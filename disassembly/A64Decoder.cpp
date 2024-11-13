@@ -25,6 +25,10 @@ InstructionType decode_data_processing_type(uint32_t raw_instruction) {
 }
 
 A64Decoder::A64Decoder(std::vector<std::byte>& code) {
+	if (code.size() % sizeof(uint32_t) != 0) {
+		throw std::runtime_error("The code bytes must be aligned to 4 bytes");
+	}
+
 	this->_code = std::move(code);
 	this->_index = 0;
 	this->_last_raw_instruction = 0;
