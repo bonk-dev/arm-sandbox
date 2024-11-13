@@ -27,5 +27,5 @@ public:
 	explicit A64Decoder(std::vector<std::byte>& code);
 	InstructionType decode_next();
 
-	AddImmediateInstruction decode_add_immediate();
+	[[nodiscard]] AddImmediateInstruction decode_add_immediate() const;
 };

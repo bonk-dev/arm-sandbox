@@ -9,7 +9,19 @@ int main() {
 
 	InstructionType inst = dec.decode_next();
 	while (inst != InstructionType::Undefined) {
-		std::cout << "Instruction: " << static_cast<uint32_t>(inst) << std::endl;
+		switch (inst) {
+			case InstructionType::AddOrSubImmediate:
+			{
+				AddImmediateInstruction details = dec.decode_add_immediate();
+				printf("IMM: #0x%x, Destination index: %i, Src index: %i",
+					   details.immediate, details.destination_reg_index, details.source_reg_index);
+				break;
+			}
+			default:
+				std::cout << "Invalid instruction" << std::endl;
+				break;
+		}
+
 		inst = dec.decode_next();
 	}
 
