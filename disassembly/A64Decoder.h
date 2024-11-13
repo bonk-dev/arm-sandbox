@@ -3,7 +3,7 @@
 #include <vector>
 
 enum class InstructionType {
-	AddImmediate,
+	AddOrSubImmediate,
 	Undefined = 0xFFFFFFF
 };
 

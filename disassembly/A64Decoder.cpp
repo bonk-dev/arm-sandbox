@@ -18,7 +18,7 @@ InstructionType decode_data_processing_type(uint32_t raw_instruction) {
 
 	constexpr uint32_t ADD_SUB_MASK = 0b0100;
 	if ((op1 & ADD_SUB_MASK) == ADD_SUB_MASK) {
-		return InstructionType::AddImmediate;
+		return InstructionType::AddOrSubImmediate;
 	}
 
 	return InstructionType::Undefined;
