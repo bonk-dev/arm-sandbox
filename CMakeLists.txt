@@ -10,4 +10,5 @@ add_executable(arm_sandbox main.cpp
         emulation/AArch64Cpu.h
         emulation/executors/AddSubImmediateExecutor.cpp
         emulation/executors/AddSubImmediateExecutor.h
+        numbers/two_complement.h
 )
