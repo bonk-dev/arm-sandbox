@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <cstdint>
 #include <format>
 #include "disassembly/A64Decoder.h"
 #include "emulation/AArch64Cpu.h"
@@ -17,7 +16,8 @@ int main() {
 	};
 	A64Decoder dec(sample_code);
 
-	const auto shared_cpu = std::make_shared<AArch64Cpu>(AArch64Cpu{});
+	constexpr size_t INITIAL_CPU_MEMORY = 10240; // bytes
+	const auto shared_cpu = std::make_shared<AArch64Cpu>(AArch64Cpu(INITIAL_CPU_MEMORY));
 	AddSubImmediateExecutor add_sub_immediate_executor(shared_cpu);
 	LoadStoreRegPairExecutor load_store_pair_executor(shared_cpu);
 

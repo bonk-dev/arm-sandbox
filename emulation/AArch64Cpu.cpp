@@ -4,7 +4,7 @@
 
 #include "AArch64Cpu.h"
 
-AArch64Cpu::AArch64Cpu() {
+AArch64Cpu::AArch64Cpu(size_t initial_memory_size) : _memory(CpuVirtualMemory(initial_memory_size)) {
     this->_general_registers = std::vector<uint64_t>(
         AARCH64_GENERAL_PURPOSE_REGISTERS);
 }
