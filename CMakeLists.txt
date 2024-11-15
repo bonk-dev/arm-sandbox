@@ -15,4 +15,6 @@ add_executable(arm_sandbox main.cpp
         emulation/executors/LoadStoreRegPairExecutor.h
         emulation/executors/ExecutorBase.h
         emulation/executors/ExecutorBase.cpp
+        emulation/CpuVirtualMemory.cpp
+        emulation/CpuVirtualMemory.h
 )
