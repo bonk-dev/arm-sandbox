@@ -5,6 +5,7 @@
 #include "disassembly/A64Decoder.h"
 #include "emulation/AArch64Cpu.h"
 #include "emulation/executors/AddSubImmediateExecutor.h"
+#include "emulation/executors/LoadStoreRegPairExecutor.h"
 
 int main() {
 	std::vector<std::byte> sample_code = {
@@ -18,6 +19,7 @@ int main() {
 
 	const auto shared_cpu = std::make_shared<AArch64Cpu>(AArch64Cpu{});
 	AddSubImmediateExecutor add_sub_immediate_executor(shared_cpu);
+	LoadStoreRegPairExecutor load_store_pair_executor(shared_cpu);
 
 	InstructionType inst = dec.decode_next();
 	while (inst != InstructionType::Undefined) {
@@ -39,6 +41,7 @@ int main() {
 										 details.immediate_value, details.base_reg, details.first_reg_index, details.second_reg_index)
 										 << std::endl;
 
+				load_store_pair_executor.execute(details);
 				break;
 			}
 			default:

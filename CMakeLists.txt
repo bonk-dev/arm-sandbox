@@ -11,6 +11,8 @@ add_executable(arm_sandbox main.cpp
         emulation/executors/AddSubImmediateExecutor.cpp
         emulation/executors/AddSubImmediateExecutor.h
         numbers/two_complement.h
+        emulation/executors/LoadStoreRegPairExecutor.cpp
+        emulation/executors/LoadStoreRegPairExecutor.h
         emulation/executors/ExecutorBase.h
         emulation/executors/ExecutorBase.cpp
 )
