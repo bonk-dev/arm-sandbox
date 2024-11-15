@@ -2,8 +2,17 @@
 #include <vector>
 #include <cstdint>
 #include "disassembly/A64Decoder.h"
+#include "emulation/AArch64Cpu.h"
 
 int main() {
+	AArch64Cpu cpu{};
+	cpu.write_gp_register_64(25, 0x1FFFFFFFF);
+	std::cout << std::hex << cpu.read_gp_register_32(25) << std::endl;
+	std::cout << std::hex << cpu.read_gp_register_64(25) << std::endl;
+	cpu.write_gp_register_32(25, 0xBBBBBBBB);
+	std::cout << std::hex << cpu.read_gp_register_32(25) << std::endl;
+	std::cout << std::hex << cpu.read_gp_register_64(25) << std::endl;
+
 	std::vector<std::byte> sample_code = { std::byte(0x19), std::byte(0x00), std::byte(0x1F), std::byte(0x91) };
 	A64Decoder dec(sample_code);
 

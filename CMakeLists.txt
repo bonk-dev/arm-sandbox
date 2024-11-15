@@ -6,4 +6,6 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(arm_sandbox main.cpp
         disassembly/A64Decoder.cpp
         disassembly/A64Decoder.h
+        emulation/AArch64Cpu.cpp
+        emulation/AArch64Cpu.h
 )
