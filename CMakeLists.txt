@@ -8,4 +8,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/A64Decoder.h
         emulation/AArch64Cpu.cpp
         emulation/AArch64Cpu.h
+        emulation/executors/AddSubImmediateExecutor.cpp
+        emulation/executors/AddSubImmediateExecutor.h
 )
