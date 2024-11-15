@@ -7,16 +7,6 @@
 #include "emulation/executors/AddSubImmediateExecutor.h"
 
 int main() {
-	const auto shared_cpu = std::make_shared<AArch64Cpu>(AArch64Cpu{});
-	auto cpu = shared_cpu.get();
-
-	cpu->write_gp_register_64(25, 0x1FFFFFFFF);
-	std::cout << std::hex << cpu->read_gp_register_32(25) << std::endl;
-	std::cout << std::hex << cpu->read_gp_register_64(25) << std::endl;
-	cpu->write_gp_register_32(25, 0xBBBBBBBB);
-	std::cout << std::hex << cpu->read_gp_register_32(25) << std::endl;
-	std::cout << std::hex << cpu->read_gp_register_64(25) << std::endl;
-
 	std::vector<std::byte> sample_code = {
 			// ADD X25, X0, #0x7C0
 			std::byte(0x19), std::byte(0x00), std::byte(0x1F), std::byte(0x91),
@@ -26,6 +16,7 @@ int main() {
 	};
 	A64Decoder dec(sample_code);
 
+	const auto shared_cpu = std::make_shared<AArch64Cpu>(AArch64Cpu{});
 	AddSubImmediateExecutor add_sub_immediate_executor(shared_cpu);
 
 	InstructionType inst = dec.decode_next();
