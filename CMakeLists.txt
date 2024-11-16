@@ -17,4 +17,5 @@ add_executable(arm_sandbox main.cpp
         emulation/executors/ExecutorBase.cpp
         emulation/CpuVirtualMemory.cpp
         emulation/CpuVirtualMemory.h
+        emulation/emu_types.h
 )

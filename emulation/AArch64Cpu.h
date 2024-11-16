@@ -3,9 +3,9 @@
 #include <memory>
 #include <vector>
 #include "CpuVirtualMemory.h"
+#include "emu_types.h"
 
 constexpr size_t AARCH64_GENERAL_PURPOSE_REGISTERS = 32;
-typedef uint8_t regindex_t;
 
 class AArch64Cpu {
 private:
