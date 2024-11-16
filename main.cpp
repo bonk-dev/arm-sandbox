@@ -38,8 +38,7 @@ int main() {
 			case InstructionType::AddOrSubImmediate:
 			{
 				AddImmediateInstruction details = dec.decode_add_immediate();
-				printf("IMM: #0x%x, Destination index: %i, Src index: %i\n",
-					   details.immediate, details.destination_reg_index, details.source_reg_index);
+				std::cout << details.to_pretty_string() << std::endl;
 
 				add_sub_immediate_executor.execute(details);
 				break;

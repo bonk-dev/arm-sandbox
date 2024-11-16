@@ -3,6 +3,7 @@
 #include <utility>
 #include <cmath>
 #include <stdexcept>
+#include <sstream>
 
 constexpr bool MATCHES_MASK(uint32_t val, uint32_t mask) {
 	return (val & mask) == mask;
@@ -156,4 +157,25 @@ LoadStoreRegisterPairInstruction A64Decoder::decode_load_store_register_pair_ins
 		base_reg,
 		static_cast<int16_t>(actual_imm_value)
 	};
+}
+
+std::string AddImmediateInstruction::to_pretty_string() const {
+	const char reg_prefix = this->is_64bit
+			? 'X'
+			: 'W';
+
+	std::stringstream ss;
+	if (this->set_flags) {
+		ss << (this->is_subtraction
+				? "SUBS"
+				: "ADDS");
+	}
+	else {
+		ss << (this->is_subtraction
+				   ? "SUB"
+				   : "ADD");
+	}
+
+	ss << ", " << reg_prefix << toascii(this->destination_reg_index) << ", " << '#' << std::hex << this->immediate;
+	return ss.str();
 }

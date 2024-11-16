@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <vector>
+#include <string>
 #include "../emulation/emu_types.h"
 
 enum class InstructionType {
@@ -19,6 +20,8 @@ typedef struct AddImmediateInstruction {
 
 	uint8_t destination_reg_index;
 	uint8_t source_reg_index;
+
+	[[nodiscard]] std::string to_pretty_string() const;
 } AddImmediateInstruction;
 
 typedef struct FormPcRelAddressInstruction {
