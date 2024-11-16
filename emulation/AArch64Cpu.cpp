@@ -1,7 +1,3 @@
-//
-// Created by bonk on 15.11.24.
-//
-
 #include "AArch64Cpu.h"
 
 AArch64Cpu::AArch64Cpu(size_t initial_memory_size) : _memory(CpuVirtualMemory(initial_memory_size)),
