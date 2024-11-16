@@ -4,6 +4,7 @@
 
 enum class InstructionType {
 	AddOrSubImmediate,
+	PcRelativeAddressing,
 	LoadStoreRegisterPair,
 	Undefined = 0xFFFFFFF
 };

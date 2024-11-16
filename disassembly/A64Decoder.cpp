@@ -22,8 +22,13 @@ InstructionType decode_data_processing_type(uint32_t raw_instruction) {
 	const uint32_t op1 = raw_instruction >> 22 & 0b1111;
 
 	constexpr uint32_t ADD_SUB_MASK = 0b0100;
+	constexpr uint32_t PC_REL_MASK = 0;
+
 	if (MATCHES_MASK(op1, ADD_SUB_MASK)) {
 		return InstructionType::AddOrSubImmediate;
+	}
+	if (MATCHES_MASK(op1, PC_REL_MASK)) {
+		return InstructionType::PcRelativeAddressing;
 	}
 
 	return InstructionType::Undefined;
