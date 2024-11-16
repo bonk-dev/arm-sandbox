@@ -19,7 +19,10 @@ int main() {
 			std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x90),
 
 			// ADR X0, #0x2001
-			std::byte(0x00), std::byte(0x00), std::byte(0x01), std::byte(0x30)
+			std::byte(0x00), std::byte(0x00), std::byte(0x01), std::byte(0x30),
+
+			// MOV X29, SP (alias of ADD X29, SP, #0)
+			std::byte(0xFD), std::byte(0x03), std::byte(0x00), std::byte(0x91)
 	};
 	A64Decoder dec(sample_code);
 
