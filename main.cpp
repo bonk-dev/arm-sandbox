@@ -7,6 +7,10 @@
 #include "emulation/executors/LoadStoreRegPairExecutor.h"
 #include "emulation/executors/FormPcRelAddressExecutor.h"
 
+void print_disassembly(const std::string& s) {
+	std::cout << "Dissassembly: " << s << std::endl;
+}
+
 int main() {
 	std::vector<std::byte> sample_code = {
 			// ADD X25, X0, #0x7C0
@@ -38,7 +42,7 @@ int main() {
 			case InstructionType::AddOrSubImmediate:
 			{
 				AddImmediateInstruction details = dec.decode_add_immediate();
-				std::cout << details.to_pretty_string() << std::endl;
+				print_disassembly(details.to_pretty_string());
 
 				add_sub_immediate_executor.execute(details);
 				break;
@@ -46,7 +50,7 @@ int main() {
 			case InstructionType::PcRelativeAddressing:
 			{
 				FormPcRelAddressInstruction details = dec.decode_form_pc_rel_addr_instruction();
-				std::cout << details.to_pretty_string() << std::endl;
+				print_disassembly(details.to_pretty_string());
 
 				form_pc_rel_address_executor.execute(details);
 				break;
@@ -54,7 +58,7 @@ int main() {
 			case InstructionType::LoadStoreRegisterPair:
 			{
 				LoadStoreRegisterPairInstruction details = dec.decode_load_store_register_pair_instruction();
-				std::cout << details.to_pretty_string() << std::endl;
+				print_disassembly(details.to_pretty_string());
 
 				load_store_pair_executor.execute(details);
 				break;
