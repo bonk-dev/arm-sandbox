@@ -19,4 +19,6 @@ public:
 
     [[nodiscard]] uint32_t read_gp_register_32(regindex_t index) const;
     [[nodiscard]] uint64_t read_gp_register_64(regindex_t index) const;
+
+	CpuVirtualMemory& get_memory();
 };

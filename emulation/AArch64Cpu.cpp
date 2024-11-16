@@ -24,3 +24,7 @@ uint32_t AArch64Cpu::read_gp_register_32(const regindex_t index) const {
 uint64_t AArch64Cpu::read_gp_register_64(const regindex_t index) const {
     return this->_general_registers[index];
 }
+
+CpuVirtualMemory &AArch64Cpu::get_memory() {
+	return this->_memory;
+}
