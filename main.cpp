@@ -8,7 +8,7 @@
 #include "emulation/executors/FormPcRelAddressExecutor.h"
 
 void print_disassembly(const std::string& s) {
-	std::cout << "Dissassembly: " << s << std::endl;
+	std::cout << "Disassembly: " << s << std::endl;
 }
 
 int main() {
