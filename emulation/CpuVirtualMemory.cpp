@@ -14,17 +14,17 @@ CpuVirtualMemory::~CpuVirtualMemory() {
 }
 
 void CpuVirtualMemory::write_uint32(uintptr_t addr, uint32_t value) {
-	printf("Writing (32) %u to virtual %lu", value, addr);
+	printf("Writing (32) %u to virtual %lx\n", value, addr);
 }
 void CpuVirtualMemory::write_uint64(uintptr_t addr, uint64_t value) {
-	printf("Writing (64) %lu to virtual %lu", value, addr);
+	printf("Writing (64) %lu to virtual %lx\n", value, addr);
 }
 
 uint32_t CpuVirtualMemory::read_uint32(uintptr_t addr) {
-	printf("Reading (32) from virtual %lu", addr);
+	printf("Reading (32) from virtual %lx\n", addr);
 	return 32;
 }
 uint64_t CpuVirtualMemory::read_uint64(uintptr_t addr) {
-	printf("Reading (64) from virtual %lu", addr);
+	printf("Reading (64) from virtual %lx\n", addr);
 	return 64;
 }
