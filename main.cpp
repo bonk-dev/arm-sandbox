@@ -13,6 +13,12 @@ int main() {
 
 			// STP X29, X30, [SP, #-0x10]!
 			std::byte(0xFD), std::byte(0x7B), std::byte(0xBF), std::byte(0xA9),
+
+			// ADRP X0, #0
+			std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x90),
+
+			// ADR X0, #0x2001
+			std::byte(0x00), std::byte(0x00), std::byte(0x01), std::byte(0x30)
 	};
 	A64Decoder dec(sample_code);
 
@@ -31,6 +37,13 @@ int main() {
 					   details.immediate, details.destination_reg_index, details.source_reg_index);
 
 				add_sub_immediate_executor.execute(details);
+				break;
+			}
+			case InstructionType::PcRelativeAddressing:
+			{
+				FormPcRelAddressInstruction details = dec.decode_form_pc_rel_addr_instruction();
+				printf("IMM: #0x%x, Destination index: %i, 4KB page?: %b\n",
+					   details.immediate, details.destination_reg_index, details.rel_to_4kb_page);
 				break;
 			}
 			case InstructionType::LoadStoreRegisterPair:

@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <vector>
+#include "../emulation/emu_types.h"
 
 enum class InstructionType {
 	AddOrSubImmediate,
@@ -19,6 +20,13 @@ typedef struct AddImmediateInstruction {
 	uint8_t destination_reg_index;
 	uint8_t source_reg_index;
 } AddImmediateInstruction;
+
+typedef struct FormPcRelAddressInstruction {
+	bool rel_to_4kb_page;
+
+	regindex_t destination_reg_index;
+	int32_t immediate;
+} FormPcRelAddressInstruction;
 
 enum class LoadStorePairEncoding : uint8_t {
 	NonTemporalOffset = 0b000,
@@ -53,6 +61,7 @@ public:
 	InstructionType decode_next();
 
 	[[nodiscard]] AddImmediateInstruction decode_add_immediate() const;
+	[[nodiscard]] FormPcRelAddressInstruction decode_form_pc_rel_addr_instruction() const;
 
 	[[nodiscard]] LoadStoreRegisterPairInstruction decode_load_store_register_pair_instruction() const;
 };
