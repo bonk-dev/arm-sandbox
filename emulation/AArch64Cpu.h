@@ -10,12 +10,17 @@ typedef uint8_t regindex_t;
 class AArch64Cpu {
 private:
     std::vector<uint64_t> _general_registers;
+	uint64_t _program_counter;
+
 	CpuVirtualMemory _memory;
 public:
     explicit AArch64Cpu(size_t initial_memory_size);
 
     void write_gp_register_32(regindex_t index, uint32_t val);
     void write_gp_register_64(regindex_t index, uint64_t val);
+
+	[[nodiscard]] uint64_t get_program_counter() const;
+	void set_program_counter(uint64_t pc);
 
     [[nodiscard]] uint32_t read_gp_register_32(regindex_t index) const;
     [[nodiscard]] uint64_t read_gp_register_64(regindex_t index) const;
