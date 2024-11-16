@@ -176,6 +176,20 @@ std::string AddImmediateInstruction::to_pretty_string() const {
 				   : "ADD");
 	}
 
-	ss << ", " << reg_prefix << toascii(this->destination_reg_index) << ", " << '#' << std::hex << this->immediate;
+	ss << ", " << reg_prefix << toascii(this->destination_reg_index) << ", #" << std::hex << this->immediate;
+	return ss.str();
+}
+
+std::string FormPcRelAddressInstruction::to_pretty_string() const {
+	std::stringstream ss;
+
+	if (this->rel_to_4kb_page) {
+		ss << "ADRP";
+	}
+	else {
+		ss << "ADR";
+	}
+
+	ss << ", X" << toascii(this->destination_reg_index) << ", #" << std::hex << this->immediate;
 	return ss.str();
 }

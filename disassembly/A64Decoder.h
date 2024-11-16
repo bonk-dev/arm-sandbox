@@ -29,6 +29,8 @@ typedef struct FormPcRelAddressInstruction {
 
 	regindex_t destination_reg_index;
 	int32_t immediate;
+
+	[[nodiscard]] std::string to_pretty_string() const;
 } FormPcRelAddressInstruction;
 
 enum class LoadStorePairEncoding : uint8_t {

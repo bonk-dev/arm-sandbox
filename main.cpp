@@ -46,8 +46,7 @@ int main() {
 			case InstructionType::PcRelativeAddressing:
 			{
 				FormPcRelAddressInstruction details = dec.decode_form_pc_rel_addr_instruction();
-				printf("IMM: #0x%x, Destination index: %i, 4KB page?: %b\n",
-					   details.immediate, details.destination_reg_index, details.rel_to_4kb_page);
+				std::cout << details.to_pretty_string() << std::endl;
 
 				form_pc_rel_address_executor.execute(details);
 				break;
