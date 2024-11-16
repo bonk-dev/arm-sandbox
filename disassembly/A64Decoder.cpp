@@ -4,6 +4,10 @@
 #include <cmath>
 #include <stdexcept>
 
+constexpr bool MATCHES_MASK(uint32_t val, uint32_t mask) {
+	return (val & mask) == mask;
+}
+
 uint32_t read_uint_le(const std::vector<std::byte>& v, const int index) {
 	uint32_t value = 0;
 	for (int i = 3; i >= 0; --i) {
@@ -18,7 +22,7 @@ InstructionType decode_data_processing_type(uint32_t raw_instruction) {
 	const uint32_t op1 = raw_instruction >> 22 & 0b1111;
 
 	constexpr uint32_t ADD_SUB_MASK = 0b0100;
-	if ((op1 & ADD_SUB_MASK) == ADD_SUB_MASK) {
+	if (MATCHES_MASK(op1, ADD_SUB_MASK)) {
 		return InstructionType::AddOrSubImmediate;
 	}
 
@@ -31,7 +35,7 @@ InstructionType decode_load_and_store_type(uint32_t raw_instruction) {
 	const uint32_t op2 = raw_instruction >> 10 & 0b111111111111111;
 
 	constexpr uint32_t LOAD_STORE_PAIR_MASK_OP0 = 0b0010;
-	if ((op0 & LOAD_STORE_PAIR_MASK_OP0) == LOAD_STORE_PAIR_MASK_OP0) {
+	if (MATCHES_MASK(op0, LOAD_STORE_PAIR_MASK_OP0)) {
 		return InstructionType::LoadStoreRegisterPair;
 	}
 
