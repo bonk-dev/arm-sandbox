@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdio>
+#include <cstdint>
 
 /*
  * @class CpuVirtualMemory
@@ -12,4 +13,10 @@ private:
 public:
 	explicit CpuVirtualMemory(size_t size);
 	~CpuVirtualMemory();
+
+	void write_uint32(uintptr_t addr, uint32_t value);
+	void write_uint64(uintptr_t addr, uint64_t value);
+
+	[[nodiscard]] uint32_t read_uint32(uintptr_t addr);
+	[[nodiscard]] uint64_t read_uint64(uintptr_t addr);
 };
