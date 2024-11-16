@@ -54,10 +54,7 @@ int main() {
 			case InstructionType::LoadStoreRegisterPair:
 			{
 				LoadStoreRegisterPairInstruction details = dec.decode_load_store_register_pair_instruction();
-
-				std::cout << std::format("IMM: #[{:#x}], Base reg: {}, First: {}, Second: {}",
-										 details.immediate_value, details.base_reg, details.first_reg_index, details.second_reg_index)
-										 << std::endl;
+				std::cout << details.to_pretty_string() << std::endl;
 
 				load_store_pair_executor.execute(details);
 				break;

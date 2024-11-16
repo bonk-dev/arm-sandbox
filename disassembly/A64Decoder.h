@@ -54,6 +54,8 @@ typedef struct LoadRegisterPairInstruction {
 	uint8_t second_reg_index;
 	uint8_t base_reg;
 	int16_t immediate_value;
+
+	[[nodiscard]] std::string to_pretty_string() const;
 } LoadStoreRegisterPairInstruction;
 
 class A64Decoder {
