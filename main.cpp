@@ -5,6 +5,7 @@
 #include "emulation/AArch64Cpu.h"
 #include "emulation/executors/AddSubImmediateExecutor.h"
 #include "emulation/executors/LoadStoreRegPairExecutor.h"
+#include "emulation/executors/FormPcRelAddressExecutor.h"
 
 int main() {
 	std::vector<std::byte> sample_code = {
@@ -25,6 +26,7 @@ int main() {
 	constexpr size_t INITIAL_CPU_MEMORY = 10240; // bytes
 	const auto shared_cpu = std::make_shared<AArch64Cpu>(AArch64Cpu(INITIAL_CPU_MEMORY));
 	AddSubImmediateExecutor add_sub_immediate_executor(shared_cpu);
+	FormPcRelAddressExecutor form_pc_rel_address_executor(shared_cpu);
 	LoadStoreRegPairExecutor load_store_pair_executor(shared_cpu);
 
 	InstructionType inst = dec.decode_next();
@@ -44,6 +46,8 @@ int main() {
 				FormPcRelAddressInstruction details = dec.decode_form_pc_rel_addr_instruction();
 				printf("IMM: #0x%x, Destination index: %i, 4KB page?: %b\n",
 					   details.immediate, details.destination_reg_index, details.rel_to_4kb_page);
+
+				form_pc_rel_address_executor.execute(details);
 				break;
 			}
 			case InstructionType::LoadStoreRegisterPair:

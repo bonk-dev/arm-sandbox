@@ -18,4 +18,6 @@ add_executable(arm_sandbox main.cpp
         emulation/CpuVirtualMemory.cpp
         emulation/CpuVirtualMemory.h
         emulation/emu_types.h
+        emulation/executors/FormPcRelAddressExecutor.cpp
+        emulation/executors/FormPcRelAddressExecutor.h
 )
