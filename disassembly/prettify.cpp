@@ -1,4 +1,5 @@
 #include <sstream>
+#include <format>
 #include "prettify.h"
 
 void insert_signed_hex(std::stringstream& ss, int32_t val) {
@@ -11,6 +12,27 @@ void insert_signed_hex(std::stringstream& ss, int32_t val) {
 		ss << "-" << val;
 	}
 	ss << std::noshowbase;
+}
+
+std::string gp_reg_name(regindex_t index, unsigned int bitness = 64) {
+	if (bitness != 64 && bitness != 32) {
+		throw std::runtime_error("reg_name only supports bitness of 64 and 32");
+	}
+
+	switch (index) {
+		case 30:
+			return bitness == 64 ? "LP" : "LPW";
+		case 31:
+			return bitness == 64 ? "SP" : "SPW";
+		default:
+			const char bit_prefix = bitness == 64
+									? 'X'
+									: 'W';
+			return std::format("{}{}", bit_prefix, toascii(index));
+	}
+}
+std::string gp_reg_name(regindex_t index, bool is_64bit) {
+	return gp_reg_name(index, static_cast<unsigned int>(is_64bit ? 64 : 32));
 }
 
 std::string disassembly::to_pretty_string(AddImmediateInstruction &i) {
@@ -30,7 +52,7 @@ std::string disassembly::to_pretty_string(AddImmediateInstruction &i) {
 			   : "ADD");
 	}
 
-	ss << ", " << reg_prefix << toascii(i.destination_reg_index) << ", #" << std::hex << i.immediate;
+	ss << ", " << gp_reg_name(i.destination_reg_index, i.is_64bit) << ", #" << std::hex << i.immediate;
 	return ss.str();
 }
 
@@ -44,7 +66,7 @@ std::string disassembly::to_pretty_string(FormPcRelAddressInstruction &i) {
 		ss << "ADR";
 	}
 
-	ss << ", X" << toascii(i.destination_reg_index) << ", #" << std::hex << i.immediate;
+	ss << ", " << gp_reg_name(i.destination_reg_index) << ", #" << std::hex << i.immediate;
 	return ss.str();
 }
 
@@ -68,21 +90,18 @@ std::string disassembly::to_pretty_string(LoadRegisterPairInstruction &i) {
 		}
 	}
 
-	const char size = i.is_wide
-					  ? 'X'
-					  : 'W';
-	ss << ' ' << size << toascii(i.first_reg_index) << ", " << size << toascii(i.second_reg_index) << ", ";
+	ss << ' ' << gp_reg_name(i.first_reg_index) << ", " << gp_reg_name(i.second_reg_index) << ", ";
 
 	switch (i.encoding) {
 		case LoadStorePairEncoding::PostIndex:
-			ss << '[' << size << toascii(i.base_reg) << "], #" << i.immediate_value;
+			ss << '[' << gp_reg_name(i.base_reg) << "], #" << i.immediate_value;
 			break;
 		case LoadStorePairEncoding::PreIndex:
-			ss << '[' << size << toascii(i.base_reg) << ", #" << i.immediate_value << "]!";
+			ss << '[' << gp_reg_name(i.base_reg) << ", #" << i.immediate_value << "]!";
 			break;
 		case LoadStorePairEncoding::SignedOffset:
 		case LoadStorePairEncoding::NonTemporalOffset:
-			ss << '[' << size << toascii(i.base_reg) << "{, #" << i.immediate_value << "}]";
+			ss << '[' << gp_reg_name(i.base_reg) << "{, #" << i.immediate_value << "}]";
 			break;
 	}
 
