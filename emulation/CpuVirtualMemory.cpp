@@ -10,6 +10,7 @@ CpuVirtualMemory::CpuVirtualMemory(const size_t size) {
 CpuVirtualMemory::~CpuVirtualMemory() {
 	if (this->_allocatedMemory != nullptr) {
 		free(this->_allocatedMemory);
+		this->_allocatedMemory = nullptr;
 	}
 }
 
