@@ -28,7 +28,10 @@ int main() {
 			std::byte(0x00), std::byte(0x00), std::byte(0x01), std::byte(0x30),
 
 			// MOV X29, SP (alias of ADD X29, SP, #0)
-			std::byte(0xFD), std::byte(0x03), std::byte(0x00), std::byte(0x91)
+			std::byte(0xFD), std::byte(0x03), std::byte(0x00), std::byte(0x91),
+
+			// BL (offset -0x20)
+			std::byte(0xF8), std::byte(0xFF), std::byte(0xFF), std::byte(0x97)
 	};
 	A64Decoder dec(sample_code);
 
