@@ -6,7 +6,7 @@
 
 enum class InstructionType {
 	AddOrSubImmediate,
-	BranchLink,
+	UnconditionalBranchImmediate,
 	PcRelativeAddressing,
 	LoadStoreRegisterPair,
 	Undefined = 0xFFFFFFF
