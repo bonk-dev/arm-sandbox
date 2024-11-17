@@ -66,7 +66,7 @@ int main() {
 			case InstructionType::UnconditionalBranchImmediate:
 			{
 				UnconditionalBranchImmediateInstruction details = dec.decode_unconditional_branch_instruction();
-				std::cout << "Decoded uncond branch" << std::endl;
+				print_disassembly(details);
 
 				break;
 			}

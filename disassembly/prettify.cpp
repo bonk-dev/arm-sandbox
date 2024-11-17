@@ -1,6 +1,18 @@
 #include <sstream>
 #include "prettify.h"
 
+void insert_signed_hex(std::stringstream& ss, int32_t val) {
+	ss << std::hex << std::showbase;
+	if (val >= 0) {
+		ss << val;
+	}
+	else {
+		val = abs(val);
+		ss << "-" << val;
+	}
+	ss << std::noshowbase;
+}
+
 std::string disassembly::to_pretty_string(AddImmediateInstruction &i) {
 	const char reg_prefix = i.is_64bit
 							? 'X'
@@ -73,6 +85,15 @@ std::string disassembly::to_pretty_string(LoadRegisterPairInstruction &i) {
 			ss << '[' << size << toascii(i.base_reg) << "{, #" << i.immediate_value << "}]";
 			break;
 	}
+
+	return ss.str();
+}
+
+std::string disassembly::to_pretty_string(UnconditionalBranchImmediateInstruction &i) {
+	std::stringstream ss;
+
+	ss << (i.is_with_link ? "BL " : "B ");
+	insert_signed_hex(ss, i.immediate);
 
 	return ss.str();
 }
