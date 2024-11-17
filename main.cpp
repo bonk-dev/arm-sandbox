@@ -63,6 +63,13 @@ int main() {
 				form_pc_rel_address_executor.execute(details);
 				break;
 			}
+			case InstructionType::UnconditionalBranchImmediate:
+			{
+				UnconditionalBranchImmediateInstruction details = dec.decode_unconditional_branch_instruction();
+				std::cout << "Decoded uncond branch" << std::endl;
+
+				break;
+			}
 			case InstructionType::LoadStoreRegisterPair:
 			{
 				LoadStoreRegisterPairInstruction details = dec.decode_load_store_register_pair_instruction();

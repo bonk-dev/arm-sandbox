@@ -30,6 +30,20 @@ typedef struct FormPcRelAddressInstruction {
 	int32_t immediate;
 } FormPcRelAddressInstruction;
 
+typedef struct UnconditionalBranchImmediateInstruction {
+	/**
+	 * @var is_with_link
+	 * @brief If true, the executor should set X30 to PC+4
+	 */
+	bool is_with_link;
+
+	/**
+	 * @var immediate
+	 * @brief Offset from PC, in the range +/- 128MB
+	 **/
+	int32_t immediate;
+} UnconditionalBranchImmediateInstruction;
+
 enum class LoadStorePairEncoding : uint8_t {
 	NonTemporalOffset = 0b000,
 	PostIndex = 0b001,
@@ -64,6 +78,8 @@ public:
 
 	[[nodiscard]] AddImmediateInstruction decode_add_immediate() const;
 	[[nodiscard]] FormPcRelAddressInstruction decode_form_pc_rel_addr_instruction() const;
+
+	[[nodiscard]] UnconditionalBranchImmediateInstruction decode_unconditional_branch_instruction() const;
 
 	[[nodiscard]] LoadStoreRegisterPairInstruction decode_load_store_register_pair_instruction() const;
 };

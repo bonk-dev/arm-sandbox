@@ -194,3 +194,16 @@ LoadStoreRegisterPairInstruction A64Decoder::decode_load_store_register_pair_ins
 		static_cast<int16_t>(actual_imm_value)
 	};
 }
+
+UnconditionalBranchImmediateInstruction A64Decoder::decode_unconditional_branch_instruction() const {
+	const auto raw = this->_last_raw_instruction;
+
+	const bool is_link = raw >> 31 & 1;
+	const uint32_t raw_imm26 = (raw & 0b11111111111111111111111111) << 2; // 26 bits
+	const int32_t signed_imm = signed_26_bit { static_cast<int>(raw_imm26) }.val;
+
+	return {
+		is_link,
+		signed_imm
+	};
+}
