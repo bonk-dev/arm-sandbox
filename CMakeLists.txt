@@ -20,4 +20,6 @@ add_executable(arm_sandbox main.cpp
         emulation/emu_types.h
         emulation/executors/FormPcRelAddressExecutor.cpp
         emulation/executors/FormPcRelAddressExecutor.h
+        disassembly/prettify.h
+        disassembly/prettify.cpp
 )

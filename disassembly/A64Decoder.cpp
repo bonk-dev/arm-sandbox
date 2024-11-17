@@ -3,7 +3,6 @@
 #include <utility>
 #include <cmath>
 #include <stdexcept>
-#include <sstream>
 #include <map>
 
 // Explanation for the maps:
@@ -180,80 +179,4 @@ LoadStoreRegisterPairInstruction A64Decoder::decode_load_store_register_pair_ins
 		base_reg,
 		static_cast<int16_t>(actual_imm_value)
 	};
-}
-
-std::string AddImmediateInstruction::to_pretty_string() const {
-	const char reg_prefix = this->is_64bit
-			? 'X'
-			: 'W';
-
-	std::stringstream ss;
-	if (this->set_flags) {
-		ss << (this->is_subtraction
-				? "SUBS"
-				: "ADDS");
-	}
-	else {
-		ss << (this->is_subtraction
-				   ? "SUB"
-				   : "ADD");
-	}
-
-	ss << ", " << reg_prefix << toascii(this->destination_reg_index) << ", #" << std::hex << this->immediate;
-	return ss.str();
-}
-
-std::string FormPcRelAddressInstruction::to_pretty_string() const {
-	std::stringstream ss;
-
-	if (this->rel_to_4kb_page) {
-		ss << "ADRP";
-	}
-	else {
-		ss << "ADR";
-	}
-
-	ss << ", X" << toascii(this->destination_reg_index) << ", #" << std::hex << this->immediate;
-	return ss.str();
-}
-
-std::string LoadRegisterPairInstruction::to_pretty_string() const {
-	std::stringstream ss;
-
-	if (this->is_load) {
-		if (this->encoding == LoadStorePairEncoding::NonTemporalOffset) {
-			ss << "LDNP";
-		}
-		else {
-			ss << "LTP";
-		}
-	}
-	else {
-		if (this->encoding == LoadStorePairEncoding::NonTemporalOffset) {
-			ss << "STNP";
-		}
-		else {
-			ss << "STP";
-		}
-	}
-
-	const char size = this->is_wide
-			? 'X'
-			: 'W';
-	ss << ' ' << size << toascii(this->first_reg_index) << ", " << size << toascii(this->second_reg_index) << ", ";
-
-	switch (this->encoding) {
-		case LoadStorePairEncoding::PostIndex:
-			ss << '[' << size << toascii(this->base_reg) << "], #" << this->immediate_value;
-			break;
-		case LoadStorePairEncoding::PreIndex:
-			ss << '[' << size << toascii(this->base_reg) << ", #" << this->immediate_value << "]!";
-			break;
-		case LoadStorePairEncoding::SignedOffset:
-		case LoadStorePairEncoding::NonTemporalOffset:
-			ss << '[' << size << toascii(this->base_reg) << "{, #" << this->immediate_value << "}]";
-			break;
-	}
-
-	return ss.str();
 }

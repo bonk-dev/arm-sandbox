@@ -2,6 +2,7 @@
 #include <vector>
 #include <format>
 #include "disassembly/A64Decoder.h"
+#include "disassembly/prettify.h"
 #include "emulation/AArch64Cpu.h"
 #include "emulation/executors/AddSubImmediateExecutor.h"
 #include "emulation/executors/LoadStoreRegPairExecutor.h"
@@ -42,7 +43,7 @@ int main() {
 			case InstructionType::AddOrSubImmediate:
 			{
 				AddImmediateInstruction details = dec.decode_add_immediate();
-				print_disassembly(details.to_pretty_string());
+				print_disassembly(disassembly::to_pretty_string(details));
 
 				add_sub_immediate_executor.execute(details);
 				break;
@@ -50,7 +51,7 @@ int main() {
 			case InstructionType::PcRelativeAddressing:
 			{
 				FormPcRelAddressInstruction details = dec.decode_form_pc_rel_addr_instruction();
-				print_disassembly(details.to_pretty_string());
+				print_disassembly(disassembly::to_pretty_string(details));
 
 				form_pc_rel_address_executor.execute(details);
 				break;
@@ -58,7 +59,7 @@ int main() {
 			case InstructionType::LoadStoreRegisterPair:
 			{
 				LoadStoreRegisterPairInstruction details = dec.decode_load_store_register_pair_instruction();
-				print_disassembly(details.to_pretty_string());
+				print_disassembly(disassembly::to_pretty_string(details));
 
 				load_store_pair_executor.execute(details);
 				break;
