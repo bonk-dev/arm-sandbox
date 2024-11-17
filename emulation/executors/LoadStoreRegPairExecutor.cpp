@@ -25,7 +25,7 @@ uintptr_t LoadStoreRegPairExecutor::calc_next_address(LoadStoreRegisterPairInstr
 	return virt_addr;
 }
 
-void LoadStoreRegPairExecutor::execute(LoadStoreRegisterPairInstruction instruction) {
+void LoadStoreRegPairExecutor::execute(LoadStoreRegisterPairInstruction& instruction) {
 	if (instruction.is_simd) {
 		throw std::runtime_error("SIMD operations are not implemented");
 	}
