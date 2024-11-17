@@ -4,9 +4,32 @@
 #include <cmath>
 #include <stdexcept>
 #include <sstream>
+#include <map>
 
-constexpr bool MATCHES_MASK(uint32_t val, uint32_t mask) {
-	return (val & mask) == mask;
+// Explanation for the maps:
+// std::tuple<uint32_t, uint32_t> contains:
+// 	1 - mask for the field (e.g. when only the 2 MSBs are to be compared, value 1 is equal to 1100)
+//	2 - field value after ANDing the decoded value with the mask (1)
+// example:
+// ADD/SUB (immediate):
+// op1 decode field == 010x (only the first 3 most significant bits are compared)
+// (1) == 1110
+// (2) == 0100 (x are replaced with 0)
+typedef std::tuple<uint32_t, uint32_t> mask_values_t;
+
+constexpr bool MATCHES_MASK(uint32_t val, mask_values_t mask_and_value) {
+	const auto [mask, fixed_val] = mask_and_value;
+	return (val & mask) == fixed_val;
+}
+
+template<class EnumType>
+void find_instruction_type(std::map<mask_values_t, EnumType>& mask_type_map, uint32_t val, EnumType& result) {
+	for (const auto& [mask, type] : mask_type_map) {
+		if (MATCHES_MASK(val, mask)) {
+			result = type;
+			return;
+		}
+	}
 }
 
 uint32_t read_uint_le(const std::vector<std::byte>& v, const int index) {
@@ -17,35 +40,33 @@ uint32_t read_uint_le(const std::vector<std::byte>& v, const int index) {
 	return value;
 }
 
+// Top-level -> Data processing -> (op1 field)
+static std::map<mask_values_t, InstructionType> data_proc_op1 {
+		{ mask_values_t(0b1110, 0b0100), InstructionType::AddOrSubImmediate },
+		{ mask_values_t(0b1100, 0b0000), InstructionType::PcRelativeAddressing }
+};
 InstructionType decode_data_processing_type(uint32_t raw_instruction) {
 	// op0 unused for now
 	const uint32_t op0 = raw_instruction >> 29 & 0b11;
 	const uint32_t op1 = raw_instruction >> 22 & 0b1111;
 
-	constexpr uint32_t ADD_SUB_MASK = 0b0100;
-	constexpr uint32_t PC_REL_MASK = 0;
-
-	if (MATCHES_MASK(op1, ADD_SUB_MASK)) {
-		return InstructionType::AddOrSubImmediate;
-	}
-	if (MATCHES_MASK(op1, PC_REL_MASK)) {
-		return InstructionType::PcRelativeAddressing;
-	}
-
-	return InstructionType::Undefined;
+	InstructionType result = InstructionType::Undefined;
+	find_instruction_type(data_proc_op1, op1, result);
+	return result;
 }
 
+// Top-level -> Load and store -> (op0 field)
+static std::map<mask_values_t , InstructionType> load_and_store_op0 {
+		{ mask_values_t(0b0011, 0b0010), InstructionType::LoadStoreRegisterPair },
+};
 InstructionType decode_load_and_store_type(uint32_t raw_instruction) {
 	const uint32_t op0 = raw_instruction >> 28 & 0b1111;
 	const uint32_t op1 = raw_instruction >> 26 & 1;
 	const uint32_t op2 = raw_instruction >> 10 & 0b111111111111111;
 
-	constexpr uint32_t LOAD_STORE_PAIR_MASK_OP0 = 0b0010;
-	if (MATCHES_MASK(op0, LOAD_STORE_PAIR_MASK_OP0)) {
-		return InstructionType::LoadStoreRegisterPair;
-	}
-
-	return InstructionType::Undefined;
+	InstructionType result = InstructionType::Undefined;
+	find_instruction_type(load_and_store_op0, op0, result);
+	return result;
 }
 
 A64Decoder::A64Decoder(std::vector<std::byte>& code) {
@@ -58,6 +79,11 @@ A64Decoder::A64Decoder(std::vector<std::byte>& code) {
 	this->_last_raw_instruction = 0;
 }
 
+typedef InstructionType (*decode_sublevel_instruction_t)(uint32_t);
+static std::map<mask_values_t, decode_sublevel_instruction_t> top_level_op1 {
+		{ mask_values_t(0b1110, 0b1000), &decode_data_processing_type },
+		{ mask_values_t(0b0101, 0b0100), &decode_load_and_store_type }
+};
 InstructionType A64Decoder::decode_next() {
 	if (this->_index >= this->_code.size()) {
 		return InstructionType::Undefined;
@@ -69,17 +95,14 @@ InstructionType A64Decoder::decode_next() {
 	constexpr uint8_t OP1_MASK = 0b1111;
 	uint8_t op1_field = (this->_last_raw_instruction >> 25) & OP1_MASK;
 
-	constexpr uint8_t DATA_PROCESSING_OP1_MASK = 0b1000;
-	constexpr uint8_t LOADS_AND_STORES_OP1_MASK = 0b0100;
-
-	if ((op1_field & DATA_PROCESSING_OP1_MASK) == DATA_PROCESSING_OP1_MASK) {
-		return decode_data_processing_type(this->_last_raw_instruction);
+	decode_sublevel_instruction_t decode_func = nullptr;
+	find_instruction_type(top_level_op1, op1_field, decode_func);
+	if (decode_func == nullptr) {
+		return InstructionType::Undefined;
 	}
-	else if ((op1_field & LOADS_AND_STORES_OP1_MASK) == LOADS_AND_STORES_OP1_MASK) {
-		return decode_load_and_store_type(this->_last_raw_instruction);
+	else {
+		return decode_func(this->_last_raw_instruction);
 	}
-
-	return InstructionType::Undefined;
 }
 
 AddImmediateInstruction A64Decoder::decode_add_immediate() const {
