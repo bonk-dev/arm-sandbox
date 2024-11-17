@@ -22,4 +22,6 @@ add_executable(arm_sandbox main.cpp
         emulation/executors/FormPcRelAddressExecutor.h
         disassembly/prettify.h
         disassembly/prettify.cpp
+        emulation/executors/UnconditionalBranchImmediateExecutor.cpp
+        emulation/executors/UnconditionalBranchImmediateExecutor.h
 )

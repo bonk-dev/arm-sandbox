@@ -7,6 +7,7 @@
 #include "emulation/executors/AddSubImmediateExecutor.h"
 #include "emulation/executors/LoadStoreRegPairExecutor.h"
 #include "emulation/executors/FormPcRelAddressExecutor.h"
+#include "emulation/executors/UnconditionalBranchImmediateExecutor.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -42,6 +43,7 @@ int main() {
 	const auto shared_cpu = std::make_shared<AArch64Cpu>(INITIAL_CPU_MEMORY);
 	AddSubImmediateExecutor add_sub_immediate_executor(shared_cpu);
 	FormPcRelAddressExecutor form_pc_rel_address_executor(shared_cpu);
+	UnconditionalBranchImmediateExecutor unconditional_branch_imm_executor(shared_cpu);
 	LoadStoreRegPairExecutor load_store_pair_executor(shared_cpu);
 
 	InstructionType inst = dec.decode_next();
@@ -68,6 +70,7 @@ int main() {
 				UnconditionalBranchImmediateInstruction details = dec.decode_unconditional_branch_instruction();
 				print_disassembly(details);
 
+				unconditional_branch_imm_executor.execute(details);
 				break;
 			}
 			case InstructionType::LoadStoreRegisterPair:
