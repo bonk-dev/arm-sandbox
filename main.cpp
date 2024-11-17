@@ -31,7 +31,7 @@ int main() {
 	A64Decoder dec(sample_code);
 
 	constexpr size_t INITIAL_CPU_MEMORY = 10240; // bytes
-	const auto shared_cpu = std::make_shared<AArch64Cpu>(AArch64Cpu(INITIAL_CPU_MEMORY));
+	const auto shared_cpu = std::make_shared<AArch64Cpu>(INITIAL_CPU_MEMORY);
 	AddSubImmediateExecutor add_sub_immediate_executor(shared_cpu);
 	FormPcRelAddressExecutor form_pc_rel_address_executor(shared_cpu);
 	LoadStoreRegPairExecutor load_store_pair_executor(shared_cpu);
