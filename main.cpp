@@ -31,7 +31,10 @@ int main() {
 			std::byte(0xFD), std::byte(0x03), std::byte(0x00), std::byte(0x91),
 
 			// BL (offset -0x20)
-			std::byte(0xF8), std::byte(0xFF), std::byte(0xFF), std::byte(0x97)
+			std::byte(0xF8), std::byte(0xFF), std::byte(0xFF), std::byte(0x97),
+
+			// B (offset -0x20)
+			std::byte(0xF8), std::byte(0xFF), std::byte(0xFF), std::byte(0x17)
 	};
 	A64Decoder dec(sample_code);
 
