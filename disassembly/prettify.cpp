@@ -42,6 +42,10 @@ std::string disassembly::to_pretty_string(AddImmediateInstruction &i) {
 			   ? "SUBS"
 			   : "ADDS");
 	}
+	else if ((i.destination_reg_index == 31 || i.source_reg_index == 31) && i.immediate == 0) {
+		// MOV to/from SP is an alias of ADD (imm), #0
+		ss << "MOV";
+	}
 	else {
 		ss << (i.is_subtraction
 			   ? "SUB"
