@@ -36,10 +36,6 @@ std::string gp_reg_name(regindex_t index, bool is_64bit) {
 }
 
 std::string disassembly::to_pretty_string(AddImmediateInstruction &i) {
-	const char reg_prefix = i.is_64bit
-							? 'X'
-							: 'W';
-
 	std::stringstream ss;
 	if (i.set_flags) {
 		ss << (i.is_subtraction
