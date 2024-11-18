@@ -1,6 +1,7 @@
 #pragma once
 
 #include "A64Decoder.h"
+#include "instructions/AddImmediateInstruction.h"
 
 namespace disassembly {
 	std::string to_pretty_string(AddImmediateInstruction& i);

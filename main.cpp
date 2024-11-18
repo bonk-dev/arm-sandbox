@@ -8,6 +8,7 @@
 #include "emulation/executors/LoadStoreRegPairExecutor.h"
 #include "emulation/executors/FormPcRelAddressExecutor.h"
 #include "emulation/executors/UnconditionalBranchImmediateExecutor.h"
+#include "disassembly/instructions/AddImmediateInstruction.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -51,7 +52,8 @@ int main() {
 		switch (inst) {
 			case InstructionType::AddOrSubImmediate:
 			{
-				AddImmediateInstruction details = dec.decode_add_immediate();
+//				AddImmediateInstruction details = dec.decode_add_immediate();
+				auto details = dec.decode_details<AddImmediateInstruction>();
 				print_disassembly(details);
 
 				add_sub_immediate_executor.execute(details);

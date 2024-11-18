@@ -24,4 +24,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/prettify.cpp
         emulation/executors/UnconditionalBranchImmediateExecutor.cpp
         emulation/executors/UnconditionalBranchImmediateExecutor.h
+        disassembly/instructions/AddImmediateInstruction.h
+        disassembly/instructions/AddImmediateInstruction.cpp
 )

@@ -118,32 +118,6 @@ InstructionType A64Decoder::decode_next() {
 	}
 }
 
-AddImmediateInstruction A64Decoder::decode_add_immediate() const {
-	constexpr uint32_t DEST_MASK = 0b11111;
-	constexpr uint32_t SOURCE_MASK = 0b11111;
-	constexpr uint32_t IMM12_MASK = 0b111111111111;
-
-	const bool is_64bit = this->_last_raw_instruction >> 31 & 1;
-	const bool is_sub = this->_last_raw_instruction >> 30 & 1;
-	const bool set_bits = this->_last_raw_instruction >> 29 & 1;
-	const bool shift_12 = this->_last_raw_instruction >> 30 & 1;
-
-	const uint16_t imm12_val = (this->_last_raw_instruction >> 10) & IMM12_MASK;
-	const uint8_t source = (this->_last_raw_instruction >> 5) & SOURCE_MASK;
-	const uint8_t destination = this->_last_raw_instruction & DEST_MASK;
-
-	AddImmediateInstruction details {
-		is_64bit,
-		is_sub,
-		set_bits,
-		shift_12,
-		imm12_val,
-		source,
-		destination
-	};
-	return details;
-}
-
 FormPcRelAddressInstruction A64Decoder::decode_form_pc_rel_addr_instruction() const {
 	const uint32_t raw = this->_last_raw_instruction;
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "../AArch64Cpu.h"
-#include "../../disassembly/A64Decoder.h"
 #include "ExecutorBase.h"
+#include "../../disassembly/instructions/AddImmediateInstruction.h"
 
 class AddSubImmediateExecutor : ExecutorBase {
 public:
