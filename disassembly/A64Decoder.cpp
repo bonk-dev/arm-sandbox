@@ -117,36 +117,3 @@ InstructionType A64Decoder::decode_next() {
 		return decode_func(this->_last_raw_instruction);
 	}
 }
-
-LoadStoreRegisterPairInstruction A64Decoder::decode_load_store_register_pair_instruction() const {
-	const uint32_t raw = this->_last_raw_instruction;
-
-	const bool is_wide = raw >> 31 & 1;
-	const bool is_simd = raw >> 26 & 1;
-	const auto encoding = static_cast<LoadStorePairEncoding>((raw >> 23) & 0b111);
-	const bool is_load = raw >> 22 & 1;
-
-	constexpr uint8_t REGISTER_MASK = 0b11111;
-	const uint8_t first_reg = raw & REGISTER_MASK;
-	const uint8_t second_reg = raw >> 10 & REGISTER_MASK;
-	const uint8_t base_reg = raw >> 5 & REGISTER_MASK;
-
-	const uint8_t raw_imm7 = raw >> 15 & 0b1111111;
-	const int signed_imm7 = signed_7_bit {raw_imm7 }.val;
-
-	const int actual_imm_value = is_wide
-			? signed_imm7 * 8
-			: signed_imm7 * 4;
-
-	return LoadRegisterPairInstruction{
-		is_wide,
-		is_simd,
-		encoding,
-		is_load,
-
-		first_reg,
-		second_reg,
-		base_reg,
-		static_cast<int16_t>(actual_imm_value)
-	};
-}

@@ -77,7 +77,7 @@ int main() {
 			}
 			case InstructionType::LoadStoreRegisterPair:
 			{
-				LoadStoreRegisterPairInstruction details = dec.decode_load_store_register_pair_instruction();
+				auto details = dec.decode_details<LoadStoreRegisterPairInstruction>();
 				print_disassembly(details);
 
 				load_store_pair_executor.execute(details);
