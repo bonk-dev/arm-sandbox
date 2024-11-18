@@ -45,6 +45,8 @@ std::string disassembly::to_pretty_string(AddImmediateInstruction &i) {
 	else if ((i.destination_reg_index == 31 || i.source_reg_index == 31) && i.immediate == 0) {
 		// MOV to/from SP is an alias of ADD (imm), #0
 		ss << "MOV";
+		ss << ' ' << gp_reg_name(i.destination_reg_index, i.is_64bit) << ", " << gp_reg_name(i.source_reg_index, i.is_64bit);
+		return ss.str();
 	}
 	else {
 		ss << (i.is_subtraction
@@ -52,7 +54,7 @@ std::string disassembly::to_pretty_string(AddImmediateInstruction &i) {
 			   : "ADD");
 	}
 
-	ss << ", " << gp_reg_name(i.destination_reg_index, i.is_64bit) << ", #" << std::hex << i.immediate;
+	ss << ' ' << gp_reg_name(i.destination_reg_index, i.is_64bit) << ", " << gp_reg_name(i.source_reg_index, i.is_64bit) << ", #" << std::hex << i.immediate;
 	return ss.str();
 }
 
