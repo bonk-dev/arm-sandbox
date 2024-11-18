@@ -9,6 +9,7 @@
 #include "emulation/executors/FormPcRelAddressExecutor.h"
 #include "emulation/executors/UnconditionalBranchImmediateExecutor.h"
 #include "disassembly/instructions/AddImmediateInstruction.h"
+#include "disassembly/instructions/FormPcRelAddressInstruction.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -52,7 +53,6 @@ int main() {
 		switch (inst) {
 			case InstructionType::AddOrSubImmediate:
 			{
-//				AddImmediateInstruction details = dec.decode_add_immediate();
 				auto details = dec.decode_details<AddImmediateInstruction>();
 				print_disassembly(details);
 
@@ -61,7 +61,7 @@ int main() {
 			}
 			case InstructionType::PcRelativeAddressing:
 			{
-				FormPcRelAddressInstruction details = dec.decode_form_pc_rel_addr_instruction();
+				auto details = dec.decode_details<FormPcRelAddressInstruction>();
 				print_disassembly(details);
 
 				form_pc_rel_address_executor.execute(details);

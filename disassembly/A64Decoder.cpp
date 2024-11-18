@@ -118,24 +118,6 @@ InstructionType A64Decoder::decode_next() {
 	}
 }
 
-FormPcRelAddressInstruction A64Decoder::decode_form_pc_rel_addr_instruction() const {
-	const uint32_t raw = this->_last_raw_instruction;
-
-	const bool rel_to_4kb = raw >> 31 & 1;
-	const uint32_t imm_lo = raw >> 29 & 0b11;
-	const uint32_t imm_hi = raw >> 5 & 0b1111111111111111111; // 19 bits
-	const regindex_t reg_destination_index = raw & 0b11111;
-
-	const uint32_t joined_imm = (imm_hi << 2) | imm_lo;
-	const int32_t signed_imm = signed_21_bit { static_cast<int>(joined_imm) }.val;
-
-	return FormPcRelAddressInstruction {
-		rel_to_4kb,
-		reg_destination_index,
-		signed_imm
-	};
-}
-
 LoadStoreRegisterPairInstruction A64Decoder::decode_load_store_register_pair_instruction() const {
 	const uint32_t raw = this->_last_raw_instruction;
 

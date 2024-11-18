@@ -12,13 +12,6 @@ enum class InstructionType {
 	Undefined = 0xFFFFFFF
 };
 
-typedef struct FormPcRelAddressInstruction {
-	bool rel_to_4kb_page;
-
-	regindex_t destination_reg_index;
-	int32_t immediate;
-} FormPcRelAddressInstruction;
-
 typedef struct UnconditionalBranchImmediateInstruction {
 	/**
 	 * @var is_with_link
@@ -69,8 +62,6 @@ public:
 	[[nodiscard]] InstructionDetailsT decode_details() const {
 		return InstructionDetailsT(this->_last_raw_instruction);
 	}
-
-	[[nodiscard]] FormPcRelAddressInstruction decode_form_pc_rel_addr_instruction() const;
 
 	[[nodiscard]] UnconditionalBranchImmediateInstruction decode_unconditional_branch_instruction() const;
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ExecutorBase.h"
-#include "../../disassembly/A64Decoder.h"
+#include "../../disassembly/instructions/FormPcRelAddressInstruction.h"
 
 class FormPcRelAddressExecutor : ExecutorBase {
 public:
