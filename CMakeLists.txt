@@ -28,4 +28,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/AddImmediateInstruction.cpp
         disassembly/instructions/FormPcRelAddressInstruction.h
         disassembly/instructions/FormPcRelAddressInstruction.cpp
+        disassembly/instructions/UnconditionalBranchImmediateInstruction.h
+        disassembly/instructions/UnconditionalBranchImmediateInstruction.cpp
 )
