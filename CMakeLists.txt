@@ -34,4 +34,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/LoadRegisterPairInstruction.cpp
         disassembly/instructions/MoveWideImmediateInstruction.h
         disassembly/instructions/MoveWideImmediateInstruction.cpp
+        emulation/executors/MoveWideImmediateExecutor.cpp
+        emulation/executors/MoveWideImmediateExecutor.h
 )

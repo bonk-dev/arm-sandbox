@@ -11,6 +11,7 @@
 #include "disassembly/instructions/AddImmediateInstruction.h"
 #include "disassembly/instructions/FormPcRelAddressInstruction.h"
 #include "disassembly/instructions/MoveWideImmediateInstruction.h"
+#include "emulation/executors/MoveWideImmediateExecutor.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -52,6 +53,7 @@ int main() {
 	const auto shared_cpu = std::make_shared<AArch64Cpu>(INITIAL_CPU_MEMORY);
 	AddSubImmediateExecutor add_sub_immediate_executor(shared_cpu);
 	FormPcRelAddressExecutor form_pc_rel_address_executor(shared_cpu);
+	MoveWideImmediateExecutor move_wide_imm_executor(shared_cpu);
 	UnconditionalBranchImmediateExecutor unconditional_branch_imm_executor(shared_cpu);
 	LoadStoreRegPairExecutor load_store_pair_executor(shared_cpu);
 
@@ -77,6 +79,8 @@ int main() {
 			case InstructionType::MoveWideImmediate:
 			{
 				auto details = dec.decode_details<MoveWideImmediateInstruction>();
+
+				move_wide_imm_executor.execute(details);
 				break;
 			}
 			case InstructionType::UnconditionalBranchImmediate:
