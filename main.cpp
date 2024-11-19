@@ -41,6 +41,9 @@ int main() {
 
 			// MOV W0, #0 (alias of MOVZ W0, #0)
 			std::byte(0x00), std::byte(0x00), std::byte(0x80), std::byte(0x52),
+
+			// MOV W15, #55 (alias of MOVZ W15, #55)
+			std::byte(0xEF), std::byte(0x06), std::byte(0x80), std::byte(0x52),
 	};
 	A64Decoder dec(sample_code);
 
