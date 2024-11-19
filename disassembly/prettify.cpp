@@ -108,7 +108,7 @@ std::string disassembly::to_pretty_string(LoadRegisterPairInstruction &i) {
 			ss << "LDNP";
 		}
 		else {
-			ss << "LTP";
+			ss << "LDP";
 		}
 	}
 	else {
