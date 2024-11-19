@@ -72,6 +72,34 @@ std::string disassembly::to_pretty_string(FormPcRelAddressInstruction &i) {
 	return ss.str();
 }
 
+std::string disassembly::to_pretty_string(MoveWideImmediateInstruction &i) {
+	// TODO: Add aliases
+
+	std::stringstream ss;
+	ss << "MOV";
+
+	switch (i.op_type) {
+		case MoveWideImmediateInstructionOpType::Unallocated:
+			throw std::runtime_error("Unallocated operation type");
+		case MoveWideImmediateInstructionOpType::Invert:
+			ss << 'N';
+			break;
+		case MoveWideImmediateInstructionOpType::Zero:
+			ss << 'Z';
+			break;
+		case MoveWideImmediateInstructionOpType::KeepBits:
+			ss << 'K';
+			break;
+	}
+
+	ss << ' ' << gp_reg_name(i.destination_reg, i.is_64bit) << ", #" << i.immediate;
+	if (i.left_shift > 0) {
+		ss << "{, LSL #" << i.left_shift << "}";
+	}
+
+	return ss.str();
+}
+
 std::string disassembly::to_pretty_string(LoadRegisterPairInstruction &i) {
 	std::stringstream ss;
 

@@ -79,6 +79,7 @@ int main() {
 			case InstructionType::MoveWideImmediate:
 			{
 				auto details = dec.decode_details<MoveWideImmediateInstruction>();
+				print_disassembly(details);
 
 				move_wide_imm_executor.execute(details);
 				break;
