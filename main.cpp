@@ -46,6 +46,9 @@ int main() {
 
 			// MOV W15, #55 (alias of MOVZ W15, #55)
 			std::byte(0xEF), std::byte(0x06), std::byte(0x80), std::byte(0x52),
+
+			// LDP X29, X30, [SP], #0x10
+			std::byte(0xFD), std::byte(0x7B), std::byte(0xC1), std::byte(0xA8)
 	};
 	A64Decoder dec(sample_code);
 
