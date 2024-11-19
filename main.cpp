@@ -10,6 +10,7 @@
 #include "emulation/executors/UnconditionalBranchImmediateExecutor.h"
 #include "disassembly/instructions/AddImmediateInstruction.h"
 #include "disassembly/instructions/FormPcRelAddressInstruction.h"
+#include "disassembly/instructions/MoveWideImmediateInstruction.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -75,7 +76,7 @@ int main() {
 			}
 			case InstructionType::MoveWideImmediate:
 			{
-				std::cout << "Move wide (IMM) decoded" << std::endl;
+				auto details = dec.decode_details<MoveWideImmediateInstruction>();
 				break;
 			}
 			case InstructionType::UnconditionalBranchImmediate:

@@ -32,4 +32,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/UnconditionalBranchImmediateInstruction.cpp
         disassembly/instructions/LoadRegisterPairInstruction.h
         disassembly/instructions/LoadRegisterPairInstruction.cpp
+        disassembly/instructions/MoveWideImmediateInstruction.h
+        disassembly/instructions/MoveWideImmediateInstruction.cpp
 )
