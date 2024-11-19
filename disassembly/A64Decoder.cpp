@@ -42,7 +42,8 @@ uint32_t read_uint_le(const std::vector<std::byte>& v, const int index) {
 // Top-level -> Data processing -> (op1 field)
 static std::map<mask_values_t, InstructionType> data_proc_op1 {
 		{ mask_values_t(0b1110, 0b0100), InstructionType::AddOrSubImmediate },
-		{ mask_values_t(0b1100, 0b0000), InstructionType::PcRelativeAddressing }
+		{ mask_values_t(0b1100, 0b0000), InstructionType::PcRelativeAddressing },
+		{ mask_values_t(0b1110, 0b1010), InstructionType::MoveWideImmediate }
 };
 InstructionType decode_data_processing_type(uint32_t raw_instruction) {
 	// op0 unused for now

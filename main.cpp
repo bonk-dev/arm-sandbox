@@ -37,7 +37,10 @@ int main() {
 			std::byte(0xF8), std::byte(0xFF), std::byte(0xFF), std::byte(0x97),
 
 			// B (offset -0x20)
-			std::byte(0xF8), std::byte(0xFF), std::byte(0xFF), std::byte(0x17)
+			std::byte(0xF8), std::byte(0xFF), std::byte(0xFF), std::byte(0x17),
+
+			// MOV W0, #0 (alias of MOVZ W0, #0)
+			std::byte(0x00), std::byte(0x00), std::byte(0x80), std::byte(0x52),
 	};
 	A64Decoder dec(sample_code);
 
@@ -65,6 +68,11 @@ int main() {
 				print_disassembly(details);
 
 				form_pc_rel_address_executor.execute(details);
+				break;
+			}
+			case InstructionType::MoveWideImmediate:
+			{
+				std::cout << "Move wide (IMM) decoded" << std::endl;
 				break;
 			}
 			case InstructionType::UnconditionalBranchImmediate:

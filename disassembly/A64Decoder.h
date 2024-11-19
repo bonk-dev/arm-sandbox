@@ -8,6 +8,7 @@ enum class InstructionType {
 	AddOrSubImmediate,
 	UnconditionalBranchImmediate,
 	PcRelativeAddressing,
+	MoveWideImmediate,
 	LoadStoreRegisterPair,
 	Undefined = 0xFFFFFFF
 };
