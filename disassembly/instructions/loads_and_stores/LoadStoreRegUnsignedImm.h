@@ -24,8 +24,13 @@ namespace InstructionDefs::LoadsAndStores {
 		bool is_using_64bit_reg;
 
 		union {
-			int16_t signed_imm: 12;
-			uint16_t unsigned_imm: 12;
+			int16_t signed_imm : 12;
+			uint16_t unsigned_imm : 12;
+		};
+
+		union {
+			int16_t signed_imm9 : 9;
+			uint16_t unsigned_imm9 : 9;
 		};
 
 		/**
