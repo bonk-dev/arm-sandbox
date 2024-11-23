@@ -89,7 +89,7 @@ int main() {
 			}
 			case InstructionType::UnconditionalBranchImmediate:
 			{
-				auto details = dec.decode_details<InstructionDefs::UnconditionalBranchImmediate>();
+				auto details = dec.decode_details<InstructionDefs::Begsi::UnconditionalBranchImmediate>();
 				print_disassembly(details);
 
 				unconditional_branch_imm_executor.execute(details);

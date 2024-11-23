@@ -28,8 +28,8 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/data_proc_imm/AddImmediate.cpp
         disassembly/instructions/data_proc_imm/FormPcRelAddress.h
         disassembly/instructions/data_proc_imm/FormPcRelAddress.cpp
-        disassembly/instructions/UnconditionalBranchImmediate.h
-        disassembly/instructions/UnconditionalBranchImmediate.cpp
+        disassembly/instructions/begsi/UnconditionalBranchImmediate.h
+        disassembly/instructions/begsi/UnconditionalBranchImmediate.cpp
         disassembly/instructions/loads_and_stores/LoadRegisterPair.h
         disassembly/instructions/loads_and_stores/LoadRegisterPair.cpp
         disassembly/instructions/data_proc_imm/MoveWideImmediate.h

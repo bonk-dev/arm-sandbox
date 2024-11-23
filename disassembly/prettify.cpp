@@ -138,7 +138,7 @@ std::string disassembly::to_pretty_string(InstructionDefs::LoadsAndStores::LoadR
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::UnconditionalBranchImmediate &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::Begsi::UnconditionalBranchImmediate &i) {
 	std::stringstream ss;
 
 	ss << (i.is_with_link ? "BL " : "B ");

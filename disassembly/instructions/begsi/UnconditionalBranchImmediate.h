@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace InstructionDefs {
+namespace InstructionDefs::Begsi {
 	typedef struct UnconditionalBranchImmediate {
 	private:
 		static int32_t decode_immediate(uint32_t encoded);
