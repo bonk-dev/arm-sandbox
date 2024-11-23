@@ -20,8 +20,8 @@ add_executable(arm_sandbox main.cpp
         emulation/emu_types.h
         emulation/executors/FormPcRelAddressExecutor.cpp
         emulation/executors/FormPcRelAddressExecutor.h
-        disassembly/prettify.h
-        disassembly/prettify.cpp
+        disassembly/disassembly.h
+        disassembly/disassembly.cpp
         emulation/executors/UnconditionalBranchImmediateExecutor.cpp
         emulation/executors/UnconditionalBranchImmediateExecutor.h
         disassembly/instructions/data_proc_imm/AddImmediate.h

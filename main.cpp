@@ -2,7 +2,7 @@
 #include <vector>
 #include <format>
 #include "disassembly/A64Decoder.h"
-#include "disassembly/prettify.h"
+#include "disassembly/disassembly.h"
 #include "emulation/AArch64Cpu.h"
 #include "emulation/executors/AddSubImmediateExecutor.h"
 #include "emulation/executors/LoadStoreRegPairExecutor.h"

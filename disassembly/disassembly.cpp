@@ -1,6 +1,6 @@
 #include <sstream>
 #include <format>
-#include "prettify.h"
+#include "disassembly.h"
 
 void insert_signed_hex(std::stringstream& ss, int32_t val) {
 	ss << std::hex << std::showbase;
