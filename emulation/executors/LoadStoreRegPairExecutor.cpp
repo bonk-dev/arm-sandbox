@@ -2,21 +2,21 @@
 
 LoadStoreRegPairExecutor::LoadStoreRegPairExecutor(const std::shared_ptr<AArch64Cpu> &cpu) : ExecutorBase(cpu) {}
 
-uintptr_t LoadStoreRegPairExecutor::calc_next_address(InstructionDefs::LoadStoreRegisterPairInstruction& instruction) const {
+uintptr_t LoadStoreRegPairExecutor::calc_next_address(InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction& instruction) const {
 	const auto cpu = this->get_cpu().get();
 	uintptr_t virt_addr = instruction.is_wide
 						  ? cpu->read_gp_register_64(instruction.base_reg)
 						  : cpu->read_gp_register_32(instruction.base_reg);
 
 	switch (instruction.encoding) {
-		case InstructionDefs::LoadStorePairEncoding::NonTemporalOffset:
-		case InstructionDefs::LoadStorePairEncoding::SignedOffset:
+		case InstructionDefs::LoadsAndStores::LoadStorePairEncoding::NonTemporalOffset:
+		case InstructionDefs::LoadsAndStores::LoadStorePairEncoding::SignedOffset:
 			virt_addr += instruction.immediate_value;
 			break;
-		case InstructionDefs::LoadStorePairEncoding::PostIndex:
+		case InstructionDefs::LoadsAndStores::LoadStorePairEncoding::PostIndex:
 			cpu->write_gp_register_64(instruction.base_reg, virt_addr + instruction.immediate_value);
 			break;
-		case InstructionDefs::LoadStorePairEncoding::PreIndex:
+		case InstructionDefs::LoadsAndStores::LoadStorePairEncoding::PreIndex:
 			virt_addr += instruction.immediate_value;
 			cpu->write_gp_register_64(instruction.base_reg, virt_addr);
 			break;
@@ -25,7 +25,7 @@ uintptr_t LoadStoreRegPairExecutor::calc_next_address(InstructionDefs::LoadStore
 	return virt_addr;
 }
 
-void LoadStoreRegPairExecutor::execute(InstructionDefs::LoadStoreRegisterPairInstruction& instruction) {
+void LoadStoreRegPairExecutor::execute(InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction& instruction) {
 	if (instruction.is_simd) {
 		throw std::runtime_error("SIMD operations are not implemented");
 	}

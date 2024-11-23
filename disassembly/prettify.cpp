@@ -100,11 +100,11 @@ std::string disassembly::to_pretty_string(InstructionDefs::MoveWideImmediate &i)
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::LoadRegisterPair &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::LoadsAndStores::LoadRegisterPair &i) {
 	std::stringstream ss;
 
 	if (i.is_load) {
-		if (i.encoding == InstructionDefs::LoadStorePairEncoding::NonTemporalOffset) {
+		if (i.encoding == InstructionDefs::LoadsAndStores::LoadStorePairEncoding::NonTemporalOffset) {
 			ss << "LDNP";
 		}
 		else {
@@ -112,7 +112,7 @@ std::string disassembly::to_pretty_string(InstructionDefs::LoadRegisterPair &i) 
 		}
 	}
 	else {
-		if (i.encoding == InstructionDefs::LoadStorePairEncoding::NonTemporalOffset) {
+		if (i.encoding == InstructionDefs::LoadsAndStores::LoadStorePairEncoding::NonTemporalOffset) {
 			ss << "STNP";
 		}
 		else {
@@ -123,14 +123,14 @@ std::string disassembly::to_pretty_string(InstructionDefs::LoadRegisterPair &i) 
 	ss << ' ' << gp_reg_name(i.first_reg_index) << ", " << gp_reg_name(i.second_reg_index) << ", ";
 
 	switch (i.encoding) {
-		case InstructionDefs::LoadStorePairEncoding::PostIndex:
+		case InstructionDefs::LoadsAndStores::LoadStorePairEncoding::PostIndex:
 			ss << '[' << gp_reg_name(i.base_reg) << "], #" << i.immediate_value;
 			break;
-		case InstructionDefs::LoadStorePairEncoding::PreIndex:
+		case InstructionDefs::LoadsAndStores::LoadStorePairEncoding::PreIndex:
 			ss << '[' << gp_reg_name(i.base_reg) << ", #" << i.immediate_value << "]!";
 			break;
-		case InstructionDefs::LoadStorePairEncoding::SignedOffset:
-		case InstructionDefs::LoadStorePairEncoding::NonTemporalOffset:
+		case InstructionDefs::LoadsAndStores::LoadStorePairEncoding::SignedOffset:
+		case InstructionDefs::LoadsAndStores::LoadStorePairEncoding::NonTemporalOffset:
 			ss << '[' << gp_reg_name(i.base_reg) << "{, #" << i.immediate_value << "}]";
 			break;
 	}

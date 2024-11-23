@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace InstructionDefs {
+namespace InstructionDefs::LoadsAndStores {
 	enum class LoadStorePairEncoding : uint8_t {
 		NonTemporalOffset = 0b000,
 		PostIndex = 0b001,
