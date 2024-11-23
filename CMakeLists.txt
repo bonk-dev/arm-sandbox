@@ -38,4 +38,6 @@ add_executable(arm_sandbox main.cpp
         emulation/executors/MoveWideImmediateExecutor.h
         disassembly/instructions/loads_and_stores/LoadStoreRegUnsignedImm.h
         disassembly/instructions/loads_and_stores/LoadStoreRegUnsignedImm.cpp
+        emulation/executors/loads_and_stores/LoadStoreRegUnsignedImm.cpp
+        emulation/executors/loads_and_stores/LoadStoreRegUnsignedImm.h
 )

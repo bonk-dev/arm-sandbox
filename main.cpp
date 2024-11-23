@@ -12,6 +12,7 @@
 #include "disassembly/instructions/data_proc_imm/FormPcRelAddress.h"
 #include "disassembly/instructions/data_proc_imm/MoveWideImmediate.h"
 #include "emulation/executors/MoveWideImmediateExecutor.h"
+#include "emulation/executors/loads_and_stores/LoadStoreRegUnsignedImm.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -62,6 +63,7 @@ int main() {
 	MoveWideImmediateExecutor move_wide_imm_executor(shared_cpu);
 	UnconditionalBranchImmediateExecutor unconditional_branch_imm_executor(shared_cpu);
 	LoadStoreRegPairExecutor load_store_pair_executor(shared_cpu);
+	Executors::LoadsAndStores::LoadStoreRegUnsignedImm load_store_unsigned_imm_executor(shared_cpu);
 
 	InstructionType inst = dec.decode_next();
 	while (inst != InstructionType::Undefined) {
@@ -109,6 +111,9 @@ int main() {
 			case InstructionType::LoadStoreRegisterUnsignedImm:
 			{
 				std::cout << "Load/store unsigned imm" << std::endl;
+				auto details = dec.decode_details<InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm>();
+
+				load_store_unsigned_imm_executor.execute(details);
 				break;
 			}
 			default:
