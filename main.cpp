@@ -48,7 +48,10 @@ int main() {
 			std::byte(0xEF), std::byte(0x06), std::byte(0x80), std::byte(0x52),
 
 			// LDP X29, X30, [SP], #0x10
-			std::byte(0xFD), std::byte(0x7B), std::byte(0xC1), std::byte(0xA8)
+			std::byte(0xFD), std::byte(0x7B), std::byte(0xC1), std::byte(0xA8),
+
+			// LDR X17, [X16, #0x20]
+			std::byte(0x11), std::byte(0x12), std::byte(0x40), std::byte(0xF9)
 	};
 	A64Decoder dec(sample_code);
 
@@ -101,6 +104,11 @@ int main() {
 				print_disassembly(details);
 
 				load_store_pair_executor.execute(details);
+				break;
+			}
+			case InstructionType::LoadStoreRegisterUnsignedImm:
+			{
+				std::cout << "Load/store unsigned imm" << std::endl;
 				break;
 			}
 			default:
