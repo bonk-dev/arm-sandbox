@@ -3,7 +3,7 @@
 #include "../../emulation/emu_types.h"
 
 namespace InstructionDefs {
-	typedef struct FormPcRelAddressInstruction {
+	typedef struct FormPcRelAddress {
 	private:
 		static int32_t decode_immediate(uint32_t encoded);
 
@@ -13,6 +13,6 @@ namespace InstructionDefs {
 		regindex_t destination_reg_index;
 		int32_t immediate;
 
-		explicit FormPcRelAddressInstruction(uint32_t encoded);
+		explicit FormPcRelAddress(uint32_t encoded);
 	} FormPcRelAddressInstruction;
 }

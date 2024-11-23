@@ -35,7 +35,7 @@ std::string gp_reg_name(regindex_t index, bool is_64bit) {
 	return gp_reg_name(index, static_cast<unsigned int>(is_64bit ? 64 : 32));
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::AddImmediateInstruction &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::AddImmediate &i) {
 	std::stringstream ss;
 	if (i.set_flags) {
 		ss << (i.is_subtraction
@@ -58,7 +58,7 @@ std::string disassembly::to_pretty_string(InstructionDefs::AddImmediateInstructi
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::FormPcRelAddressInstruction &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::FormPcRelAddress &i) {
 	std::stringstream ss;
 
 	if (i.rel_to_4kb_page) {
@@ -72,22 +72,22 @@ std::string disassembly::to_pretty_string(InstructionDefs::FormPcRelAddressInstr
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::MoveWideImmediateInstruction &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::MoveWideImmediate &i) {
 	// TODO: Add aliases
 
 	std::stringstream ss;
 	ss << "MOV";
 
 	switch (i.op_type) {
-		case InstructionDefs::MoveWideImmediateInstructionOpType::Unallocated:
+		case InstructionDefs::MoveWideImmediateOpType::Unallocated:
 			throw std::runtime_error("Unallocated operation type");
-		case InstructionDefs::MoveWideImmediateInstructionOpType::Invert:
+		case InstructionDefs::MoveWideImmediateOpType::Invert:
 			ss << 'N';
 			break;
-		case InstructionDefs::MoveWideImmediateInstructionOpType::Zero:
+		case InstructionDefs::MoveWideImmediateOpType::Zero:
 			ss << 'Z';
 			break;
-		case InstructionDefs::MoveWideImmediateInstructionOpType::KeepBits:
+		case InstructionDefs::MoveWideImmediateOpType::KeepBits:
 			ss << 'K';
 			break;
 	}
@@ -100,7 +100,7 @@ std::string disassembly::to_pretty_string(InstructionDefs::MoveWideImmediateInst
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::LoadRegisterPairInstruction &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::LoadRegisterPair &i) {
 	std::stringstream ss;
 
 	if (i.is_load) {
@@ -138,7 +138,7 @@ std::string disassembly::to_pretty_string(InstructionDefs::LoadRegisterPairInstr
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::UnconditionalBranchImmediateInstruction &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::UnconditionalBranchImmediate &i) {
 	std::stringstream ss;
 
 	ss << (i.is_with_link ? "BL " : "B ");

@@ -8,9 +8,9 @@
 #include "emulation/executors/LoadStoreRegPairExecutor.h"
 #include "emulation/executors/FormPcRelAddressExecutor.h"
 #include "emulation/executors/UnconditionalBranchImmediateExecutor.h"
-#include "disassembly/instructions/AddImmediateInstruction.h"
-#include "disassembly/instructions/FormPcRelAddressInstruction.h"
-#include "disassembly/instructions/MoveWideImmediateInstruction.h"
+#include "disassembly/instructions/AddImmediate.h"
+#include "disassembly/instructions/FormPcRelAddress.h"
+#include "disassembly/instructions/MoveWideImmediate.h"
 #include "emulation/executors/MoveWideImmediateExecutor.h"
 
 template<class InstDetails>
@@ -65,7 +65,7 @@ int main() {
 		switch (inst) {
 			case InstructionType::AddOrSubImmediate:
 			{
-				auto details = dec.decode_details<InstructionDefs::AddImmediateInstruction>();
+				auto details = dec.decode_details<InstructionDefs::AddImmediate>();
 				print_disassembly(details);
 
 				add_sub_immediate_executor.execute(details);
@@ -73,7 +73,7 @@ int main() {
 			}
 			case InstructionType::PcRelativeAddressing:
 			{
-				auto details = dec.decode_details<InstructionDefs::FormPcRelAddressInstruction>();
+				auto details = dec.decode_details<InstructionDefs::FormPcRelAddress>();
 				print_disassembly(details);
 
 				form_pc_rel_address_executor.execute(details);
@@ -81,7 +81,7 @@ int main() {
 			}
 			case InstructionType::MoveWideImmediate:
 			{
-				auto details = dec.decode_details<InstructionDefs::MoveWideImmediateInstruction>();
+				auto details = dec.decode_details<InstructionDefs::MoveWideImmediate>();
 				print_disassembly(details);
 
 				move_wide_imm_executor.execute(details);
@@ -89,7 +89,7 @@ int main() {
 			}
 			case InstructionType::UnconditionalBranchImmediate:
 			{
-				auto details = dec.decode_details<InstructionDefs::UnconditionalBranchImmediateInstruction>();
+				auto details = dec.decode_details<InstructionDefs::UnconditionalBranchImmediate>();
 				print_disassembly(details);
 
 				unconditional_branch_imm_executor.execute(details);

@@ -3,7 +3,7 @@
 
 FormPcRelAddressExecutor::FormPcRelAddressExecutor(const std::shared_ptr<AArch64Cpu> &cpu) : ExecutorBase(cpu) {}
 
-void FormPcRelAddressExecutor::execute(InstructionDefs::FormPcRelAddressInstruction &instruction) const {
+void FormPcRelAddressExecutor::execute(InstructionDefs::FormPcRelAddress &instruction) const {
 	const auto cpu = this->get_cpu().get();
 
 	uint64_t pc = cpu->get_program_counter();

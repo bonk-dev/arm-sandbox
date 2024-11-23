@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ExecutorBase.h"
-#include "../../disassembly/instructions/LoadRegisterPairInstruction.h"
+#include "../../disassembly/instructions/LoadRegisterPair.h"
 
 class LoadStoreRegPairExecutor : ExecutorBase {
 private:

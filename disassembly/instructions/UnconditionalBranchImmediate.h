@@ -3,7 +3,7 @@
 #include <cstdint>
 
 namespace InstructionDefs {
-	typedef struct UnconditionalBranchImmediateInstruction {
+	typedef struct UnconditionalBranchImmediate {
 	private:
 		static int32_t decode_immediate(uint32_t encoded);
 
@@ -20,6 +20,6 @@ namespace InstructionDefs {
 		 **/
 		int32_t immediate;
 
-		explicit UnconditionalBranchImmediateInstruction(uint32_t encoded);
+		explicit UnconditionalBranchImmediate(uint32_t encoded);
 	} UnconditionalBranchImmediateInstruction;
 }

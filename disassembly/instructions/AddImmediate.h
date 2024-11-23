@@ -3,7 +3,7 @@
 #include <cstdint>
 
 namespace InstructionDefs {
-	typedef struct AddImmediateInstruction {
+	typedef struct AddImmediate {
 		bool is_64bit;
 		bool is_subtraction;
 		bool set_flags;
@@ -13,6 +13,6 @@ namespace InstructionDefs {
 		uint8_t destination_reg_index;
 		uint8_t source_reg_index;
 
-		explicit AddImmediateInstruction(uint32_t encoded);
+		explicit AddImmediate(uint32_t encoded);
 	} AddImmediateInstruction;
 }

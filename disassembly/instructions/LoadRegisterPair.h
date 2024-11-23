@@ -10,7 +10,7 @@ namespace InstructionDefs {
 		SignedOffset = 0b010
 	};
 
-	typedef struct LoadRegisterPairInstruction {
+	typedef struct LoadRegisterPair {
 	private:
 		static int16_t decode_immediate(bool is_wide, uint32_t encoded);
 
@@ -29,6 +29,6 @@ namespace InstructionDefs {
 		uint8_t base_reg;
 		int16_t immediate_value;
 
-		explicit LoadRegisterPairInstruction(uint32_t encoded);
+		explicit LoadRegisterPair(uint32_t encoded);
 	} LoadStoreRegisterPairInstruction;
 }
