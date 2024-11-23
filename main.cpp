@@ -8,8 +8,8 @@
 #include "emulation/executors/LoadStoreRegPairExecutor.h"
 #include "emulation/executors/FormPcRelAddressExecutor.h"
 #include "emulation/executors/UnconditionalBranchImmediateExecutor.h"
-#include "disassembly/instructions/AddImmediate.h"
-#include "disassembly/instructions/FormPcRelAddress.h"
+#include "disassembly/instructions/data_proc_imm/AddImmediate.h"
+#include "disassembly/instructions/data_proc_imm/FormPcRelAddress.h"
 #include "disassembly/instructions/MoveWideImmediate.h"
 #include "emulation/executors/MoveWideImmediateExecutor.h"
 
@@ -65,7 +65,7 @@ int main() {
 		switch (inst) {
 			case InstructionType::AddOrSubImmediate:
 			{
-				auto details = dec.decode_details<InstructionDefs::AddImmediate>();
+				auto details = dec.decode_details<InstructionDefs::DataProcImm::AddImmediate>();
 				print_disassembly(details);
 
 				add_sub_immediate_executor.execute(details);
@@ -73,7 +73,7 @@ int main() {
 			}
 			case InstructionType::PcRelativeAddressing:
 			{
-				auto details = dec.decode_details<InstructionDefs::FormPcRelAddress>();
+				auto details = dec.decode_details<InstructionDefs::DataProcImm::FormPcRelAddress>();
 				print_disassembly(details);
 
 				form_pc_rel_address_executor.execute(details);

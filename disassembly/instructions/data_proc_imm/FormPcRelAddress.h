@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../emulation/emu_types.h"
+#include "../../../emulation/emu_types.h"
 
-namespace InstructionDefs {
+namespace InstructionDefs::DataProcImm {
 	typedef struct FormPcRelAddress {
 	private:
 		static int32_t decode_immediate(uint32_t encoded);

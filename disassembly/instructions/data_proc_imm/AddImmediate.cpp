@@ -4,7 +4,7 @@ constexpr uint32_t DEST_MASK = 0b11111;
 constexpr uint32_t SOURCE_MASK = 0b11111;
 constexpr uint32_t IMM12_MASK = 0b111111111111;
 
-InstructionDefs::AddImmediate::AddImmediate(uint32_t encoded) :
+InstructionDefs::DataProcImm::AddImmediate::AddImmediate(uint32_t encoded) :
 	is_64bit(encoded >> 31 & 1),
 	is_subtraction(encoded >> 30 & 1),
 	set_flags(encoded >> 29 & 1),

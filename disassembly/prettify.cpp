@@ -35,7 +35,7 @@ std::string gp_reg_name(regindex_t index, bool is_64bit) {
 	return gp_reg_name(index, static_cast<unsigned int>(is_64bit ? 64 : 32));
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::AddImmediate &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::DataProcImm::AddImmediate &i) {
 	std::stringstream ss;
 	if (i.set_flags) {
 		ss << (i.is_subtraction
@@ -58,7 +58,7 @@ std::string disassembly::to_pretty_string(InstructionDefs::AddImmediate &i) {
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::FormPcRelAddress &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::DataProcImm::FormPcRelAddress &i) {
 	std::stringstream ss;
 
 	if (i.rel_to_4kb_page) {

@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace InstructionDefs {
+namespace InstructionDefs::DataProcImm {
 	typedef struct AddImmediate {
 		bool is_64bit;
 		bool is_subtraction;

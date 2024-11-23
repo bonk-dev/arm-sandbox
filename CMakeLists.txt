@@ -24,10 +24,10 @@ add_executable(arm_sandbox main.cpp
         disassembly/prettify.cpp
         emulation/executors/UnconditionalBranchImmediateExecutor.cpp
         emulation/executors/UnconditionalBranchImmediateExecutor.h
-        disassembly/instructions/AddImmediate.h
-        disassembly/instructions/AddImmediate.cpp
-        disassembly/instructions/FormPcRelAddress.h
-        disassembly/instructions/FormPcRelAddress.cpp
+        disassembly/instructions/data_proc_imm/AddImmediate.h
+        disassembly/instructions/data_proc_imm/AddImmediate.cpp
+        disassembly/instructions/data_proc_imm/FormPcRelAddress.h
+        disassembly/instructions/data_proc_imm/FormPcRelAddress.cpp
         disassembly/instructions/UnconditionalBranchImmediate.h
         disassembly/instructions/UnconditionalBranchImmediate.cpp
         disassembly/instructions/loads_and_stores/LoadRegisterPair.h
