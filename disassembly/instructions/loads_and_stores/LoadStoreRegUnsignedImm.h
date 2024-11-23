@@ -5,6 +5,18 @@
 
 namespace InstructionDefs::LoadsAndStores {
 	typedef struct LoadStoreRegUnsignedImm {
+		enum class Indexing {
+			PostIndex = 0b001,
+			PreIndex = 0b011,
+			UnsignedOffset = 0b100
+		};
+
+		/**
+		 * @var indexing_mode
+		 * @brief Defines how the address is calculated and wrote back (to the base register)
+		 */
+		Indexing indexing_mode;
+
 		/**
 		 * @var size
 		 * @brief Size of loaded/stored data (in bits)
