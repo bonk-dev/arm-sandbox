@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../emulation/emu_types.h"
+#include "../../../emulation/emu_types.h"
 
-namespace InstructionDefs {
+namespace InstructionDefs::DataProcImm {
 	enum class MoveWideImmediateOpType {
 		Unallocated = 0b01,
 		Invert = 0b00,

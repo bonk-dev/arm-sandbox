@@ -32,8 +32,8 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/UnconditionalBranchImmediate.cpp
         disassembly/instructions/loads_and_stores/LoadRegisterPair.h
         disassembly/instructions/loads_and_stores/LoadRegisterPair.cpp
-        disassembly/instructions/MoveWideImmediate.h
-        disassembly/instructions/MoveWideImmediate.cpp
+        disassembly/instructions/data_proc_imm/MoveWideImmediate.h
+        disassembly/instructions/data_proc_imm/MoveWideImmediate.cpp
         emulation/executors/MoveWideImmediateExecutor.cpp
         emulation/executors/MoveWideImmediateExecutor.h
 )

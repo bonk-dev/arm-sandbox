@@ -72,22 +72,22 @@ std::string disassembly::to_pretty_string(InstructionDefs::DataProcImm::FormPcRe
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::MoveWideImmediate &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::DataProcImm::MoveWideImmediate &i) {
 	// TODO: Add aliases
 
 	std::stringstream ss;
 	ss << "MOV";
 
 	switch (i.op_type) {
-		case InstructionDefs::MoveWideImmediateOpType::Unallocated:
+		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::Unallocated:
 			throw std::runtime_error("Unallocated operation type");
-		case InstructionDefs::MoveWideImmediateOpType::Invert:
+		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::Invert:
 			ss << 'N';
 			break;
-		case InstructionDefs::MoveWideImmediateOpType::Zero:
+		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::Zero:
 			ss << 'Z';
 			break;
-		case InstructionDefs::MoveWideImmediateOpType::KeepBits:
+		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::KeepBits:
 			ss << 'K';
 			break;
 	}

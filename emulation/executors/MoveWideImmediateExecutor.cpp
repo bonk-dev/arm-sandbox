@@ -2,18 +2,18 @@
 
 MoveWideImmediateExecutor::MoveWideImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu) : ExecutorBase(cpu) {}
 
-void MoveWideImmediateExecutor::execute(InstructionDefs::MoveWideImmediate &instruction) {
+void MoveWideImmediateExecutor::execute(InstructionDefs::DataProcImm::MoveWideImmediate &instruction) {
 	uint64_t result;
 	switch (instruction.op_type) {
-		case InstructionDefs::MoveWideImmediateOpType::Unallocated:
+		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::Unallocated:
 			throw std::runtime_error("Unallocated operation type");
-		case InstructionDefs::MoveWideImmediateOpType::Invert:
+		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::Invert:
 			result = ~(instruction.immediate << instruction.left_shift);
 			break;
-		case InstructionDefs::MoveWideImmediateOpType::Zero:
+		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::Zero:
 			result = instruction.immediate << instruction.left_shift;
 			break;
-		case InstructionDefs::MoveWideImmediateOpType::KeepBits:
+		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::KeepBits:
 			result = instruction.is_64bit
 					? this->get_cpu()->read_gp_register_64(instruction.destination_reg)
 					: this->get_cpu()->read_gp_register_32(instruction.destination_reg);

@@ -10,7 +10,7 @@
 #include "emulation/executors/UnconditionalBranchImmediateExecutor.h"
 #include "disassembly/instructions/data_proc_imm/AddImmediate.h"
 #include "disassembly/instructions/data_proc_imm/FormPcRelAddress.h"
-#include "disassembly/instructions/MoveWideImmediate.h"
+#include "disassembly/instructions/data_proc_imm/MoveWideImmediate.h"
 #include "emulation/executors/MoveWideImmediateExecutor.h"
 
 template<class InstDetails>
@@ -81,7 +81,7 @@ int main() {
 			}
 			case InstructionType::MoveWideImmediate:
 			{
-				auto details = dec.decode_details<InstructionDefs::MoveWideImmediate>();
+				auto details = dec.decode_details<InstructionDefs::DataProcImm::MoveWideImmediate>();
 				print_disassembly(details);
 
 				move_wide_imm_executor.execute(details);
