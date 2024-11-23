@@ -6,5 +6,5 @@
 class AddSubImmediateExecutor : ExecutorBase {
 public:
 	explicit AddSubImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu);
-	void execute(InstructionDefs::DataProcImm::AddImmediate& instruction) const;
+	void execute(InstructionDefs::DataProcImm::AddImmediate& instruction);
 };

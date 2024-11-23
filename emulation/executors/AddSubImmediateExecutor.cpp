@@ -3,7 +3,7 @@
 AddSubImmediateExecutor::AddSubImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu) : ExecutorBase(cpu) {}
 
 // TODO: Make an executor template?
-void AddSubImmediateExecutor::execute(InstructionDefs::DataProcImm::AddImmediate& instruction) const {
+void AddSubImmediateExecutor::execute(InstructionDefs::DataProcImm::AddImmediate& instruction) {
     const auto cpu = this->get_cpu().get();
 
     uint64_t val = instruction.is_64bit

@@ -2,7 +2,7 @@
 
 LoadStoreRegPairExecutor::LoadStoreRegPairExecutor(const std::shared_ptr<AArch64Cpu> &cpu) : ExecutorBase(cpu) {}
 
-uintptr_t LoadStoreRegPairExecutor::calc_next_address(InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction& instruction) const {
+uintptr_t LoadStoreRegPairExecutor::calc_next_address(InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction& instruction) {
 	const auto cpu = this->get_cpu().get();
 	uintptr_t virt_addr = instruction.is_wide
 						  ? cpu->read_gp_register_64(instruction.base_reg)
