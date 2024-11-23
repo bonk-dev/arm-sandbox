@@ -7,9 +7,9 @@
 #include "instructions/MoveWideImmediateInstruction.h"
 
 namespace disassembly {
-	std::string to_pretty_string(AddImmediateInstruction& i);
-	std::string to_pretty_string(FormPcRelAddressInstruction& i);
-	std::string to_pretty_string(MoveWideImmediateInstruction& i);
-	std::string to_pretty_string(LoadRegisterPairInstruction& i);
-	std::string to_pretty_string(UnconditionalBranchImmediateInstruction& i);
+	std::string to_pretty_string(InstructionDefs::AddImmediateInstruction& i);
+	std::string to_pretty_string(InstructionDefs::FormPcRelAddressInstruction& i);
+	std::string to_pretty_string(InstructionDefs::MoveWideImmediateInstruction& i);
+	std::string to_pretty_string(InstructionDefs::LoadRegisterPairInstruction& i);
+	std::string to_pretty_string(InstructionDefs::UnconditionalBranchImmediateInstruction& i);
 }

@@ -65,7 +65,7 @@ int main() {
 		switch (inst) {
 			case InstructionType::AddOrSubImmediate:
 			{
-				auto details = dec.decode_details<AddImmediateInstruction>();
+				auto details = dec.decode_details<InstructionDefs::AddImmediateInstruction>();
 				print_disassembly(details);
 
 				add_sub_immediate_executor.execute(details);
@@ -73,7 +73,7 @@ int main() {
 			}
 			case InstructionType::PcRelativeAddressing:
 			{
-				auto details = dec.decode_details<FormPcRelAddressInstruction>();
+				auto details = dec.decode_details<InstructionDefs::FormPcRelAddressInstruction>();
 				print_disassembly(details);
 
 				form_pc_rel_address_executor.execute(details);
@@ -81,7 +81,7 @@ int main() {
 			}
 			case InstructionType::MoveWideImmediate:
 			{
-				auto details = dec.decode_details<MoveWideImmediateInstruction>();
+				auto details = dec.decode_details<InstructionDefs::MoveWideImmediateInstruction>();
 				print_disassembly(details);
 
 				move_wide_imm_executor.execute(details);
@@ -89,7 +89,7 @@ int main() {
 			}
 			case InstructionType::UnconditionalBranchImmediate:
 			{
-				auto details = dec.decode_details<UnconditionalBranchImmediateInstruction>();
+				auto details = dec.decode_details<InstructionDefs::UnconditionalBranchImmediateInstruction>();
 				print_disassembly(details);
 
 				unconditional_branch_imm_executor.execute(details);
@@ -97,7 +97,7 @@ int main() {
 			}
 			case InstructionType::LoadStoreRegisterPair:
 			{
-				auto details = dec.decode_details<LoadStoreRegisterPairInstruction>();
+				auto details = dec.decode_details<InstructionDefs::LoadStoreRegisterPairInstruction>();
 				print_disassembly(details);
 
 				load_store_pair_executor.execute(details);

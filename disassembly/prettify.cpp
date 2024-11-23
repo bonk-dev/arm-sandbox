@@ -35,7 +35,7 @@ std::string gp_reg_name(regindex_t index, bool is_64bit) {
 	return gp_reg_name(index, static_cast<unsigned int>(is_64bit ? 64 : 32));
 }
 
-std::string disassembly::to_pretty_string(AddImmediateInstruction &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::AddImmediateInstruction &i) {
 	std::stringstream ss;
 	if (i.set_flags) {
 		ss << (i.is_subtraction
@@ -58,7 +58,7 @@ std::string disassembly::to_pretty_string(AddImmediateInstruction &i) {
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(FormPcRelAddressInstruction &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::FormPcRelAddressInstruction &i) {
 	std::stringstream ss;
 
 	if (i.rel_to_4kb_page) {
@@ -72,22 +72,22 @@ std::string disassembly::to_pretty_string(FormPcRelAddressInstruction &i) {
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(MoveWideImmediateInstruction &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::MoveWideImmediateInstruction &i) {
 	// TODO: Add aliases
 
 	std::stringstream ss;
 	ss << "MOV";
 
 	switch (i.op_type) {
-		case MoveWideImmediateInstructionOpType::Unallocated:
+		case InstructionDefs::MoveWideImmediateInstructionOpType::Unallocated:
 			throw std::runtime_error("Unallocated operation type");
-		case MoveWideImmediateInstructionOpType::Invert:
+		case InstructionDefs::MoveWideImmediateInstructionOpType::Invert:
 			ss << 'N';
 			break;
-		case MoveWideImmediateInstructionOpType::Zero:
+		case InstructionDefs::MoveWideImmediateInstructionOpType::Zero:
 			ss << 'Z';
 			break;
-		case MoveWideImmediateInstructionOpType::KeepBits:
+		case InstructionDefs::MoveWideImmediateInstructionOpType::KeepBits:
 			ss << 'K';
 			break;
 	}
@@ -100,11 +100,11 @@ std::string disassembly::to_pretty_string(MoveWideImmediateInstruction &i) {
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(LoadRegisterPairInstruction &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::LoadRegisterPairInstruction &i) {
 	std::stringstream ss;
 
 	if (i.is_load) {
-		if (i.encoding == LoadStorePairEncoding::NonTemporalOffset) {
+		if (i.encoding == InstructionDefs::LoadStorePairEncoding::NonTemporalOffset) {
 			ss << "LDNP";
 		}
 		else {
@@ -112,7 +112,7 @@ std::string disassembly::to_pretty_string(LoadRegisterPairInstruction &i) {
 		}
 	}
 	else {
-		if (i.encoding == LoadStorePairEncoding::NonTemporalOffset) {
+		if (i.encoding == InstructionDefs::LoadStorePairEncoding::NonTemporalOffset) {
 			ss << "STNP";
 		}
 		else {
@@ -123,14 +123,14 @@ std::string disassembly::to_pretty_string(LoadRegisterPairInstruction &i) {
 	ss << ' ' << gp_reg_name(i.first_reg_index) << ", " << gp_reg_name(i.second_reg_index) << ", ";
 
 	switch (i.encoding) {
-		case LoadStorePairEncoding::PostIndex:
+		case InstructionDefs::LoadStorePairEncoding::PostIndex:
 			ss << '[' << gp_reg_name(i.base_reg) << "], #" << i.immediate_value;
 			break;
-		case LoadStorePairEncoding::PreIndex:
+		case InstructionDefs::LoadStorePairEncoding::PreIndex:
 			ss << '[' << gp_reg_name(i.base_reg) << ", #" << i.immediate_value << "]!";
 			break;
-		case LoadStorePairEncoding::SignedOffset:
-		case LoadStorePairEncoding::NonTemporalOffset:
+		case InstructionDefs::LoadStorePairEncoding::SignedOffset:
+		case InstructionDefs::LoadStorePairEncoding::NonTemporalOffset:
 			ss << '[' << gp_reg_name(i.base_reg) << "{, #" << i.immediate_value << "}]";
 			break;
 	}
@@ -138,7 +138,7 @@ std::string disassembly::to_pretty_string(LoadRegisterPairInstruction &i) {
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(UnconditionalBranchImmediateInstruction &i) {
+std::string disassembly::to_pretty_string(InstructionDefs::UnconditionalBranchImmediateInstruction &i) {
 	std::stringstream ss;
 
 	ss << (i.is_with_link ? "BL " : "B ");

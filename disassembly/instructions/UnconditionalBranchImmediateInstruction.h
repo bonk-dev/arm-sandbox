@@ -2,21 +2,24 @@
 
 #include <cstdint>
 
-typedef struct UnconditionalBranchImmediateInstruction {
-private:
-	static int32_t decode_immediate(uint32_t encoded);
-public:
-	/**
-	 * @var is_with_link
-	 * @brief If true, the executor should set X30 to PC+4
-	 */
-	bool is_with_link;
+namespace InstructionDefs {
+	typedef struct UnconditionalBranchImmediateInstruction {
+	private:
+		static int32_t decode_immediate(uint32_t encoded);
 
-	/**
-	 * @var immediate
-	 * @brief Offset from PC, in the range +/- 128MB
-	 **/
-	int32_t immediate;
+	public:
+		/**
+		 * @var is_with_link
+		 * @brief If true, the executor should set X30 to PC+4
+		 */
+		bool is_with_link;
 
-	explicit UnconditionalBranchImmediateInstruction(uint32_t encoded);
-} UnconditionalBranchImmediateInstruction;
+		/**
+		 * @var immediate
+		 * @brief Offset from PC, in the range +/- 128MB
+		 **/
+		int32_t immediate;
+
+		explicit UnconditionalBranchImmediateInstruction(uint32_t encoded);
+	} UnconditionalBranchImmediateInstruction;
+}

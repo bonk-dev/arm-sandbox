@@ -5,8 +5,8 @@
 
 class LoadStoreRegPairExecutor : ExecutorBase {
 private:
-	uintptr_t calc_next_address(LoadStoreRegisterPairInstruction& instruction) const;
+	uintptr_t calc_next_address(InstructionDefs::LoadStoreRegisterPairInstruction& instruction) const;
 public:
 	explicit LoadStoreRegPairExecutor(const std::shared_ptr<AArch64Cpu> &cpu);
-	void execute(LoadStoreRegisterPairInstruction& instruction);
+	void execute(InstructionDefs::LoadStoreRegisterPairInstruction& instruction);
 };

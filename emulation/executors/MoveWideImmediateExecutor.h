@@ -6,5 +6,5 @@
 class MoveWideImmediateExecutor : ExecutorBase {
 public:
 	explicit MoveWideImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu);
-	void execute(MoveWideImmediateInstruction& instruction);
+	void execute(InstructionDefs::MoveWideImmediateInstruction& instruction);
 };

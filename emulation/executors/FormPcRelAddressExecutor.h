@@ -6,5 +6,5 @@
 class FormPcRelAddressExecutor : ExecutorBase {
 public:
 	explicit FormPcRelAddressExecutor(const std::shared_ptr<AArch64Cpu> &cpu);
-	void execute(FormPcRelAddressInstruction& instruction) const;
+	void execute(InstructionDefs::FormPcRelAddressInstruction& instruction) const;
 };

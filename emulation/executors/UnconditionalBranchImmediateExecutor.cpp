@@ -3,7 +3,7 @@
 UnconditionalBranchImmediateExecutor::UnconditionalBranchImmediateExecutor(
 		const std::shared_ptr<AArch64Cpu> &cpu) : ExecutorBase(cpu) {}
 
-void UnconditionalBranchImmediateExecutor::execute(UnconditionalBranchImmediateInstruction &instruction) {
+void UnconditionalBranchImmediateExecutor::execute(InstructionDefs::UnconditionalBranchImmediateInstruction &instruction) {
 	uint64_t pc = this->get_cpu()->get_program_counter();
 
 	if (instruction.is_with_link) {
