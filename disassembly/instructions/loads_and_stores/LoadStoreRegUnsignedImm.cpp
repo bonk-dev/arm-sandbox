@@ -1,14 +1,22 @@
+#include <stdexcept>
 #include "LoadStoreRegUnsignedImm.h"
 
 namespace {
-	InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm::Indexing decode_indexing_mode(uint32_t encoded) {
+	InstructionDefs::IndexingMode decode_indexing_mode(uint32_t encoded) {
 		const bool is_unsigned_offset = ((encoded >> 24) & 0b11) == 0b01;
 		if (is_unsigned_offset) {
-			return InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm::Indexing::UnsignedOffset;
+			return InstructionDefs::IndexingMode::UnsignedOffset;
 		}
 
  		const uint8_t pre_post_bits = (encoded >> 10) & 0b11;
-		return static_cast<InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm::Indexing>(pre_post_bits);
+		switch (pre_post_bits) {
+			case 0b01:
+				return InstructionDefs::IndexingMode::PostIndex;
+			case 0b11:
+				return InstructionDefs::IndexingMode::PreIndex;
+			default:
+				throw std::runtime_error("Invalid indexing mode");
+		}
 	}
 }
 

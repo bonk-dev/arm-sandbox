@@ -1,12 +1,31 @@
+#include <stdexcept>
 #include "LoadRegisterPair.h"
 #include "../../../numbers/two_complement.h"
 
 constexpr uint8_t REGISTER_MASK = 0b11111;
 
+namespace {
+	InstructionDefs::IndexingMode decode_indexing_mode(uint32_t encoded) {
+		const uint8_t field = encoded >> 23 & 0b111;
+		switch (field) {
+			case 0b000:
+				return InstructionDefs::IndexingMode::NonTemporalOffset;
+			case 0b001:
+				return InstructionDefs::IndexingMode::PostIndex;
+			case 0b011:
+				return InstructionDefs::IndexingMode::PreIndex;
+			case 0b010:
+				return InstructionDefs::IndexingMode::SignedOffset;
+			default:
+				throw std::runtime_error("Invalid indexing mode");
+		}
+	}
+}
+
 InstructionDefs::LoadsAndStores::LoadRegisterPair::LoadRegisterPair(uint32_t encoded) :
 	is_wide(encoded >> 31 & 1),
 	is_simd(encoded >> 26 & 1),
-	encoding(static_cast<LoadStorePairEncoding>((encoded >> 23) & 0b111)),
+	encoding(decode_indexing_mode(encoded)),
 	is_load(encoded >> 22 & 1),
 	second_reg_index(encoded >> 10 & REGISTER_MASK),
 	base_reg(encoded >> 5 & REGISTER_MASK),

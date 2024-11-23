@@ -9,17 +9,19 @@ uintptr_t LoadStoreRegPairExecutor::calc_next_address(InstructionDefs::LoadsAndS
 						  : cpu->read_gp_register_32(instruction.base_reg);
 
 	switch (instruction.encoding) {
-		case InstructionDefs::LoadsAndStores::LoadStorePairEncoding::NonTemporalOffset:
-		case InstructionDefs::LoadsAndStores::LoadStorePairEncoding::SignedOffset:
+		case InstructionDefs::IndexingMode::NonTemporalOffset:
+		case InstructionDefs::IndexingMode::SignedOffset:
 			virt_addr += instruction.immediate_value;
 			break;
-		case InstructionDefs::LoadsAndStores::LoadStorePairEncoding::PostIndex:
+		case InstructionDefs::IndexingMode::PostIndex:
 			cpu->write_gp_register_64(instruction.base_reg, virt_addr + instruction.immediate_value);
 			break;
-		case InstructionDefs::LoadsAndStores::LoadStorePairEncoding::PreIndex:
+		case InstructionDefs::IndexingMode::PreIndex:
 			virt_addr += instruction.immediate_value;
 			cpu->write_gp_register_64(instruction.base_reg, virt_addr);
 			break;
+		default:
+			throw std::runtime_error("Illegal indexing mode");
 	}
 
 	return virt_addr;

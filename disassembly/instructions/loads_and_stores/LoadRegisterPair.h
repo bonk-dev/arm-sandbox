@@ -1,15 +1,9 @@
 #pragma once
 
 #include <cstdint>
+#include "../IndexingMode.h"
 
 namespace InstructionDefs::LoadsAndStores {
-	enum class LoadStorePairEncoding : uint8_t {
-		NonTemporalOffset = 0b000,
-		PostIndex = 0b001,
-		PreIndex = 0b011,
-		SignedOffset = 0b010
-	};
-
 	typedef struct LoadRegisterPair {
 	private:
 		static int16_t decode_immediate(bool is_wide, uint32_t encoded);
@@ -21,7 +15,7 @@ namespace InstructionDefs::LoadsAndStores {
 		 */
 		bool is_wide;
 		bool is_simd;
-		LoadStorePairEncoding encoding;
+		InstructionDefs::IndexingMode encoding;
 		bool is_load;
 
 		uint8_t first_reg_index;
