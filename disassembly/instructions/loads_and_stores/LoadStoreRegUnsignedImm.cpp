@@ -1,6 +1,6 @@
 #include "LoadStoreRegUnsignedImm.h"
 
-LoadStoreRegUnsignedImm::LoadStoreRegUnsignedImm(uint32_t encoded) :
+InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm::LoadStoreRegUnsignedImm(uint32_t encoded) :
 	size(8 << (encoded >> 30)),
 	is_simd((encoded >> 26) & 1),
 	is_using_64bit_reg((encoded >> 23) & 0b11),
