@@ -10,6 +10,7 @@ enum class InstructionType {
 	PcRelativeAddressing,
 	MoveWideImmediate,
 	LoadStoreRegisterPair,
+	LoadStoreRegisterUnsignedImm,
 	Undefined = 0xFFFFFFF
 };
 
