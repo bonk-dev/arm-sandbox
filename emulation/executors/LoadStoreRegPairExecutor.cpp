@@ -45,10 +45,10 @@ void LoadStoreRegPairExecutor::execute(InstructionDefs::LoadsAndStores::LoadStor
 		}
 		else {
 			if (instruction.is_wide) {
-				cpu->get_memory().write_uint64(virtual_address, cpu->read_gp_register_64(reg_index));
+				cpu->get_memory().write(virtual_address, cpu->read_gp_register_64(reg_index));
 			}
 			else {
-				cpu->get_memory().write_uint32(virtual_address, cpu->read_gp_register_32(reg_index));
+				cpu->get_memory().write(virtual_address, cpu->read_gp_register_32(reg_index));
 			}
 		}
 	}
