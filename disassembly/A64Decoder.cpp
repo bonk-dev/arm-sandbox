@@ -68,8 +68,8 @@ InstructionType decode_branches_exc_sys(uint32_t raw_instruction) {
 	return result;
 }
 
-// Top-level -> Load and store -> (op0 field) -> (op1 field)
-static std::map<mask_values_t , std::map<mask_values_t, InstructionType>> load_and_store_op0_op1 {
+// Top-level -> Load and store -> (op0 field) -> (op2 field)
+static std::map<mask_values_t , std::map<mask_values_t, InstructionType>> load_and_store_op0_op2 {
 		{
 			mask_values_t(0b0011, 0b0010),
 		  	{
@@ -96,12 +96,12 @@ InstructionType decode_load_and_store_type(uint32_t raw_instruction) {
 	const uint32_t op2 = raw_instruction >> 10 & 0b111111111111111;
 
 	// TODO: check if a copy occurs here
-	std::map<mask_values_t, InstructionType> op1_map {};
-	find_instruction_type(load_and_store_op0_op1, op0, op1_map);
+	std::map<mask_values_t, InstructionType> op2_map {};
+	find_instruction_type(load_and_store_op0_op2, op0, op2_map);
 
 	InstructionType result = InstructionType::Undefined;
-	if (!op1_map.empty()) {
-		find_instruction_type(op1_map, op1, result);
+	if (!op2_map.empty()) {
+		find_instruction_type(op2_map, op2, result);
 	}
 
 	return result;
