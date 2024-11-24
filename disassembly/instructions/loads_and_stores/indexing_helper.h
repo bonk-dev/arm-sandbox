@@ -20,6 +20,7 @@ namespace InstructionDefs::IndexingHelpers {
 		switch (mode) {
 			case InstructionDefs::IndexingMode::NonTemporalOffset:
 			case InstructionDefs::IndexingMode::SignedOffset:
+			case InstructionDefs::IndexingMode::UnsignedOffset:
 				virt_addr += immediate;
 				break;
 			case InstructionDefs::IndexingMode::PostIndex:
