@@ -71,6 +71,7 @@ namespace InstructionDefs::LoadsAndStores {
 		regindex_t base_reg;
 
 		explicit LoadStoreRegUnsignedImm(uint32_t encoded);
+		bool get_is_prefetch() const;
 
 	} LoadStoreRegUnsignedImm;
 }

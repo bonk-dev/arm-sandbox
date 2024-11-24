@@ -32,6 +32,10 @@ namespace {
 		return opc_field >> 1;
 	}
 
+	uint8_t decode_size(uint32_t encoded) {
+		return 8 << (encoded >> 30);
+	}
+
 	bool decode_is_load(uint32_t encoded) {
 		const uint8_t opc_field = decode_opc(encoded);
 		const bool is_simd = decode_is_simd(encoded);
@@ -41,16 +45,12 @@ namespace {
 			return opc_field & 1;
 		}
 		else {
-			if (is_signed) {
+			if (is_signed && decode_size(encoded) != 64) {
 				return true;
 			}
 
 			return opc_field & 1;
 		}
-	}
-
-	uint8_t decode_size(uint32_t encoded) {
-		return 8 << (encoded >> 30);
 	}
 
 	bool decode_is_using_64bit_reg(uint32_t encoded) {
@@ -100,4 +100,8 @@ InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm::LoadStoreRegUnsignedIm
 	if (size_field >> 1 == 1 && vr_field == 0 && opc_field == 0b11) {
 		throw std::runtime_error("Unallocated (size == 1x, VR == 0, opc == 11)");
 	}
+}
+
+bool InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm::get_is_prefetch() const {
+	return this->size == 64 && !this->is_simd && !this->is_load;
 }

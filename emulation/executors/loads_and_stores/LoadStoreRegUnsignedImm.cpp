@@ -8,6 +8,9 @@ void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(InstructionDefs
 	if (instruction.is_simd) {
 		throw Exceptions::FeatureFpNotImplemented("LoadStoreRegUnsignedImm");
 	}
+	if (instruction.get_is_prefetch()) {
+		// do nothing
+	}
 
 	const int imm = instruction.indexing_mode == InstructionDefs::IndexingMode::UnsignedOffset
 			? (instruction.unsigned_imm)
