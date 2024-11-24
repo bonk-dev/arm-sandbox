@@ -86,7 +86,7 @@ InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm::LoadStoreRegUnsignedIm
 	is_using_64bit_reg(decode_is_using_64bit_reg(encoded)),
 	base_reg((encoded >> 5) & 0b11111),
 	src_dst_reg(encoded & 0b11111),
-	unsigned_imm((encoded >> 10) & 0b111111111111),
+	unsigned_imm(((encoded >> 10) & 0b111111111111) << scale),
 	unsigned_imm9((encoded >> 12 & 0b111111111))
 {
 	const auto size_field = encoded >> 30;

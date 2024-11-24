@@ -10,7 +10,7 @@ void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(InstructionDefs
 	}
 
 	const int imm = instruction.indexing_mode == InstructionDefs::IndexingMode::UnsignedOffset
-			? (instruction.unsigned_imm << (instruction.scale))
+			? (instruction.unsigned_imm)
 			: instruction.signed_imm9;
 	const auto virtual_address = InstructionDefs::IndexingHelpers::calc_next_address(
 			instruction.indexing_mode,
