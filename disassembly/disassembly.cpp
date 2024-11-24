@@ -105,15 +105,15 @@ namespace {
 	void append_indexing_semantics(std::stringstream& ss, regindex_t base_reg, InstructionDefs::IndexingMode mode, T imm) {
 		switch (mode) {
 			case InstructionDefs::IndexingMode::PostIndex:
-				ss << '[' << gp_reg_name(base_reg) << "], #" << imm;
+				ss << '[' << gp_reg_name(base_reg) << "], #" << std::hex << std::showbase << imm;
 				break;
 			case InstructionDefs::IndexingMode::PreIndex:
-				ss << '[' << gp_reg_name(base_reg) << ", #" << imm << "]!";
+				ss << '[' << gp_reg_name(base_reg) << ", #" << std::hex << std::showbase << imm << "]!";
 				break;
 			case InstructionDefs::IndexingMode::UnsignedOffset:
 			case InstructionDefs::IndexingMode::SignedOffset:
 			case InstructionDefs::IndexingMode::NonTemporalOffset:
-				ss << '[' << gp_reg_name(base_reg) << ", #" << imm << "]";
+				ss << '[' << gp_reg_name(base_reg) << ", #" << std::hex << std::showbase << imm << "]";
 				break;
 			default:
 				throw std::runtime_error("Unsupported indexing mode");
