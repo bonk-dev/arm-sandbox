@@ -113,7 +113,7 @@ namespace {
 			case InstructionDefs::IndexingMode::UnsignedOffset:
 			case InstructionDefs::IndexingMode::SignedOffset:
 			case InstructionDefs::IndexingMode::NonTemporalOffset:
-				ss << '[' << gp_reg_name(base_reg) << "{, #" << imm << "}]";
+				ss << '[' << gp_reg_name(base_reg) << ", #" << imm << "]";
 				break;
 			default:
 				throw std::runtime_error("Unsupported indexing mode");
