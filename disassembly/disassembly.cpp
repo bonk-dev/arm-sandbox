@@ -133,6 +133,8 @@ std::string disassembly::to_pretty_string(InstructionDefs::LoadsAndStores::LoadR
 		case InstructionDefs::IndexingMode::NonTemporalOffset:
 			ss << '[' << gp_reg_name(i.base_reg) << "{, #" << i.immediate_value << "}]";
 			break;
+		case InstructionDefs::IndexingMode::UnsignedOffset:
+			throw std::runtime_error("Unsupported indexing mode");
 	}
 
 	return ss.str();
