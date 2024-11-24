@@ -9,32 +9,72 @@ void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(InstructionDefs
 		throw Exceptions::FeatureFpNotImplemented("LoadStoreRegUnsignedImm");
 	}
 
-//	const int imm = instruction.indexing_mode == InstructionDefs::IndexingMode::UnsignedOffset
-//			? (instruction.unsigned_imm << 1)
-//			: instruction.signed_imm9;
-//	const auto virtual_address = InstructionDefs::IndexingHelpers::calc_next_address(
-//			instruction.indexing_mode,
-//			this->get_cpu(),
-//			imm,
-//			instruction.base_reg,
-//			true); // always 64bit op
-//
-//	if (instruction.is_load) {
-//		if (instruction.is_wide) {
-//			cpu->write_gp_register_64(reg_index, cpu->get_memory().read_uint64(virtual_address));
-//		}
-//		else {
-//			cpu->write_gp_register_32(reg_index, cpu->get_memory().read_uint32(virtual_address));
-//		}
-//	}
-//	else {
-//		if (instruction.is_wide) {
-//			cpu->get_memory().write(virtual_address, cpu->read_gp_register_64(reg_index));
-//		}
-//		else {
-//			cpu->get_memory().write(virtual_address, cpu->read_gp_register_32(reg_index));
-//		}
-//	}
+	const int imm = instruction.indexing_mode == InstructionDefs::IndexingMode::UnsignedOffset
+			? (instruction.unsigned_imm << (instruction.scale))
+			: instruction.signed_imm9;
+	const auto virtual_address = InstructionDefs::IndexingHelpers::calc_next_address(
+			instruction.indexing_mode,
+			this->get_cpu(),
+			imm,
+			instruction.base_reg,
+			true); // always 64bit op
 
-	throw std::runtime_error("LDR/STR Not implemented");
+	if (instruction.is_load) {
+		uint64_t val;
+		if (instruction.is_signed) {
+			switch (instruction.size) {
+				case 8:
+					val = this->get_cpu()->get_memory().read<int8_t>(virtual_address);
+					break;
+				case 16:
+					val = this->get_cpu()->get_memory().read<int16_t>(virtual_address);
+					break;
+				case 32:
+					val = this->get_cpu()->get_memory().read<int32_t>(virtual_address);
+					break;
+				case 64:
+					val = this->get_cpu()->get_memory().read<int64_t>(virtual_address);
+					break;
+				default:
+					throw std::runtime_error("Invalid data size");
+			}
+		}
+		else {
+			switch (instruction.size) {
+				case 8:
+					val = this->get_cpu()->get_memory().read<uint8_t>(virtual_address);
+					break;
+				case 16:
+					val = this->get_cpu()->get_memory().read<uint16_t>(virtual_address);
+					break;
+				case 32:
+					val = this->get_cpu()->get_memory().read<uint32_t>(virtual_address);
+					break;
+				case 64:
+					val = this->get_cpu()->get_memory().read<uint64_t>(virtual_address);
+					break;
+				default:
+					throw std::runtime_error("Invalid data size");
+			}
+		}
+
+		if (instruction.is_using_64bit_reg) {
+			this->get_cpu()->write_gp_register_64(
+					instruction.src_dst_reg, val);
+		}
+		else {
+			this->get_cpu()->write_gp_register_32(
+					instruction.src_dst_reg, val);
+		}
+	}
+	else {
+		if (instruction.is_using_64bit_reg) {
+			this->get_cpu()->get_memory().write(
+					virtual_address, this->get_cpu()->read_gp_register_64(instruction.src_dst_reg));
+		}
+		else {
+			this->get_cpu()->get_memory().write(
+					virtual_address, this->get_cpu()->read_gp_register_32(instruction.src_dst_reg));
+		}
+	}
 }
