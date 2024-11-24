@@ -100,6 +100,27 @@ std::string disassembly::to_pretty_string(InstructionDefs::DataProcImm::MoveWide
 	return ss.str();
 }
 
+namespace {
+	template<class T>
+	void append_indexing_semantics(std::stringstream& ss, regindex_t base_reg, InstructionDefs::IndexingMode mode, T imm) {
+		switch (mode) {
+			case InstructionDefs::IndexingMode::PostIndex:
+				ss << '[' << gp_reg_name(base_reg) << "], #" << imm;
+				break;
+			case InstructionDefs::IndexingMode::PreIndex:
+				ss << '[' << gp_reg_name(base_reg) << ", #" << imm << "]!";
+				break;
+			case InstructionDefs::IndexingMode::UnsignedOffset:
+			case InstructionDefs::IndexingMode::SignedOffset:
+			case InstructionDefs::IndexingMode::NonTemporalOffset:
+				ss << '[' << gp_reg_name(base_reg) << "{, #" << imm << "}]";
+				break;
+			default:
+				throw std::runtime_error("Unsupported indexing mode");
+		}
+	}
+}
+
 std::string disassembly::to_pretty_string(InstructionDefs::LoadsAndStores::LoadRegisterPair &i) {
 	std::stringstream ss;
 
@@ -121,21 +142,7 @@ std::string disassembly::to_pretty_string(InstructionDefs::LoadsAndStores::LoadR
 	}
 
 	ss << ' ' << gp_reg_name(i.first_reg_index) << ", " << gp_reg_name(i.second_reg_index) << ", ";
-
-	switch (i.encoding) {
-		case InstructionDefs::IndexingMode::PostIndex:
-			ss << '[' << gp_reg_name(i.base_reg) << "], #" << i.immediate_value;
-			break;
-		case InstructionDefs::IndexingMode::PreIndex:
-			ss << '[' << gp_reg_name(i.base_reg) << ", #" << i.immediate_value << "]!";
-			break;
-		case InstructionDefs::IndexingMode::SignedOffset:
-		case InstructionDefs::IndexingMode::NonTemporalOffset:
-			ss << '[' << gp_reg_name(i.base_reg) << "{, #" << i.immediate_value << "}]";
-			break;
-		case InstructionDefs::IndexingMode::UnsignedOffset:
-			throw std::runtime_error("Unsupported indexing mode");
-	}
+	append_indexing_semantics(ss, i.base_reg, i.encoding, i.immediate_value);
 
 	return ss.str();
 }
