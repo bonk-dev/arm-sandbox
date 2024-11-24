@@ -86,4 +86,17 @@ InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm::LoadStoreRegUnsignedIm
 	base_reg((encoded >> 5) & 0b11111),
 	src_dst_reg(encoded & 0b11111),
 	unsigned_imm((encoded >> 10) & 0b111111111111),
-	unsigned_imm9((encoded >> 12 & 0b111111111)) {}
+	unsigned_imm9((encoded >> 12 & 0b111111111))
+{
+	const auto size_field = encoded >> 30;
+	const auto vr_field = (encoded >> 26) & 1;
+	const auto opc_field = (encoded >> 22) & 0b11;
+	const auto opc_field_msb = opc_field >> 1;
+	if ((encoded >> 30) != 0 && vr_field == 1 && opc_field_msb == 1) {
+		throw std::runtime_error("Unallocated (size != 00, VR == 1, opc == 1x)");
+	}
+
+	if (size_field >> 1 == 1 && vr_field == 0 && opc_field == 0b11) {
+		throw std::runtime_error("Unallocated (size == 1x, VR == 0, opc == 11)");
+	}
+}
