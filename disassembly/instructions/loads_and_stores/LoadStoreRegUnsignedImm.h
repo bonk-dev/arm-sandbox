@@ -13,6 +13,18 @@ namespace InstructionDefs::LoadsAndStores {
 		InstructionDefs::IndexingMode indexing_mode;
 
 		/**
+		 * @var is_load
+		 * @brief If true, the data is loaded from memory into a register
+		 */
+		bool is_load;
+
+		/**
+		 * @var is_signed
+		 * @brief If true, the loaded data should be sign-extended
+		 */
+		bool is_signed;
+
+		/**
 		 * @var size
 		 * @brief Size of loaded/stored data (in bits)
 		 */
@@ -20,7 +32,7 @@ namespace InstructionDefs::LoadsAndStores {
 
 		/**
 		 * @var is_simd
-		 * @brief If true, this is a SIMD operation (probably revolving around floating-point numbers)
+		 * @brief If true, this is a SIMD operation (revolving around floating-point numbers)
 		 */
 		bool is_simd;
 
