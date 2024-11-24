@@ -110,8 +110,8 @@ int main() {
 			}
 			case InstructionType::LoadStoreRegisterUnsignedImm:
 			{
-				std::cout << "Load/store unsigned imm" << std::endl;
 				auto details = dec.decode_details<InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm>();
+				print_disassembly(details);
 
 				load_store_unsigned_imm_executor.execute(details);
 				break;

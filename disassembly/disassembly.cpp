@@ -121,6 +121,44 @@ namespace {
 	}
 }
 
+std::string disassembly::to_pretty_string(InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm &i) {
+	std::stringstream ss;
+
+	if (i.get_is_prefetch()) {
+		ss << "#" << std::hex << std::showbase << i.src_dst_reg;
+		ss << ", [X" << i.base_reg << ", #" << i.unsigned_imm << "]";
+	}
+	else {
+
+		ss << (i.is_load ? "LDR" : "STR");
+
+		if (i.is_load && i.is_signed) {
+			ss << "S";
+		}
+
+		switch (i.size) {
+			case 8:
+				ss << "B";
+				break;
+			case 16:
+				ss << "H";
+				break;
+			case 32:
+				ss << "W";
+				break;
+		}
+	}
+
+	ss << ' ' << gp_reg_name(i.src_dst_reg) << ", ";
+
+	auto imm = i.indexing_mode == InstructionDefs::IndexingMode::UnsignedOffset
+			? i.unsigned_imm
+			: i.signed_imm9;
+	append_indexing_semantics(ss, i.base_reg, i.indexing_mode, imm);
+
+	return ss.str();
+}
+
 std::string disassembly::to_pretty_string(InstructionDefs::LoadsAndStores::LoadRegisterPair &i) {
 	std::stringstream ss;
 
