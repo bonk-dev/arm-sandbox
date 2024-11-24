@@ -25,6 +25,12 @@ namespace InstructionDefs::LoadsAndStores {
 		bool is_signed;
 
 		/**
+		 * @var scale
+		 * @brief Used to calculate data size, but also used in calculating offset
+		 */
+		uint8_t scale;
+
+		/**
 		 * @var size
 		 * @brief Size of loaded/stored data (in bits)
 		 */

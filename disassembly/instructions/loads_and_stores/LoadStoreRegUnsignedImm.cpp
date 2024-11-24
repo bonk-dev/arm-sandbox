@@ -78,6 +78,7 @@ namespace {
 
 InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm::LoadStoreRegUnsignedImm(uint32_t encoded) :
 	indexing_mode(decode_indexing_mode(encoded)),
+	scale(encoded >> 30),
 	size(decode_size(encoded)),
 	is_load(decode_is_load(encoded)),
 	is_signed(decode_is_signed(encoded)),
