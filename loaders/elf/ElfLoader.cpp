@@ -6,6 +6,10 @@
 #include <cstring>
 #include <format>
 
+namespace {
+
+}
+
 namespace Loaders {
 	ElfLoader::ElfLoader(std::string executablePath) :
 		_rawFile{},
@@ -48,5 +52,19 @@ namespace Loaders {
 		if (elfHeader.e_machine != EM_AARCH64) {
 			throw std::runtime_error("Only AARCH64 executables are supported");
 		}
+
+		auto sectionHeaders = this->_parseStructs<Elf64_Shdr>(
+				elfHeader.e_shnum, elfHeader.e_shoff, elfHeader.e_shentsize);
+
+		Elf64_Shdr* strtabHeader = sectionHeaders[elfHeader.e_shstrndx];
+		std::byte* base = this->_rawFile->data();
+
+		char* sectionNameTable = reinterpret_cast<char*>(base + strtabHeader->sh_offset);
+		for (Elf64_Shdr* header : sectionHeaders) {
+			char* sectionName = &sectionNameTable[header->sh_name];
+			std::cout << "Section: " << sectionName << std::endl;
+		}
+
+		int a;
 	}
 }
