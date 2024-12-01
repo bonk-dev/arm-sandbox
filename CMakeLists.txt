@@ -44,4 +44,6 @@ add_executable(arm_sandbox main.cpp
         emulation/exceptions/FeatureFpNotImplemented.h
         disassembly/instructions/IndexingMode.h
         disassembly/instructions/loads_and_stores/indexing_helper.h
+        loaders/elf/ElfLoader.h
+        loaders/elf/ElfLoader.cpp
 )

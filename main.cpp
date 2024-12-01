@@ -13,6 +13,7 @@
 #include "disassembly/instructions/data_proc_imm/MoveWideImmediate.h"
 #include "emulation/executors/MoveWideImmediateExecutor.h"
 #include "emulation/executors/loads_and_stores/LoadStoreRegUnsignedImm.h"
+#include "loaders/elf/ElfLoader.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -127,7 +128,9 @@ int prototype_main() {
 	return 0;
 }
 
-int read_elf_main(char* path) {
+int read_elf_main(const char* path) {
+	Loaders::ElfLoader loader(path);
+	loader.loadEntireFile();
 	return 0;
 }
 
