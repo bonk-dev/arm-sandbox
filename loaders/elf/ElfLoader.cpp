@@ -49,9 +49,9 @@ namespace Loaders {
 			throw std::runtime_error("Only AARCH64 executables are supported");
 		}
 
-		auto programHaders = this->_parseStructs<Elf64_Phdr>(
+		auto programHadersPtr = this->_parseStructs<Elf64_Phdr>(
 				elfHeader.e_phnum, elfHeader.e_phoff, elfHeader.e_phentsize);
-		for (Elf64_Phdr* header : programHaders) {
+		for (Elf64_Phdr* header : *programHadersPtr) {
 			switch (header->p_type) {
 				case PT_NULL:
 					break;
@@ -91,11 +91,11 @@ namespace Loaders {
 		auto sectionHeaders = this->_parseStructs<Elf64_Shdr>(
 				elfHeader.e_shnum, elfHeader.e_shoff, elfHeader.e_shentsize);
 
-		Elf64_Shdr* strtabHeader = sectionHeaders[elfHeader.e_shstrndx];
+		Elf64_Shdr* strtabHeader = (*sectionHeaders)[elfHeader.e_shstrndx];
 		std::byte* base = this->_rawFile->data();
 
 		char* sectionNameTable = reinterpret_cast<char*>(base + strtabHeader->sh_offset);
-		for (Elf64_Shdr* header : sectionHeaders) {
+		for (Elf64_Shdr* header : *sectionHeaders) {
 			char* sectionName = &sectionNameTable[header->sh_name];
 			std::cout << "Section: " << sectionName << std::endl;
 		}

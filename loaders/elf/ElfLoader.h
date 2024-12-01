@@ -21,12 +21,12 @@ namespace Loaders {
 		std::string _filePath;
 
 		template<class T>
-		std::vector<T*> _parseStructs(Elf64_Half count, Elf64_Off fileOffset, Elf64_Half size) {
+		std::unique_ptr<std::vector<T*>> _parseStructs(Elf64_Half count, Elf64_Off fileOffset, Elf64_Half size) {
 			if (fileOffset <= 0 || size <= 0 || count <= 0) {
 				return {};
 			}
 
-			std::vector<T*> headers = std::vector<T*>(count);
+			auto headers = std::make_unique<std::vector<T*>>(count);
 			std::byte* data = this->_rawFile->data();
 
 			for (int i = 0; i < count; ++i) {
@@ -37,7 +37,7 @@ namespace Loaders {
 
 				std::byte* sectionPtr = (data + dataOffset);
 				auto* headerPtr = reinterpret_cast<T*>(sectionPtr);
-				headers[i] = (headerPtr);
+				(*headers)[i] = (headerPtr);
 			}
 
 			return headers;
