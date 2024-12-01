@@ -20,6 +20,12 @@ namespace Loaders {
 		 */
 		std::string _filePath;
 
+		/**
+		 * @var _elfSectionHeaders
+		 * @brief Lazily allocated std::vector of ELF64 section headers std::vector
+		 */
+		std::unique_ptr<std::vector<Elf64_Shdr*>> _elfSectionHeaders;
+
 		template<class T>
 		std::unique_ptr<std::vector<T*>> _parseStructs(Elf64_Half count, Elf64_Off fileOffset, Elf64_Half size) {
 			if (fileOffset <= 0 || size <= 0 || count <= 0) {
