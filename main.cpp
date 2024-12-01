@@ -19,7 +19,7 @@ void print_disassembly(InstDetails& i) {
 	std::cout << "Disassembly: " << disassembly::to_pretty_string(i) << std::endl;
 }
 
-int main() {
+int prototype_main() {
 	std::vector<std::byte> sample_code = {
 			// ADD X25, X0, #0x7C0
 			std::byte(0x19), std::byte(0x00), std::byte(0x1F), std::byte(0x91),
@@ -125,4 +125,19 @@ int main() {
 	}
 
 	return 0;
+}
+
+int read_elf_main(char* path) {
+	return 0;
+}
+
+int main(int argc, char** argv) {
+	if (argc <= 1) {
+		std::cout << "No arguments provided. Entering prototype mode..." << std::endl;
+		return prototype_main();
+	}
+	else {
+		std::cout << "Loading ELF from " << argv[1] << std::endl;
+		return read_elf_main(argv[1]);
+	}
 }
