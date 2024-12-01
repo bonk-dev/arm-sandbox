@@ -4,6 +4,11 @@
 #include <cstdint>
 #include <sstream>
 #include <iostream>
+#include <map>
+#include <vector>
+#include <optional>
+
+typedef uintptr_t virtual_address_t;
 
 /**
  * @class CpuVirtualMemory
@@ -12,6 +17,21 @@
 class CpuVirtualMemory {
 private:
 	void* _allocatedMemory;
+	std::vector<std::byte> _memoryVector;
+
+	/**
+	 * @brief Mapping of virtual addresses accessible by the CPU to beginning indexes of pages (_memoryVector)
+	 *
+	 * Every page is 4KB
+	 */
+	std::map<virtual_address_t, uintptr_t> _allocatedPages;
+
+	/**
+	 * @brief Key: 4KB page address, Value: true if allocated
+	 */
+	std::map<uintptr_t, bool> _allocatedAddresses;
+
+	void _allocatePages(virtual_address_t address, size_t neededSize);
 public:
 	explicit CpuVirtualMemory(size_t size);
 	~CpuVirtualMemory();
@@ -41,4 +61,8 @@ public:
 
 	[[nodiscard]] uint32_t read_uint32(uintptr_t addr);
 	[[nodiscard]] uint64_t read_uint64(uintptr_t addr);
+
+	void manualAllocatePage(virtual_address_t address, size_t requiredSize) {
+		this->_allocatePages(address, requiredSize);
+	}
 };
