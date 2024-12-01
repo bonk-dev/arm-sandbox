@@ -102,4 +102,12 @@ namespace Loaders {
 
 		int a;
 	}
+
+	void ElfLoader::allocateSections(CpuVirtualMemory& memory) {
+		if (!this->_elfSectionHeaders) {
+			throw std::runtime_error("Elf section headers were not initalized");
+		}
+
+		throw std::runtime_error("Not implemented");
+	}
 }

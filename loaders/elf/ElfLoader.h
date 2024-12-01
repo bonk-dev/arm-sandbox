@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include "elf.h"
+#include "../../emulation/CpuVirtualMemory.h"
 
 namespace Loaders {
 	class ElfLoader {
@@ -54,9 +55,14 @@ namespace Loaders {
 		explicit ElfLoader(std::string  executablePath);
 		void loadEntireFile();
 
-		/***
+		/**
 		 * @brief This method will parse the ELF file and return abstracted info about the executable
 		 */
 		void parse();
+
+		/**
+		 * @brief Allocates appropriate sections in the virtual memory
+		 */
+		void allocateSections(CpuVirtualMemory& memory);
 	};
 }
