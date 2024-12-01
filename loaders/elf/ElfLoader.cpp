@@ -6,10 +6,6 @@
 #include <cstring>
 #include <format>
 
-namespace {
-
-}
-
 namespace Loaders {
 	ElfLoader::ElfLoader(std::string executablePath) :
 		_rawFile{},
