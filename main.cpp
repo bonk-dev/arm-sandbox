@@ -131,6 +131,7 @@ int prototype_main() {
 int read_elf_main(const char* path) {
 	Loaders::ElfLoader loader(path);
 	loader.loadEntireFile();
+	loader.parse();
 	return 0;
 }
 

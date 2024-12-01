@@ -2,6 +2,9 @@
 #include <filesystem>
 #include <fstream>
 #include <utility>
+#include <iostream>
+#include <cstring>
+#include <format>
 
 namespace Loaders {
 	ElfLoader::ElfLoader(std::string executablePath) :
@@ -18,5 +21,32 @@ namespace Loaders {
 		}
 
 		f.read(reinterpret_cast<char*>(this->_rawFile->data()), size);
+	}
+
+	Elf64_Ehdr ElfLoader::_parseElf64Header() {
+		auto* header = reinterpret_cast<Elf64_Ehdr*>(this->_rawFile->data());
+		// make a copy
+		return *header;
+	}
+
+	void ElfLoader::parse() {
+		auto elfHeader = this->_parseElf64Header();
+
+		if (strncmp(reinterpret_cast<const char *>(&elfHeader.e_ident[EI_MAG0]), ELFMAG, sizeof(ELFMAG) - 1) != 0) {
+			throw std::runtime_error("Not an ELF file");
+		}
+
+		switch (elfHeader.e_ident[EI_CLASS]) {
+			case ELFCLASS64:
+				// supported
+				break;
+			default:
+				throw std::runtime_error(std::format("Unsupported ELF class: {}",
+													 elfHeader.e_ident[EI_CLASS]));
+		}
+
+		if (elfHeader.e_machine != EM_AARCH64) {
+			throw std::runtime_error("Only AARCH64 executables are supported");
+		}
 	}
 }
