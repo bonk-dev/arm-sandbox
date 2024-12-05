@@ -12,5 +12,10 @@ void CpuStack::pop(size_t size) {
 }
 
 size_t CpuStack::_getVectorOffset(virtual_address_t address) {
-	return Emulation::STACK_START - address;
+	const size_t vectorOffset = Emulation::STACK_START - address;
+	if (vectorOffset >= this->_stackMemory->size()) {
+		throw std::runtime_error("Stack overflow");
+	}
+
+	return vectorOffset;
 }
