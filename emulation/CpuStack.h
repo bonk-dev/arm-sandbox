@@ -32,4 +32,10 @@ public:
 		this->pop(sizeof(T));
 	}
 	void pop(size_t size);
+
+	template <typename T>
+	T read(virtual_address_t address) {
+		const size_t vecOffset = this->_getVectorOffset(address);
+		return *reinterpret_cast<T*>(this->_stackMemory->data() + vecOffset);
+	}
 };

@@ -61,6 +61,9 @@ int prototype_main() {
 	const auto shared_cpu = std::make_shared<AArch64Cpu>(INITIAL_CPU_MEMORY);
 
 	auto stack = shared_cpu->getStack(AARCH64_CURRENT_THEAD_ID);
+	stack->push<uint32_t>(0x123);
+	auto stackReadTest = stack->read<uint32_t>(Emulation::STACK_START - 4);
+	stack->pop<uint32_t>();
 
 	AddSubImmediateExecutor add_sub_immediate_executor(shared_cpu);
 	FormPcRelAddressExecutor form_pc_rel_address_executor(shared_cpu);
