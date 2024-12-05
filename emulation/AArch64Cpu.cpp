@@ -2,7 +2,8 @@
 #include "AArch64Cpu.h"
 
 AArch64Cpu::AArch64Cpu(size_t initial_memory_size) : _memory(initial_memory_size),
-													 _program_counter(0) {
+													 _program_counter(0),
+													 _stack(std::make_unique<CpuStack>(8 * 1024 * 1024)) {
     this->_general_registers = std::vector<uint64_t>(
         AARCH64_GENERAL_PURPOSE_REGISTERS);
 	this->createThread(AARCH64_MAIN_THREAD_ID);

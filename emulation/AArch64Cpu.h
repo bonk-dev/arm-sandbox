@@ -17,6 +17,8 @@ private:
 
 	CpuVirtualMemory _memory;
 	std::map<uint64_t, std::shared_ptr<CpuStack>> _threadStacks;
+
+	std::unique_ptr<CpuStack> _stack;
 public:
     explicit AArch64Cpu(size_t initial_memory_size);
 
