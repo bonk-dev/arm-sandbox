@@ -144,7 +144,7 @@ int read_elf_main(const char* path) {
 	constexpr virtual_address_t intMainOffset = 0x640;
 
 	for (virtual_address_t i = intMainOffset; i <= intMainOffset + 0x1C; ++i) {
-		std::cout << static_cast<int>(mem.read<uint8_t>(i)) << " ";
+		std::cout << std::format("{:#04x} ", static_cast<int>(mem.read<uint8_t>(i)));
 		if (i % 4 == 3) {
 			std::cout << std::endl;
 		}
