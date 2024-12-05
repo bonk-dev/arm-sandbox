@@ -139,8 +139,17 @@ int read_elf_main(const char* path) {
 	CpuVirtualMemory mem(4 * 1024 * 1024);
 	loader.allocateSections(mem);
 
-//	mem.manualAllocatePage(0, 65536);
-//	mem.manualAllocatePage(0x7fffff, 1024);
+	// Normally we would start executing at "entry" - this offset is in the ELF header
+	// but we are going to cheat for now
+	constexpr virtual_address_t intMainOffset = 0x640;
+
+	for (virtual_address_t i = intMainOffset; i <= intMainOffset + 0x1C; ++i) {
+		std::cout << static_cast<int>(mem.read<uint8_t>(i)) << " ";
+		if (i % 4 == 3) {
+			std::cout << std::endl;
+		}
+	}
+
 	return 0;
 }
 

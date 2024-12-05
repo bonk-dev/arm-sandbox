@@ -64,17 +64,12 @@ public:
 			   std::vector<std::byte>::const_iterator begin,
 			   std::vector<std::byte>::difference_type size);
 
-	template<class T>
-	T read(uintptr_t addr) {
-		std::stringstream ss;
-		ss << "[Memory] ";
-		ss << sizeof(T) * 8;
-		ss << "bit Read from address: " << std::hex << std::showbase << addr;
-
-		// std::cout will be replaced
-		std::cout << ss.str().c_str() << std::endl;
-
-		return 0;
+	template<typename T>
+	T read(virtual_address_t virtualAddress) {
+		// TODO: Implement safe cross page read
+		const uintptr_t realAddr = this->_getRealAddress(virtualAddress);
+		T* ptr = reinterpret_cast<T*>(this->_memoryVector.data() + realAddr);
+		return *ptr;
 	}
 
 	[[nodiscard]] uint32_t read_uint32(uintptr_t addr);
