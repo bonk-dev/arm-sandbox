@@ -9,6 +9,8 @@ class CpuStack {
 private:
 	std::unique_ptr<std::vector<std::byte>> _stackMemory;
 	size_t _stackPointer;
+
+	[[nodiscard]] size_t _getVectorOffset(virtual_address_t address) const;
 public:
 	explicit CpuStack(size_t stackSize);
 
@@ -16,7 +18,7 @@ public:
 	void push(T value) {
 		this->_stackPointer -= sizeof(T);
 
-		const size_t vectorOffset = this->_stackMemory->size() - this->_stackPointer;
+		const size_t vectorOffset = this->_getVectorOffset(this->_stackPointer);
 		if (vectorOffset >= this->_stackMemory->size()) {
 			throw std::runtime_error("Stack overflow");
 		}
