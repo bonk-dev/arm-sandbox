@@ -6,6 +6,12 @@
 #include <cstring>
 #include <format>
 
+namespace {
+	constexpr bool has_flag_set(Elf64_Word value, Elf64_Word mask) {
+		return (value & mask) == mask;
+	}
+}
+
 namespace Loaders {
 	ElfLoader::ElfLoader(std::string executablePath) :
 		_rawFile{},
@@ -102,7 +108,25 @@ namespace Loaders {
 			throw std::runtime_error("Elf section headers were not initalized");
 		}
 
-		throw std::runtime_error("Not implemented");
+		// skip the inital entry
+		for (int i = 1; i < this->_elfSectionHeaders->size(); ++i) {
+			if (i >= SHN_LORESERVE && i <= SHN_HIRESERVE) {
+				continue;
+			}
+
+			Elf64_Shdr* header = this->_elfSectionHeaders->at(i);
+			if (has_flag_set(header->sh_flags, SHF_ALLOC) && header->sh_type != SHT_NOBITS) {
+				std::cout << "[ElfLoader] allocating " << this->_getSectionName(header) << " in virtual memory" << std::endl;
+				if (header->sh_addr == 0) {
+					throw std::runtime_error("ELF section has the SHF_ALLOC flag set, but the sh_addr field is 0");
+				}
+			}
+			else {
+				std::cout << "[ElfLoader] not allocating " << this->_getSectionName(header) << " in virtual memory" << std::endl;
+			}
+
+			memory.manualAllocatePage(header->sh_addr, header->sh_size);
+		}
 	}
 
 	char const *ElfLoader::_getSectionName(Elf64_Shdr *const sectionHeader) {

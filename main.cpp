@@ -136,9 +136,11 @@ int read_elf_main(const char* path) {
 	loader.loadEntireFile();
 	loader.parse();
 
-	CpuVirtualMemory mem(65536);
-	mem.manualAllocatePage(0, 65536);
-	mem.manualAllocatePage(0x7fffff, 1024);
+	CpuVirtualMemory mem(4 * 1024 * 1024);
+	loader.allocateSections(mem);
+
+//	mem.manualAllocatePage(0, 65536);
+//	mem.manualAllocatePage(0x7fffff, 1024);
 	return 0;
 }
 

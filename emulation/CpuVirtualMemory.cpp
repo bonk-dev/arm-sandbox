@@ -72,6 +72,8 @@ void CpuVirtualMemory::_allocatePages(virtual_address_t address, size_t neededSi
 					allocated += pageSize;
 					address += pageSize;
 
+					std::cout << "[CpuVirtualMemory] Allocated page at " << std::hex << std::showbase << pageAddress << std::endl;
+
 					break;
 				}
 			}
