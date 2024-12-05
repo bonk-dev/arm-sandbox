@@ -23,34 +23,32 @@ namespace Loaders {
 		f.read(reinterpret_cast<char*>(this->_rawFile->data()), size);
 	}
 
-	Elf64_Ehdr ElfLoader::_parseElf64Header() {
-		auto* header = reinterpret_cast<Elf64_Ehdr*>(this->_rawFile->data());
-		// make a copy
-		return *header;
+	Elf64_Ehdr* ElfLoader::_parseElf64Header() {
+		return reinterpret_cast<Elf64_Ehdr*>(this->_rawFile->data());
 	}
 
 	void ElfLoader::parse() {
 		auto elfHeader = this->_parseElf64Header();
 
-		if (strncmp(reinterpret_cast<const char *>(&elfHeader.e_ident[EI_MAG0]), ELFMAG, sizeof(ELFMAG) - 1) != 0) {
+		if (strncmp(reinterpret_cast<const char *>(&elfHeader->e_ident[EI_MAG0]), ELFMAG, sizeof(ELFMAG) - 1) != 0) {
 			throw std::runtime_error("Not an ELF file");
 		}
 
-		switch (elfHeader.e_ident[EI_CLASS]) {
+		switch (elfHeader->e_ident[EI_CLASS]) {
 			case ELFCLASS64:
 				// supported
 				break;
 			default:
 				throw std::runtime_error(std::format("Unsupported ELF class: {}",
-													 elfHeader.e_ident[EI_CLASS]));
+													 elfHeader->e_ident[EI_CLASS]));
 		}
 
-		if (elfHeader.e_machine != EM_AARCH64) {
+		if (elfHeader->e_machine != EM_AARCH64) {
 			throw std::runtime_error("Only AARCH64 executables are supported");
 		}
 
 		auto programHadersPtr = this->_parseStructs<Elf64_Phdr>(
-				elfHeader.e_phnum, elfHeader.e_phoff, elfHeader.e_phentsize);
+				elfHeader->e_phnum, elfHeader->e_phoff, elfHeader->e_phentsize);
 		for (Elf64_Phdr* header : *programHadersPtr) {
 			switch (header->p_type) {
 				case PT_NULL:
@@ -89,9 +87,9 @@ namespace Loaders {
 		}
 
 		this->_elfSectionHeaders = this->_parseStructs<Elf64_Shdr>(
-				elfHeader.e_shnum, elfHeader.e_shoff, elfHeader.e_shentsize);
+				elfHeader->e_shnum, elfHeader->e_shoff, elfHeader->e_shentsize);
 
-		Elf64_Shdr* strtabHeader = (*this->_elfSectionHeaders)[elfHeader.e_shstrndx];
+		Elf64_Shdr* strtabHeader = (*this->_elfSectionHeaders)[elfHeader->e_shstrndx];
 		std::byte* base = this->_rawFile->data();
 
 		char* sectionNameTable = reinterpret_cast<char*>(base + strtabHeader->sh_offset);

@@ -50,7 +50,7 @@ namespace Loaders {
 			return headers;
 		}
 
-		[[nodiscard]] Elf64_Ehdr _parseElf64Header();
+		[[nodiscard]] Elf64_Ehdr* _parseElf64Header();
 	public:
 		explicit ElfLoader(std::string  executablePath);
 		void loadEntireFile();
