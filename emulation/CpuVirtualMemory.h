@@ -10,6 +10,19 @@
 
 typedef uintptr_t virtual_address_t;
 
+namespace {
+	constexpr size_t PAGE_SIZE_2_POWER = 11;
+	constexpr size_t PAGE_SIZE = (2 << PAGE_SIZE_2_POWER);
+	constexpr size_t virtual_page_address(virtual_address_t virtualAddress) {
+		const virtual_address_t pageRelativeMask = ~((2 << PAGE_SIZE_2_POWER) - 1);
+		return virtualAddress & pageRelativeMask;
+	}
+	constexpr size_t virtual_in_page_offset(virtual_address_t virtualAddress) {
+		const virtual_address_t inPageOffsetMask = ((2 << PAGE_SIZE_2_POWER) - 1);
+		return virtualAddress & inPageOffsetMask;
+	}
+}
+
 /**
  * @class CpuVirtualMemory
  * @summary A simple (for now) class maintaining the virtual memory in the emulation context.
@@ -31,6 +44,7 @@ private:
 	 */
 	std::map<uintptr_t, bool> _allocatedAddresses;
 
+	uintptr_t _getRealAddress(virtual_address_t virtualAddress);
 	void _allocatePages(virtual_address_t address, size_t neededSize);
 public:
 	explicit CpuVirtualMemory(size_t size);

@@ -4,19 +4,6 @@
 #include <algorithm>
 #include "CpuVirtualMemory.h"
 
-namespace {
-	constexpr size_t PAGE_SIZE_2_POWER = 11;
-	constexpr size_t PAGE_SIZE = (2 << PAGE_SIZE_2_POWER);
-	constexpr size_t virtual_page_address(virtual_address_t virtualAddress) {
-		const virtual_address_t pageRelativeMask = ~((2 << PAGE_SIZE_2_POWER) - 1);
-		return virtualAddress & pageRelativeMask;
-	}
-	constexpr size_t virtual_in_page_offset(virtual_address_t virtualAddress) {
-		const virtual_address_t inPageOffsetMask = ((2 << PAGE_SIZE_2_POWER) - 1);
-		return virtualAddress & inPageOffsetMask;
-	}
-}
-
 CpuVirtualMemory::CpuVirtualMemory(const size_t size) : _memoryVector(size) {
 	this->_allocatedMemory = malloc(size);
 }
@@ -95,15 +82,19 @@ void CpuVirtualMemory::_allocatePages(virtual_address_t address, size_t neededSi
 	}
 }
 
+uintptr_t CpuVirtualMemory::_getRealAddress(virtual_address_t virtualAddress) {
+	virtual_address_t pageAddress = virtual_page_address(virtualAddress);
+	virtual_address_t inPageOffset = virtual_in_page_offset(virtualAddress);
+	return this->_allocatedPages[pageAddress] + inPageOffset;
+}
+
 void CpuVirtualMemory::write(virtual_address_t destination,
 							 std::vector<std::byte>::const_iterator begin,
 							 std::vector<std::byte>::difference_type size) {
 	this->_allocatePages(destination, size);
 
 	for (virtual_address_t i = destination; i < virtual_page_address(destination + size) + PAGE_SIZE; i += PAGE_SIZE) {
-		virtual_address_t pageAddress = virtual_page_address(i);
-		virtual_address_t inPageOffset = virtual_in_page_offset(i);
-		uintptr_t realAddress = this->_allocatedPages[pageAddress] + inPageOffset;
+		const uintptr_t realAddress = this->_getRealAddress(i);
 
 		const size_t copySize = std::min(static_cast<size_t>(size), PAGE_SIZE);
 		const auto beginIndex = static_cast<std::vector<std::byte>::difference_type>(i - destination);
