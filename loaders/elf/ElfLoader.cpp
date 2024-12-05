@@ -89,12 +89,8 @@ namespace Loaders {
 		this->_elfSectionHeaders = this->_parseStructs<Elf64_Shdr>(
 				elfHeader->e_shnum, elfHeader->e_shoff, elfHeader->e_shentsize);
 
-		Elf64_Shdr* strtabHeader = (*this->_elfSectionHeaders)[elfHeader->e_shstrndx];
-		std::byte* base = this->_rawFile->data();
-
-		char* sectionNameTable = reinterpret_cast<char*>(base + strtabHeader->sh_offset);
 		for (Elf64_Shdr* header : *this->_elfSectionHeaders) {
-			char* sectionName = &sectionNameTable[header->sh_name];
+			const char* sectionName = this->_getSectionName(header);
 			std::cout << "Section: " << sectionName << std::endl;
 		}
 
@@ -107,5 +103,18 @@ namespace Loaders {
 		}
 
 		throw std::runtime_error("Not implemented");
+	}
+
+	char const *ElfLoader::_getSectionName(Elf64_Shdr *const sectionHeader) {
+		return this->_getSectionName(sectionHeader->sh_name);
+	}
+
+	char const *ElfLoader::_getSectionName(Elf64_Word index) {
+		std::byte* base = this->_rawFile->data();
+		Elf64_Ehdr* elfHeader = this->_parseElf64Header();
+		Elf64_Shdr* strtabHeader = (*this->_elfSectionHeaders)[elfHeader->e_shstrndx];
+
+		char* sectionNameTable = reinterpret_cast<char*>(base + strtabHeader->sh_offset);
+		return &sectionNameTable[index];
 	}
 }

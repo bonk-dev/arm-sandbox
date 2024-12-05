@@ -51,6 +51,8 @@ namespace Loaders {
 		}
 
 		[[nodiscard]] Elf64_Ehdr* _parseElf64Header();
+		[[nodiscard]] char const* _getSectionName(Elf64_Shdr *sectionHeader);
+		[[nodiscard]] char const* _getSectionName(Elf64_Word index);
 	public:
 		explicit ElfLoader(std::string  executablePath);
 		void loadEntireFile();
