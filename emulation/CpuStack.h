@@ -23,7 +23,7 @@ public:
 		this->_stackPointer -= sizeof(T);
 
 		const size_t vectorOffset = this->_getVectorOffset(this->_stackPointer);
-		const T* ptr = reinterpret_cast<T*>(this->_stackMemory->data() + vectorOffset);
+		T* ptr = reinterpret_cast<T*>(this->_stackMemory->data() + vectorOffset);
 		*ptr = value;
 	}
 
