@@ -46,4 +46,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/loads_and_stores/indexing_helper.h
         loaders/elf/ElfLoader.h
         loaders/elf/ElfLoader.cpp
+        emulation/CpuStack.h
+        emulation/CpuStack.cpp
 )

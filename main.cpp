@@ -59,6 +59,9 @@ int prototype_main() {
 
 	constexpr size_t INITIAL_CPU_MEMORY = 10240; // bytes
 	const auto shared_cpu = std::make_shared<AArch64Cpu>(INITIAL_CPU_MEMORY);
+
+	auto stack = shared_cpu->getStack(AARCH64_CURRENT_THEAD_ID);
+
 	AddSubImmediateExecutor add_sub_immediate_executor(shared_cpu);
 	FormPcRelAddressExecutor form_pc_rel_address_executor(shared_cpu);
 	MoveWideImmediateExecutor move_wide_imm_executor(shared_cpu);
