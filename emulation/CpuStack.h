@@ -17,6 +17,10 @@ public:
 		this->_stackPointer -= sizeof(T);
 
 		const size_t vectorOffset = this->_stackMemory->size() - this->_stackPointer;
+		if (vectorOffset >= this->_stackMemory->size()) {
+			throw std::runtime_error("Stack overflow");
+		}
+
 		const T* ptr = reinterpret_cast<T*>(this->_stackMemory->data() + vectorOffset);
 		*ptr = value;
 	}
