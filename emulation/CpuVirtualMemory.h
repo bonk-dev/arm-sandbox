@@ -46,7 +46,9 @@ public:
 	void write(uintptr_t addr, uint32_t value);
 	void write(uintptr_t addr, uint64_t value);
 
-	void write(virtual_address_t destination, std::vector<std::byte> const& data);
+	void write(virtual_address_t destination,
+			   std::vector<std::byte>::const_iterator begin,
+			   std::vector<std::byte>::difference_type size);
 
 	template<class T>
 	T read(uintptr_t addr) {

@@ -116,16 +116,20 @@ namespace Loaders {
 
 			Elf64_Shdr* header = this->_elfSectionHeaders->at(i);
 			if (has_flag_set(header->sh_flags, SHF_ALLOC) && header->sh_type != SHT_NOBITS) {
-				std::cout << "[ElfLoader] allocating " << this->_getSectionName(header) << " in virtual memory" << std::endl;
+				std::cout << "[ElfLoader] allocating " << this->_getSectionName(header)
+					<< " in virtual memory at virtual: " << std::hex << std::showbase << header->sh_addr  << std::endl;
 				if (header->sh_addr == 0) {
 					throw std::runtime_error("ELF section has the SHF_ALLOC flag set, but the sh_addr field is 0");
 				}
 			}
 			else {
-				std::cout << "[ElfLoader] not allocating " << this->_getSectionName(header) << " in virtual memory" << std::endl;
+				std::cout << "[ElfLoader] not allocating " << this->_getSectionName(header) << std::endl;
 			}
 
-			memory.manualAllocatePage(header->sh_addr, header->sh_size);
+			memory.write(
+					header->sh_addr,
+					this->_rawFile->begin() + header->sh_offset,
+					header->sh_size);
 		}
 	}
 
