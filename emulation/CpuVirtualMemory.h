@@ -7,8 +7,7 @@
 #include <map>
 #include <vector>
 #include <optional>
-
-typedef uintptr_t virtual_address_t;
+#include "emu_types.h"
 
 namespace {
 	constexpr size_t PAGE_SIZE_2_POWER = 11;
