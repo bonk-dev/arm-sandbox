@@ -6,7 +6,7 @@ FormPcRelAddressExecutor::FormPcRelAddressExecutor(const std::shared_ptr<AArch64
 void FormPcRelAddressExecutor::execute(InstructionDefs::DataProcImm::FormPcRelAddress &instruction) {
 	const auto cpu = this->get_cpu().get();
 
-	uint64_t pc = cpu->get_program_counter();
+	uint64_t pc = cpu->getProgramCounter();
 	uint64_t result;
 	if (instruction.rel_to_4kb_page) {
 		// 2^13 has the 13th bit set, 2^13 - 1 has the bottom 12 bits set. E.g.:
@@ -23,7 +23,7 @@ void FormPcRelAddressExecutor::execute(InstructionDefs::DataProcImm::FormPcRelAd
 		result = pc + instruction.immediate;
 	}
 
-	cpu->write_gp_register_64(instruction.destination_reg_index, result);
+	cpu->writeGpRegister64(instruction.destination_reg_index, result);
 }
 
 

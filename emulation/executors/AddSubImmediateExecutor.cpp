@@ -7,8 +7,8 @@ void AddSubImmediateExecutor::execute(InstructionDefs::DataProcImm::AddImmediate
     const auto cpu = this->get_cpu().get();
 
     uint64_t val = instruction.is_64bit
-        ? cpu->read_gp_register_64(instruction.source_reg_index)
-        : cpu->read_gp_register_32(instruction.source_reg_index);
+        ? cpu->readGpRegister64(instruction.source_reg_index)
+        : cpu->readGpRegister32(instruction.source_reg_index);
 
     if (instruction.shift_12) {
         instruction.immediate <<= 12;
@@ -26,10 +26,10 @@ void AddSubImmediateExecutor::execute(InstructionDefs::DataProcImm::AddImmediate
     }
 
     if (instruction.is_64bit) {
-        cpu->write_gp_register_64(instruction.destination_reg_index, val);
+		cpu->writeGpRegister64(instruction.destination_reg_index, val);
     }
     else {
-        cpu->write_gp_register_32(instruction.destination_reg_index, val);
+		cpu->writeGpRegister32(instruction.destination_reg_index, val);
     }
 }
 

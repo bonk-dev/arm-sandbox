@@ -2,39 +2,39 @@
 #include "AArch64Cpu.h"
 
 AArch64Cpu::AArch64Cpu(size_t initial_memory_size) : _memory(initial_memory_size),
-													 _program_counter(0),
+													 _programCounter(0),
 													 _stack(std::make_unique<CpuStack>(8 * 1024 * 1024)) {
-    this->_general_registers = std::vector<uint64_t>(
+    this->_generalRegisters = std::vector<uint64_t>(
         AARCH64_GENERAL_PURPOSE_REGISTERS);
 	this->createThread(AARCH64_MAIN_THREAD_ID);
 }
 
-void AArch64Cpu::write_gp_register_32(const regindex_t index, const uint32_t val) {
-    this->_general_registers[index] = val;
+void AArch64Cpu::writeGpRegister32(regindex_t index, uint32_t val) {
+    this->_generalRegisters[index] = val;
 }
 
-void AArch64Cpu::write_gp_register_64(const regindex_t index, const uint64_t val) {
-    this->_general_registers[index] = val;
+void AArch64Cpu::writeGpRegister64(regindex_t index, uint64_t val) {
+    this->_generalRegisters[index] = val;
 }
 
-uint32_t AArch64Cpu::read_gp_register_32(const regindex_t index) const {
-    return this->_general_registers[index];
+uint32_t AArch64Cpu::readGpRegister32(regindex_t index) const {
+    return this->_generalRegisters[index];
 }
 
-uint64_t AArch64Cpu::read_gp_register_64(const regindex_t index) const {
-    return this->_general_registers[index];
+uint64_t AArch64Cpu::readGpRegister64(regindex_t index) const {
+    return this->_generalRegisters[index];
 }
 
-CpuVirtualMemory &AArch64Cpu::get_memory() {
+CpuVirtualMemory &AArch64Cpu::getMemory() {
 	return this->_memory;
 }
 
-uint64_t AArch64Cpu::get_program_counter() const {
-	return this->_program_counter;
+uint64_t AArch64Cpu::getProgramCounter() const {
+	return this->_programCounter;
 }
 
-void AArch64Cpu::set_program_counter(uint64_t pc) {
-	this->_program_counter = pc;
+void AArch64Cpu::setProgramCounter(uint64_t pc) {
+	this->_programCounter = pc;
 }
 
 std::shared_ptr<CpuStack> & AArch64Cpu::getStack(uint64_t threadId) {

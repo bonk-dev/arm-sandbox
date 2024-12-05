@@ -27,16 +27,16 @@ void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(InstructionDefs
 		if (instruction.is_signed) {
 			switch (instruction.size) {
 				case 8:
-					val = this->get_cpu()->get_memory().read<int8_t>(virtual_address);
+					val = this->get_cpu()->getMemory().read<int8_t>(virtual_address);
 					break;
 				case 16:
-					val = this->get_cpu()->get_memory().read<int16_t>(virtual_address);
+					val = this->get_cpu()->getMemory().read<int16_t>(virtual_address);
 					break;
 				case 32:
-					val = this->get_cpu()->get_memory().read<int32_t>(virtual_address);
+					val = this->get_cpu()->getMemory().read<int32_t>(virtual_address);
 					break;
 				case 64:
-					val = this->get_cpu()->get_memory().read<int64_t>(virtual_address);
+					val = this->get_cpu()->getMemory().read<int64_t>(virtual_address);
 					break;
 				default:
 					throw std::runtime_error("Invalid data size");
@@ -45,16 +45,16 @@ void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(InstructionDefs
 		else {
 			switch (instruction.size) {
 				case 8:
-					val = this->get_cpu()->get_memory().read<uint8_t>(virtual_address);
+					val = this->get_cpu()->getMemory().read<uint8_t>(virtual_address);
 					break;
 				case 16:
-					val = this->get_cpu()->get_memory().read<uint16_t>(virtual_address);
+					val = this->get_cpu()->getMemory().read<uint16_t>(virtual_address);
 					break;
 				case 32:
-					val = this->get_cpu()->get_memory().read<uint32_t>(virtual_address);
+					val = this->get_cpu()->getMemory().read<uint32_t>(virtual_address);
 					break;
 				case 64:
-					val = this->get_cpu()->get_memory().read<uint64_t>(virtual_address);
+					val = this->get_cpu()->getMemory().read<uint64_t>(virtual_address);
 					break;
 				default:
 					throw std::runtime_error("Invalid data size");
@@ -62,22 +62,22 @@ void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(InstructionDefs
 		}
 
 		if (instruction.is_using_64bit_reg) {
-			this->get_cpu()->write_gp_register_64(
+			this->get_cpu()->writeGpRegister64(
 					instruction.src_dst_reg, val);
 		}
 		else {
-			this->get_cpu()->write_gp_register_32(
+			this->get_cpu()->writeGpRegister32(
 					instruction.src_dst_reg, val);
 		}
 	}
 	else {
 		if (instruction.is_using_64bit_reg) {
-			this->get_cpu()->get_memory().write(
-					virtual_address, this->get_cpu()->read_gp_register_64(instruction.src_dst_reg));
+			this->get_cpu()->getMemory().write(
+					virtual_address, this->get_cpu()->readGpRegister64(instruction.src_dst_reg));
 		}
 		else {
-			this->get_cpu()->get_memory().write(
-					virtual_address, this->get_cpu()->read_gp_register_32(instruction.src_dst_reg));
+			this->get_cpu()->getMemory().write(
+					virtual_address, this->get_cpu()->readGpRegister32(instruction.src_dst_reg));
 		}
 	}
 }
