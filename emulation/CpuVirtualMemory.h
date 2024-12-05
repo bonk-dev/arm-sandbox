@@ -46,6 +46,8 @@ public:
 	void write(uintptr_t addr, uint32_t value);
 	void write(uintptr_t addr, uint64_t value);
 
+	void write(virtual_address_t destination, std::vector<std::byte> const& data);
+
 	template<class T>
 	T read(uintptr_t addr) {
 		std::stringstream ss;

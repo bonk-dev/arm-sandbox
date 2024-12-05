@@ -4,6 +4,11 @@
 #include <algorithm>
 #include "CpuVirtualMemory.h"
 
+namespace {
+	constexpr size_t PAGE_SIZE_2_POWER = 11;
+	constexpr size_t PAGE_SIZE = (2 << PAGE_SIZE_2_POWER);
+}
+
 CpuVirtualMemory::CpuVirtualMemory(const size_t size) : _memoryVector(size) {
 	this->_allocatedMemory = malloc(size);
 }
@@ -41,8 +46,7 @@ void CpuVirtualMemory::write(uintptr_t addr, uint64_t value) {
 }
 
 void CpuVirtualMemory::_allocatePages(virtual_address_t address, size_t neededSize) {
-	constexpr virtual_address_t not12BitsMask = ~((2 << 13) - 1);
-	constexpr size_t pageSize = 16384;
+	const virtual_address_t pageRelativeMask = ~((2 << PAGE_SIZE_2_POWER) - 1);
 
 	// No need to start from the beginning every time we need to allocate a new page
 	// so let's just store the last index
@@ -51,26 +55,26 @@ void CpuVirtualMemory::_allocatePages(virtual_address_t address, size_t neededSi
 	size_t allocated = 0;
 	bool oom = false;
 	while (allocated < neededSize && !oom) {
-		const virtual_address_t pageAddress = address & not12BitsMask;
+		const virtual_address_t pageAddress = address & pageRelativeMask;
 		if (this->_allocatedPages.count(pageAddress)) {
 			// page already allocated
-			allocated += pageSize;
-			address += pageSize;
+			allocated += PAGE_SIZE;
+			address += PAGE_SIZE;
 		}
 		else {
 			oom = true;
 
 			// allocate page
 			// find empty space in _memoryVector
-			for (; i < this->_memoryVector.size(); i += pageSize) {
+			for (; i < this->_memoryVector.size(); i += PAGE_SIZE) {
 				if (!this->_allocatedAddresses.count(i) || !this->_allocatedAddresses[i]) {
 					oom = false;
 
 					// this _memoryVector section is free
 					this->_allocatedAddresses[i] = true;
 					this->_allocatedPages[pageAddress] = i;
-					allocated += pageSize;
-					address += pageSize;
+					allocated += PAGE_SIZE;
+					address += PAGE_SIZE;
 
 					std::cout << "[CpuVirtualMemory] Allocated page at " << std::hex << std::showbase << pageAddress << std::endl;
 
@@ -83,4 +87,9 @@ void CpuVirtualMemory::_allocatePages(virtual_address_t address, size_t neededSi
 	if (allocated < neededSize) {
 		throw std::runtime_error("Out-of-memory");
 	}
+}
+
+void CpuVirtualMemory::write(virtual_address_t destination, const std::vector<std::byte> &data) {
+	this->_allocatePages(destination, data.size());
+//	this->all
 }
