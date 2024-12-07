@@ -8,6 +8,9 @@
 #include <vector>
 #include <optional>
 #include "emu_types.h"
+#include "CpuStack.h"
+
+constexpr uint64_t AARCH64_MAIN_THREAD_ID = 1;
 
 namespace {
 	constexpr size_t PAGE_SIZE_2_POWER = 11;
@@ -43,6 +46,11 @@ private:
 	 */
 	std::map<uintptr_t, bool> _allocatedAddresses;
 
+	/**
+	 * @brief Key: thread id, value: thread stack
+	 */
+	std::map<uint64_t, std::shared_ptr<CpuStack>> _threadStacks;
+
 	uintptr_t _getRealAddress(virtual_address_t virtualAddress);
 	void _allocatePages(virtual_address_t address, size_t neededSize);
 public:
@@ -77,4 +85,8 @@ public:
 	void manualAllocatePage(virtual_address_t address, size_t requiredSize) {
 		this->_allocatePages(address, requiredSize);
 	}
+
+	std::shared_ptr<CpuStack> & getStack(uint64_t threadId);
+	void createStack(uint64_t threadId, size_t size);
+	void deleteStack(uint64_t threadId);
 };

@@ -60,7 +60,7 @@ int prototype_main() {
 	constexpr size_t INITIAL_CPU_MEMORY = 10240; // bytes
 	const auto shared_cpu = std::make_shared<AArch64Cpu>(INITIAL_CPU_MEMORY);
 
-	auto stack = shared_cpu->getStack(AARCH64_CURRENT_THEAD_ID);
+	auto stack = shared_cpu->getMemory().getStack(AARCH64_MAIN_THREAD_ID);
 	stack->push<uint32_t>(0x123);
 	auto stackReadTest = stack->read<uint32_t>(Emulation::STACK_START - 4);
 	stack->pop<uint32_t>();

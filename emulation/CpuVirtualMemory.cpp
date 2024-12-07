@@ -102,3 +102,24 @@ void CpuVirtualMemory::write(virtual_address_t destination,
 		std::copy(begin + beginIndex, begin + endIndex, this->_memoryVector.begin() + realAddress);
 	}
 }
+
+std::shared_ptr<CpuStack> &CpuVirtualMemory::getStack(uint64_t threadId) {
+	if (threadId != AARCH64_MAIN_THREAD_ID) {
+		throw std::runtime_error("Only the main thread is supported");
+	}
+
+	// TODO: Only one thread is supported, so the default thread is always the main thread
+	return this->_threadStacks.at(AARCH64_MAIN_THREAD_ID);
+}
+
+void CpuVirtualMemory::createStack(uint64_t threadId, const size_t size) {
+	if (threadId != AARCH64_MAIN_THREAD_ID) {
+		throw std::runtime_error("Only the main thread is supported");
+	}
+
+	this->_threadStacks.emplace(threadId, std::make_shared<CpuStack>(size));
+}
+
+void CpuVirtualMemory::deleteStack(uint64_t threadId) {
+	this->_threadStacks.erase(threadId);
+}
