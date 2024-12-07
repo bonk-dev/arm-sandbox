@@ -38,4 +38,10 @@ public:
 		const size_t vecOffset = this->_getVectorOffset(address);
 		return *reinterpret_cast<T*>(this->_stackMemory->data() + vecOffset);
 	}
+
+	template<typename T>
+	void write(virtual_address_t address, T value) {
+		const size_t vecOffset = this->_getVectorOffset(address);
+		*reinterpret_cast<T*>(this->_stackMemory->data() + vecOffset) = value;
+	}
 };
