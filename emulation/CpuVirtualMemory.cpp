@@ -45,15 +45,6 @@ std::vector<std::byte> &CpuVirtualMemory::_getSegment(virtual_address_t virtualA
 	return segmentIterator->second;
 }
 
-uint32_t CpuVirtualMemory::read_uint32(uintptr_t addr) {
-	printf("Reading (32) from virtual %lx\n", addr);
-	return 32;
-}
-uint64_t CpuVirtualMemory::read_uint64(uintptr_t addr) {
-	printf("Reading (64) from virtual %lx\n", addr);
-	return 64;
-}
-
 void CpuVirtualMemory::write(uintptr_t addr, uint32_t value) {
 	std::stringstream ss;
 	const size_t STACK_END = this->getStack(AARCH64_MAIN_THREAD_ID)->getStackSize();
