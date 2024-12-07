@@ -27,6 +27,24 @@ namespace {
 	}
 }
 
+void CpuVirtualMemory::_allocateSegmentNoOverlapCheck(virtual_address_t address, size_t size) {
+	this->_segments.emplace(address, size);
+}
+
+std::vector<std::byte> &CpuVirtualMemory::_getSegment(virtual_address_t virtualAddress, virtual_address_t& segmentStart) {
+	auto segmentIterator = std::find_if(this->_segments.begin(), this->_segments.end(), [&](const auto& pair) {
+		const virtual_address_t segmentEnd = pair.first + pair.second.size() - 1;
+		const virtual_address_t segmentStart = pair.first;
+		return is_in_range(segmentStart, segmentEnd, virtualAddress);
+	});
+	if (segmentIterator == this->_segments.end()) {
+		throw std::runtime_error("Emulation segmentation fault");
+	}
+
+	segmentStart = segmentIterator->first;
+	return segmentIterator->second;
+}
+
 uint32_t CpuVirtualMemory::read_uint32(uintptr_t addr) {
 	printf("Reading (32) from virtual %lx\n", addr);
 	return 32;
@@ -80,20 +98,6 @@ void CpuVirtualMemory::write(virtual_address_t destination,
 	}
 
 	std::copy(begin, begin + size, segment.begin() + segmentIndex);
-}
-
-std::vector<std::byte> &CpuVirtualMemory::_getSegment(virtual_address_t virtualAddress, virtual_address_t& segmentStart) {
-	auto segmentIterator = std::find_if(this->_segments.begin(), this->_segments.end(), [&](const auto& pair) {
-		const virtual_address_t segmentEnd = pair.first + pair.second.size() - 1;
-		const virtual_address_t segmentStart = pair.first;
-		return is_in_range(segmentStart, segmentEnd, virtualAddress);
-	});
-	if (segmentIterator == this->_segments.end()) {
-		throw std::runtime_error("Emulation segmentation fault");
-	}
-
-	segmentStart = segmentIterator->first;
-	return segmentIterator->second;
 }
 
 std::shared_ptr<CpuStack> &CpuVirtualMemory::getStack(uint64_t threadId) {
@@ -157,10 +161,6 @@ void CpuVirtualMemory::allocateSegment(virtual_address_t virtualAddress, size_t 
 	}
 
 	this->_allocateSegmentNoOverlapCheck(virtualAddress, size);
-}
-
-void CpuVirtualMemory::_allocateSegmentNoOverlapCheck(virtual_address_t address, size_t size) {
-	this->_segments.emplace(address, size);
 }
 
 void CpuVirtualMemory::freeSegment(virtual_address_t virtualAddress) {
