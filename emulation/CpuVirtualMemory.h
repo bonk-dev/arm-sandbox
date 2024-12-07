@@ -56,6 +56,7 @@ private:
 public:
 	explicit CpuVirtualMemory(size_t size);
 	~CpuVirtualMemory();
+	int a = 5;
 
 	void write(uintptr_t addr, int value) {
 		this->write(addr, static_cast<uint32_t>(value));

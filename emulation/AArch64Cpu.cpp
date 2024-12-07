@@ -1,7 +1,7 @@
 #include <format>
 #include "AArch64Cpu.h"
 
-AArch64Cpu::AArch64Cpu(size_t initial_memory_size) : _memory(initial_memory_size),
+AArch64Cpu::AArch64Cpu(size_t initial_memory_size) : _memory(std::make_unique<CpuVirtualMemory>(initial_memory_size)),
 													 _programCounter(0),
 													 _threads() {
     this->_generalRegisters = std::vector<uint64_t>(
@@ -26,7 +26,7 @@ uint64_t AArch64Cpu::readGpRegister64(regindex_t index) const {
 }
 
 CpuVirtualMemory &AArch64Cpu::getMemory() {
-	return this->_memory;
+	return *this->_memory;
 }
 
 uint64_t AArch64Cpu::getProgramCounter() const {

@@ -14,7 +14,7 @@ private:
 	uint64_t _programCounter;
 
 	std::vector<uint64_t> _threads;
-	CpuVirtualMemory _memory;
+	std::unique_ptr<CpuVirtualMemory> _memory;
 public:
     explicit AArch64Cpu(size_t initial_memory_size);
 
