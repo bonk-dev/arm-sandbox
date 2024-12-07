@@ -18,6 +18,10 @@ private:
 public:
 	explicit CpuStack(size_t stackSize);
 
+	[[nodiscard]] size_t getStackSize() const {
+		return this->_stackMemory->size();
+	}
+
 	template <typename T>
 	void push(T value) {
 		this->_stackPointer -= sizeof(T);
