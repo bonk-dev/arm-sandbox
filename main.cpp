@@ -143,7 +143,7 @@ int read_elf_main(const char* path) {
 	loader.loadEntireFile();
 	loader.parse();
 
-	CpuVirtualMemory mem(4 * 1024 * 1024);
+	CpuVirtualMemory mem{};
 	loader.allocateSections(mem);
 
 	// Normally we would start executing at "entry" - this offset is in the ELF header

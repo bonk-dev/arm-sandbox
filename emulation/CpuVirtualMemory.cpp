@@ -27,9 +27,6 @@ namespace {
 	}
 }
 
-CpuVirtualMemory::CpuVirtualMemory(const size_t size) :
-	_memoryVector(size) {}
-
 uint32_t CpuVirtualMemory::read_uint32(uintptr_t addr) {
 	printf("Reading (32) from virtual %lx\n", addr);
 	return 32;
@@ -97,55 +94,6 @@ std::vector<std::byte> &CpuVirtualMemory::_getSegment(virtual_address_t virtualA
 
 	segmentStart = segmentIterator->first;
 	return segmentIterator->second;
-}
-
-
-void CpuVirtualMemory::_allocatePages(virtual_address_t address, size_t neededSize) {
-	// No need to start from the beginning every time we need to allocate a new page
-	// so let's just store the last index
-	uintptr_t i = 0;
-
-	size_t allocated = 0;
-	bool oom = false;
-	while (allocated < neededSize && !oom) {
-		const virtual_address_t pageAddress = virtual_page_address(address);
-		if (this->_allocatedPages.count(pageAddress)) {
-			// page already allocated
-			allocated += PAGE_SIZE;
-			address += PAGE_SIZE;
-		}
-		else {
-			oom = true;
-
-			// allocate page
-			// find empty space in _memoryVector
-			for (; i < this->_memoryVector.size(); i += PAGE_SIZE) {
-				if (!this->_allocatedAddresses.count(i) || !this->_allocatedAddresses[i]) {
-					oom = false;
-
-					// this _memoryVector section is free
-					this->_allocatedAddresses[i] = true;
-					this->_allocatedPages[pageAddress] = i;
-					allocated += PAGE_SIZE;
-					address += PAGE_SIZE;
-
-					std::cout << "[CpuVirtualMemory] Allocated page at " << std::hex << std::showbase << pageAddress << std::endl;
-
-					break;
-				}
-			}
-		}
-	}
-
-	if (allocated < neededSize) {
-		throw std::runtime_error("Out-of-memory");
-	}
-}
-
-uintptr_t CpuVirtualMemory::_getRealAddress(virtual_address_t virtualAddress) {
-	virtual_address_t pageAddress = virtual_page_address(virtualAddress);
-	virtual_address_t inPageOffset = virtual_in_page_offset(virtualAddress);
-	return this->_allocatedPages[pageAddress] + inPageOffset;
 }
 
 std::shared_ptr<CpuStack> &CpuVirtualMemory::getStack(uint64_t threadId) {

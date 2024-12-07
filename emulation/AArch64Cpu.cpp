@@ -1,7 +1,7 @@
 #include <format>
 #include "AArch64Cpu.h"
 
-AArch64Cpu::AArch64Cpu(size_t initial_memory_size) : _memory(std::make_unique<CpuVirtualMemory>(initial_memory_size)),
+AArch64Cpu::AArch64Cpu(size_t initial_memory_size) : _memory(std::make_unique<CpuVirtualMemory>()),
 													 _programCounter(0),
 													 _threads() {
     this->_generalRegisters = std::vector<uint64_t>(
