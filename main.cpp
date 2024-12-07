@@ -65,6 +65,10 @@ int prototype_main() {
 	auto stackReadTest = stack->read<uint32_t>(Emulation::STACK_START - 4);
 	stack->pop<uint32_t>();
 
+	shared_cpu->getMemory().allocateSegment(10240);
+	shared_cpu->getMemory().allocateSegment(10240);
+	shared_cpu->getMemory().allocateSegment(10240);
+
 	AddSubImmediateExecutor add_sub_immediate_executor(shared_cpu);
 	FormPcRelAddressExecutor form_pc_rel_address_executor(shared_cpu);
 	MoveWideImmediateExecutor move_wide_imm_executor(shared_cpu);

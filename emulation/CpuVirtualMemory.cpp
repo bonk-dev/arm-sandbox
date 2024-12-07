@@ -61,7 +61,6 @@ void CpuVirtualMemory::write(virtual_address_t destination,
 	}
 }
 
-
 void CpuVirtualMemory::_allocatePages(virtual_address_t address, size_t neededSize) {
 	// No need to start from the beginning every time we need to allocate a new page
 	// so let's just store the last index
@@ -129,4 +128,77 @@ void CpuVirtualMemory::createStack(uint64_t threadId, const size_t size) {
 
 void CpuVirtualMemory::deleteStack(uint64_t threadId) {
 	this->_threadStacks.erase(threadId);
+}
+
+namespace {
+	template<typename T>
+	constexpr bool is_in_range(T start, T end, T value) {
+		return value >= start && value <= end;
+	}
+
+	bool does_segment_overlap(const std::pair<virtual_address_t, std::vector<std::byte>> &pair, virtual_address_t start,
+							  size_t size) {
+		// If a segment starts at 0xF, and has a size of 2 bytes:
+		// Start == 0xF, End = 0x10 (0xF + 2 - 1)
+
+		// if either the requested segment starts in the already allocated region,
+		// or the requested segment ends in the region
+		// then it overlaps
+		const virtual_address_t allocatedStart = pair.first;
+		const size_t allocatedSize = pair.second.size();
+		const virtual_address_t allocatedEnd = allocatedStart + allocatedSize - 1;
+		bool resutl = is_in_range(allocatedStart, allocatedEnd, start)
+					  || is_in_range(allocatedStart, allocatedEnd, start + size - 1);;
+		return resutl;
+	}
+}
+
+void CpuVirtualMemory::allocateSegment(size_t size) {
+	virtual_address_t currentAddress = 0;
+
+	// find next available virtual address;
+	if (!this->_segments.empty()) {
+		bool freeFound = false;
+		while (!freeFound) {
+			const size_t requestedEnd = currentAddress + size - 1;
+			auto overlap = std::find_if(
+					this->_segments.begin(), this->_segments.end(),
+					[&](const auto& val)
+					{
+						return does_segment_overlap(val, currentAddress, size);
+					});
+
+			if (overlap == this->_segments.end()) {
+				freeFound = true;
+			}
+			else {
+				currentAddress = overlap->first + overlap->second.size();
+			}
+		}
+	}
+
+	this->_allocateSegmentNoOverlapCheck(currentAddress, size);
+}
+
+void CpuVirtualMemory::allocateSegment(virtual_address_t virtualAddress, size_t size) {
+	const size_t requestedEnd = virtualAddress + size - 1;
+	auto overlap = std::find_if(
+			this->_segments.begin(), this->_segments.end(),
+			[&](const auto& val)
+			{
+				return does_segment_overlap(val, virtualAddress, size);
+			});
+	if (overlap != this->_segments.end()) {
+		throw std::runtime_error("Segment overlap");
+	}
+
+	this->_allocateSegmentNoOverlapCheck(virtualAddress, size);
+}
+
+void CpuVirtualMemory::_allocateSegmentNoOverlapCheck(virtual_address_t address, size_t size) {
+	this->_segments.emplace(address, size);
+}
+
+void CpuVirtualMemory::freeSegment(virtual_address_t virtualAddress) {
+	this->_segments.erase(virtualAddress);
 }

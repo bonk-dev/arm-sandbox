@@ -32,6 +32,7 @@ namespace {
 class CpuVirtualMemory {
 private:
 	std::vector<std::byte> _memoryVector;
+	std::map<std::uint64_t, std::vector<std::byte>> _segments;
 
 	/**
 	 * @brief Mapping of virtual addresses accessible by the CPU to beginning indexes of pages (_memoryVector)
@@ -52,6 +53,7 @@ private:
 
 	uintptr_t _getRealAddress(virtual_address_t virtualAddress);
 	void _allocatePages(virtual_address_t address, size_t neededSize);
+	void _allocateSegmentNoOverlapCheck(virtual_address_t address, size_t size);
 public:
 	explicit CpuVirtualMemory(size_t size);
 
@@ -80,9 +82,9 @@ public:
 	[[nodiscard]] uint32_t read_uint32(uintptr_t addr);
 	[[nodiscard]] uint64_t read_uint64(uintptr_t addr);
 
-	void manualAllocatePage(virtual_address_t address, size_t requiredSize) {
-		this->_allocatePages(address, requiredSize);
-	}
+	void allocateSegment(size_t size);
+	void allocateSegment(virtual_address_t virtualAddress, size_t size);
+	void freeSegment(virtual_address_t virtualAddress);
 
 	std::shared_ptr<CpuStack> & getStack(uint64_t threadId);
 	void createStack(uint64_t threadId, size_t size);
