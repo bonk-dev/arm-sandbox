@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <format>
+#include <memory>
 #include "disassembly/A64Decoder.h"
 #include "disassembly/disassembly.h"
 #include "emulation/AArch64Cpu.h"
@@ -77,6 +78,12 @@ int prototype_main() {
 	Executors::LoadsAndStores::LoadStoreRegUnsignedImm load_store_unsigned_imm_executor(shared_cpu);
 
 	InstructionType inst = dec.decode_next();
+	std::map<InstructionType, std::unique_ptr<ExecutorBase>> executors;
+	executors[InstructionType::AddOrSubImmediate] = std::make_unique<AddSubImmediateExecutor>(shared_cpu);
+
+	auto& exec = executors.at(inst);
+	exec->decodeAndExecute(0x911F0019);
+
 	while (inst != InstructionType::Undefined) {
 		switch (inst) {
 			case InstructionType::AddOrSubImmediate:

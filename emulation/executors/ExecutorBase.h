@@ -9,4 +9,8 @@ protected:
 	[[nodiscard]] std::shared_ptr<AArch64Cpu>& get_cpu();
 public:
 	explicit ExecutorBase(const std::shared_ptr<AArch64Cpu> &cpu);
+	virtual void decodeAndExecute(uint32_t encoded) {
+		throw std::runtime_error("Executor not implemented");
+	}
+	virtual ~ExecutorBase() = default;
 };

@@ -33,3 +33,8 @@ void AddSubImmediateExecutor::execute(InstructionDefs::DataProcImm::AddImmediate
     }
 }
 
+void AddSubImmediateExecutor::decodeAndExecute(uint32_t encoded) {
+	auto d = InstructionDefs::DataProcImm::AddImmediate(encoded);
+	this->execute(d);
+}
+
