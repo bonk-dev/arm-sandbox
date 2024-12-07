@@ -4,16 +4,8 @@
 #include <algorithm>
 #include "CpuVirtualMemory.h"
 
-CpuVirtualMemory::CpuVirtualMemory(const size_t size) : _memoryVector(size) {
-	this->_allocatedMemory = malloc(size);
-}
-
-CpuVirtualMemory::~CpuVirtualMemory() {
-	if (this->_allocatedMemory != nullptr) {
-		free(this->_allocatedMemory);
-		this->_allocatedMemory = nullptr;
-	}
-}
+CpuVirtualMemory::CpuVirtualMemory(const size_t size) :
+	_memoryVector(size) {}
 
 uint32_t CpuVirtualMemory::read_uint32(uintptr_t addr) {
 	printf("Reading (32) from virtual %lx\n", addr);

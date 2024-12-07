@@ -31,7 +31,6 @@ namespace {
  */
 class CpuVirtualMemory {
 private:
-	void* _allocatedMemory;
 	std::vector<std::byte> _memoryVector;
 
 	/**
