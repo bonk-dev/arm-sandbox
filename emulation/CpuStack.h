@@ -6,7 +6,7 @@
 #include "emu_types.h"
 
 namespace Emulation {
-	constexpr size_t STACK_START = 0x7fffffffff;
+	constexpr size_t STACK_START = 0x7fffffffffff;
 }
 
 class CpuStack {
