@@ -4,6 +4,29 @@
 #include <algorithm>
 #include "CpuVirtualMemory.h"
 
+namespace {
+	template<typename T>
+	constexpr bool is_in_range(T start, T end, T value) {
+		return value >= start && value <= end;
+	}
+
+	bool does_segment_overlap(const std::pair<virtual_address_t, std::vector<std::byte>> &pair, virtual_address_t start,
+							  size_t size) {
+		// If a segment starts at 0xF, and has a size of 2 bytes:
+		// Start == 0xF, End = 0x10 (0xF + 2 - 1)
+
+		// if either the requested segment starts in the already allocated region,
+		// or the requested segment ends in the region
+		// then it overlaps
+		const virtual_address_t allocatedStart = pair.first;
+		const size_t allocatedSize = pair.second.size();
+		const virtual_address_t allocatedEnd = allocatedStart + allocatedSize - 1;
+		bool resutl = is_in_range(allocatedStart, allocatedEnd, start)
+					  || is_in_range(allocatedStart, allocatedEnd, start + size - 1);;
+		return resutl;
+	}
+}
+
 CpuVirtualMemory::CpuVirtualMemory(const size_t size) :
 	_memoryVector(size) {}
 
@@ -49,17 +72,33 @@ void CpuVirtualMemory::write(uintptr_t addr, uint64_t value) {
 void CpuVirtualMemory::write(virtual_address_t destination,
 							 std::vector<std::byte>::const_iterator begin,
 							 std::vector<std::byte>::difference_type size) {
-	this->_allocatePages(destination, size);
 
-	for (virtual_address_t i = destination; i < virtual_page_address(destination + size) + PAGE_SIZE; i += PAGE_SIZE) {
-		const uintptr_t realAddress = this->_getRealAddress(i);
 
-		const size_t copySize = std::min(static_cast<size_t>(size), PAGE_SIZE);
-		const auto beginIndex = static_cast<std::vector<std::byte>::difference_type>(i - destination);
-		const auto endIndex = static_cast<std::vector<std::byte>::difference_type>(beginIndex + copySize);
-		std::copy(begin + beginIndex, begin + endIndex, this->_memoryVector.begin() + realAddress);
+	virtual_address_t base = 0;
+	std::vector<std::byte>& segment = this->_getSegment(destination, base);
+	const auto segmentIndex = static_cast<std::vector<std::byte>::difference_type>(destination - base);
+
+	if (segment.size() - segmentIndex < size) {
+		throw std::runtime_error("Emulation segmentation fault");
 	}
+
+	std::copy(begin, begin + size, segment.begin() + segmentIndex);
 }
+
+std::vector<std::byte> &CpuVirtualMemory::_getSegment(virtual_address_t virtualAddress, virtual_address_t& segmentStart) {
+	auto segmentIterator = std::find_if(this->_segments.begin(), this->_segments.end(), [&](const auto& pair) {
+		const virtual_address_t segmentEnd = pair.first + pair.second.size() - 1;
+		const virtual_address_t segmentStart = pair.first;
+		return is_in_range(segmentStart, segmentEnd, virtualAddress);
+	});
+	if (segmentIterator == this->_segments.end()) {
+		throw std::runtime_error("Emulation segmentation fault");
+	}
+
+	segmentStart = segmentIterator->first;
+	return segmentIterator->second;
+}
+
 
 void CpuVirtualMemory::_allocatePages(virtual_address_t address, size_t neededSize) {
 	// No need to start from the beginning every time we need to allocate a new page
@@ -128,29 +167,6 @@ void CpuVirtualMemory::createStack(uint64_t threadId, const size_t size) {
 
 void CpuVirtualMemory::deleteStack(uint64_t threadId) {
 	this->_threadStacks.erase(threadId);
-}
-
-namespace {
-	template<typename T>
-	constexpr bool is_in_range(T start, T end, T value) {
-		return value >= start && value <= end;
-	}
-
-	bool does_segment_overlap(const std::pair<virtual_address_t, std::vector<std::byte>> &pair, virtual_address_t start,
-							  size_t size) {
-		// If a segment starts at 0xF, and has a size of 2 bytes:
-		// Start == 0xF, End = 0x10 (0xF + 2 - 1)
-
-		// if either the requested segment starts in the already allocated region,
-		// or the requested segment ends in the region
-		// then it overlaps
-		const virtual_address_t allocatedStart = pair.first;
-		const size_t allocatedSize = pair.second.size();
-		const virtual_address_t allocatedEnd = allocatedStart + allocatedSize - 1;
-		bool resutl = is_in_range(allocatedStart, allocatedEnd, start)
-					  || is_in_range(allocatedStart, allocatedEnd, start + size - 1);;
-		return resutl;
-	}
 }
 
 void CpuVirtualMemory::allocateSegment(size_t size) {

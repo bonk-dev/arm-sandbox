@@ -54,6 +54,7 @@ private:
 	uintptr_t _getRealAddress(virtual_address_t virtualAddress);
 	void _allocatePages(virtual_address_t address, size_t neededSize);
 	void _allocateSegmentNoOverlapCheck(virtual_address_t address, size_t size);
+	std::vector<std::byte>& _getSegment(virtual_address_t virtualAddress, virtual_address_t& segmentStart);
 public:
 	explicit CpuVirtualMemory(size_t size);
 
@@ -73,9 +74,9 @@ public:
 
 	template<typename T>
 	T read(virtual_address_t virtualAddress) {
-		// TODO: Implement safe cross page read
-		const uintptr_t realAddr = this->_getRealAddress(virtualAddress);
-		T* ptr = reinterpret_cast<T*>(this->_memoryVector.data() + realAddr);
+		virtual_address_t base = 0;
+		auto& segment = this->_getSegment(virtualAddress, base);
+		T* ptr = reinterpret_cast<T*>(segment.data() + (virtualAddress - base));
 		return *ptr;
 	}
 

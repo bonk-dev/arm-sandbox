@@ -121,15 +121,16 @@ namespace Loaders {
 				if (header->sh_addr == 0) {
 					throw std::runtime_error("ELF section has the SHF_ALLOC flag set, but the sh_addr field is 0");
 				}
+
+				memory.allocateSegment(header->sh_addr, header->sh_size);
+				memory.write(
+						header->sh_addr,
+						this->_rawFile->begin() + header->sh_offset,
+						header->sh_size);
 			}
 			else {
 				std::cout << "[ElfLoader] not allocating " << this->_getSectionName(header) << std::endl;
 			}
-
-			memory.write(
-					header->sh_addr,
-					this->_rawFile->begin() + header->sh_offset,
-					header->sh_size);
 		}
 	}
 
