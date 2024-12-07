@@ -18,18 +18,30 @@ uint64_t CpuVirtualMemory::read_uint64(uintptr_t addr) {
 
 void CpuVirtualMemory::write(uintptr_t addr, uint32_t value) {
 	std::stringstream ss;
-	ss << "[Memory] 32bit Write to address: " << std::hex << std::showbase << addr << " (val: " << value << ")";
+	if (addr >= Emulation::STACK_START) {
+		ss << "[Memory] 32bit write to stack: " << std::hex << std::showbase << addr;
+		this->getStack(AARCH64_MAIN_THREAD_ID)->write(addr, value);
+	}
+	else {
+		ss << "[Memory] 32bit Write to address: " << std::hex << std::showbase << addr << " (val: " << value << ")";
 
-	// std::cout will be replaced
-	std::cout << ss.str().c_str() << std::endl;
+		// std::cout will be replaced
+		std::cout << ss.str().c_str() << std::endl;
+	}
 }
 
 void CpuVirtualMemory::write(uintptr_t addr, uint64_t value) {
 	std::stringstream ss;
-	ss << "[Memory] 64bit Write to address: " << std::hex << std::showbase << addr << " (val: " << value << ")";
+	if (addr >= Emulation::STACK_START) {
+		ss << "[Memory] 64bit write to stack: " << std::hex << std::showbase << addr;
+		this->getStack(AARCH64_MAIN_THREAD_ID)->write(addr, value);
+	}
+	else {
+		ss << "[Memory] 64bit Write to address: " << std::hex << std::showbase << addr << " (val: " << value << ")";
 
-	// std::cout will be replaced
-	std::cout << ss.str().c_str() << std::endl;
+		// std::cout will be replaced
+		std::cout << ss.str().c_str() << std::endl;
+	}
 }
 
 void CpuVirtualMemory::write(virtual_address_t destination,
