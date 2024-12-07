@@ -32,6 +32,22 @@ void CpuVirtualMemory::write(uintptr_t addr, uint64_t value) {
 	std::cout << ss.str().c_str() << std::endl;
 }
 
+void CpuVirtualMemory::write(virtual_address_t destination,
+							 std::vector<std::byte>::const_iterator begin,
+							 std::vector<std::byte>::difference_type size) {
+	this->_allocatePages(destination, size);
+
+	for (virtual_address_t i = destination; i < virtual_page_address(destination + size) + PAGE_SIZE; i += PAGE_SIZE) {
+		const uintptr_t realAddress = this->_getRealAddress(i);
+
+		const size_t copySize = std::min(static_cast<size_t>(size), PAGE_SIZE);
+		const auto beginIndex = static_cast<std::vector<std::byte>::difference_type>(i - destination);
+		const auto endIndex = static_cast<std::vector<std::byte>::difference_type>(beginIndex + copySize);
+		std::copy(begin + beginIndex, begin + endIndex, this->_memoryVector.begin() + realAddress);
+	}
+}
+
+
 void CpuVirtualMemory::_allocatePages(virtual_address_t address, size_t neededSize) {
 	// No need to start from the beginning every time we need to allocate a new page
 	// so let's just store the last index
@@ -78,21 +94,6 @@ uintptr_t CpuVirtualMemory::_getRealAddress(virtual_address_t virtualAddress) {
 	virtual_address_t pageAddress = virtual_page_address(virtualAddress);
 	virtual_address_t inPageOffset = virtual_in_page_offset(virtualAddress);
 	return this->_allocatedPages[pageAddress] + inPageOffset;
-}
-
-void CpuVirtualMemory::write(virtual_address_t destination,
-							 std::vector<std::byte>::const_iterator begin,
-							 std::vector<std::byte>::difference_type size) {
-	this->_allocatePages(destination, size);
-
-	for (virtual_address_t i = destination; i < virtual_page_address(destination + size) + PAGE_SIZE; i += PAGE_SIZE) {
-		const uintptr_t realAddress = this->_getRealAddress(i);
-
-		const size_t copySize = std::min(static_cast<size_t>(size), PAGE_SIZE);
-		const auto beginIndex = static_cast<std::vector<std::byte>::difference_type>(i - destination);
-		const auto endIndex = static_cast<std::vector<std::byte>::difference_type>(beginIndex + copySize);
-		std::copy(begin + beginIndex, begin + endIndex, this->_memoryVector.begin() + realAddress);
-	}
 }
 
 std::shared_ptr<CpuStack> &CpuVirtualMemory::getStack(uint64_t threadId) {
