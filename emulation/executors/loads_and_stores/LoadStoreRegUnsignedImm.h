@@ -1,13 +1,12 @@
 #pragma once
 
-#include "../ExecutorBase.h"
 #include "../../../disassembly/instructions/loads_and_stores/LoadStoreRegUnsignedImm.h"
+#include "../ExecutorBase'.h"
 
 namespace Executors::LoadsAndStores {
-	class LoadStoreRegUnsignedImm : public ExecutorBase {
+	class LoadStoreRegUnsignedImm : public ExecutorBaseT<InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm> {
 	public:
 		explicit LoadStoreRegUnsignedImm(const std::shared_ptr<AArch64Cpu> &cpu);
-
-		void execute(InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm& instruction);
+		void execute(const InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm& instruction) override;
 	};
 }

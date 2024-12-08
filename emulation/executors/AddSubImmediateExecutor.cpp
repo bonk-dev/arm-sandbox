@@ -1,24 +1,25 @@
 #include "AddSubImmediateExecutor.h"
 
-AddSubImmediateExecutor::AddSubImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu) : ExecutorBase(cpu) {}
+AddSubImmediateExecutor::AddSubImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
+	: ExecutorBaseT<InstructionDefs::DataProcImm::AddImmediate>(cpu) {}
 
-// TODO: Make an executor template?
-void AddSubImmediateExecutor::execute(InstructionDefs::DataProcImm::AddImmediate& instruction) {
+void AddSubImmediateExecutor::execute(const InstructionDefs::DataProcImm::AddImmediate& instruction) {
     const auto cpu = this->get_cpu().get();
 
     uint64_t val = instruction.is_64bit
         ? cpu->readGpRegister64(instruction.source_reg_index)
         : cpu->readGpRegister32(instruction.source_reg_index);
 
+	uint16_t imm = instruction.immediate;
     if (instruction.shift_12) {
-        instruction.immediate <<= 12;
+        imm <<= 12;
     }
 
     if (instruction.is_subtraction) {
-        val -= instruction.immediate;
+        val -= imm;
     }
     else {
-        val += instruction.immediate;
+        val += imm;
     }
 
     if (instruction.set_flags) {
@@ -32,9 +33,3 @@ void AddSubImmediateExecutor::execute(InstructionDefs::DataProcImm::AddImmediate
 		cpu->writeGpRegister32(instruction.destination_reg_index, val);
     }
 }
-
-void AddSubImmediateExecutor::decodeAndExecute(uint32_t encoded) {
-	auto d = InstructionDefs::DataProcImm::AddImmediate(encoded);
-	this->execute(d);
-}
-

@@ -1,9 +1,10 @@
 #include <cmath>
 #include "FormPcRelAddressExecutor.h"
 
-FormPcRelAddressExecutor::FormPcRelAddressExecutor(const std::shared_ptr<AArch64Cpu> &cpu) : ExecutorBase(cpu) {}
+FormPcRelAddressExecutor::FormPcRelAddressExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
+	: ExecutorBaseT<InstructionDefs::DataProcImm::FormPcRelAddress>(cpu) {}
 
-void FormPcRelAddressExecutor::execute(InstructionDefs::DataProcImm::FormPcRelAddress &instruction) {
+void FormPcRelAddressExecutor::execute(const InstructionDefs::DataProcImm::FormPcRelAddress &instruction) {
 	const auto cpu = this->get_cpu().get();
 
 	uint64_t pc = cpu->getProgramCounter();

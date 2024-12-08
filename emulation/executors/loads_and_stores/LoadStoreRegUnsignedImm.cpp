@@ -2,9 +2,10 @@
 #include "../../exceptions/FeatureFpNotImplemented.h"
 #include "../../../disassembly/instructions/loads_and_stores/indexing_helper.h"
 
-Executors::LoadsAndStores::LoadStoreRegUnsignedImm::LoadStoreRegUnsignedImm(const std::shared_ptr<AArch64Cpu> &cpu) : ExecutorBase(cpu) {}
+Executors::LoadsAndStores::LoadStoreRegUnsignedImm::LoadStoreRegUnsignedImm(const std::shared_ptr<AArch64Cpu> &cpu)
+	: ExecutorBaseT<InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm>(cpu) {}
 
-void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm& instruction) {
+void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(const InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm& instruction) {
 	if (instruction.is_simd) {
 		throw Exceptions::FeatureFpNotImplemented("LoadStoreRegUnsignedImm");
 	}

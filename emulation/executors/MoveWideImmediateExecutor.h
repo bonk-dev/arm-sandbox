@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ExecutorBase.h"
 #include "../../disassembly/instructions/data_proc_imm/MoveWideImmediate.h"
+#include "ExecutorBase'.h"
 
-class MoveWideImmediateExecutor : public ExecutorBase {
+class MoveWideImmediateExecutor : public ExecutorBaseT<InstructionDefs::DataProcImm::MoveWideImmediate> {
 public:
 	explicit MoveWideImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu);
-	void execute(InstructionDefs::DataProcImm::MoveWideImmediate& instruction);
+	void execute(const InstructionDefs::DataProcImm::MoveWideImmediate& instruction) override;
 };

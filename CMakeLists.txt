@@ -48,4 +48,5 @@ add_executable(arm_sandbox main.cpp
         loaders/elf/ElfLoader.cpp
         emulation/CpuStack.h
         emulation/CpuStack.cpp
+        emulation/executors/ExecutorBase'.h
 )

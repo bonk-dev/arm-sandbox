@@ -1,9 +1,10 @@
 #include "LoadStoreRegPairExecutor.h"
 #include "../../disassembly/instructions/loads_and_stores/indexing_helper.h"
 
-LoadStoreRegPairExecutor::LoadStoreRegPairExecutor(const std::shared_ptr<AArch64Cpu> &cpu) : ExecutorBase(cpu) {}
+LoadStoreRegPairExecutor::LoadStoreRegPairExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
+	: ExecutorBaseT<InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction>(cpu) {}
 
-void LoadStoreRegPairExecutor::execute(InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction& instruction) {
+void LoadStoreRegPairExecutor::execute(const InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction& instruction) {
 	if (instruction.is_simd) {
 		throw std::runtime_error("SIMD operations are not implemented");
 	}
