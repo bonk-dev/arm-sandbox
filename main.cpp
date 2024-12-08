@@ -65,15 +65,6 @@ int prototype_main() {
 	constexpr size_t INITIAL_CPU_MEMORY = 10240; // bytes
 	const auto shared_cpu = std::make_shared<AArch64Cpu>(INITIAL_CPU_MEMORY);
 
-	auto stack = shared_cpu->getMemory().getStack(AARCH64_MAIN_THREAD_ID);
-	stack->push<uint32_t>(0x123);
-	auto stackReadTest = stack->read<uint32_t>(Emulation::STACK_START - 4);
-	stack->pop<uint32_t>();
-
-	shared_cpu->getMemory().allocateSegment(10240);
-	shared_cpu->getMemory().allocateSegment(10240);
-	shared_cpu->getMemory().allocateSegment(10240);
-
 	std::map<InstructionType, std::unique_ptr<ExecutorBase>> executors;
 	map_e<AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate, shared_cpu);
 	map_e<FormPcRelAddressExecutor>(executors, InstructionType::PcRelativeAddressing, shared_cpu);
