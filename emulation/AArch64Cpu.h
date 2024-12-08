@@ -16,7 +16,7 @@ private:
 	std::vector<uint64_t> _threads;
 	std::unique_ptr<CpuVirtualMemory> _memory;
 public:
-    explicit AArch64Cpu(size_t initial_memory_size);
+    AArch64Cpu();
 
     void writeGpRegister32(regindex_t index, uint32_t val);
     void writeGpRegister64(regindex_t index, uint64_t val);

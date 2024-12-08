@@ -62,8 +62,7 @@ int prototype_main() {
 			std::byte(0x11), std::byte(0x12), std::byte(0x40), std::byte(0xF9)
 	};
 
-	constexpr size_t INITIAL_CPU_MEMORY = 10240; // bytes
-	const auto shared_cpu = std::make_shared<AArch64Cpu>(INITIAL_CPU_MEMORY);
+	const auto shared_cpu = std::make_shared<AArch64Cpu>();
 
 	std::map<InstructionType, std::unique_ptr<ExecutorBase>> executors;
 	map_e<AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate, shared_cpu);
