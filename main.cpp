@@ -73,12 +73,12 @@ int prototype_main() {
 	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm, shared_cpu);
 
 	A64Decoder dec(sample_code);
-	InstructionType inst = dec.decode_next();
+	InstructionType inst = dec.decodeNextType();
 	while (inst != InstructionType::Undefined) {
 		auto& exec = executors.at(inst);
 		exec->decodeAndExecute(dec.getRawInstruction());
 
-		inst = dec.decode_next();
+		inst = dec.decodeNextType();
 	}
 
 	return 0;

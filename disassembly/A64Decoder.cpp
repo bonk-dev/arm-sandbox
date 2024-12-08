@@ -123,7 +123,7 @@ static std::map<mask_values_t, decode_sublevel_instruction_t> top_level_op1 {
 		{ mask_values_t(0b1110, 0b1010), &decode_branches_exc_sys },
 		{ mask_values_t(0b0101, 0b0100), &decode_load_and_store_type }
 };
-InstructionType A64Decoder::decode_next() {
+InstructionType A64Decoder::decodeNextType() {
 	if (this->_index >= this->_code.size()) {
 		return InstructionType::Undefined;
 	}

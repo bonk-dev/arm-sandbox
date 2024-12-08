@@ -21,7 +21,7 @@ private:
 	uint32_t _last_raw_instruction;
 public:
 	explicit A64Decoder(std::vector<std::byte>& code);
-	InstructionType decode_next();
+	InstructionType decodeNextType();
 	uint32_t getRawInstruction();
 
 	template<class InstructionDetailsT>
