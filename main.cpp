@@ -10,8 +10,6 @@
 #include "emulation/executors/FormPcRelAddressExecutor.h"
 #include "emulation/executors/UnconditionalBranchImmediateExecutor.h"
 #include "disassembly/instructions/data_proc_imm/AddImmediate.h"
-#include "disassembly/instructions/data_proc_imm/FormPcRelAddress.h"
-#include "disassembly/instructions/data_proc_imm/MoveWideImmediate.h"
 #include "emulation/executors/MoveWideImmediateExecutor.h"
 #include "emulation/executors/loads_and_stores/LoadStoreRegUnsignedImm.h"
 #include "loaders/elf/ElfLoader.h"
