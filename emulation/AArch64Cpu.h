@@ -6,7 +6,7 @@
 #include "emu_types.h"
 #include "CpuStack.h"
 
-constexpr size_t AARCH64_GENERAL_PURPOSE_REGISTERS = 32;
+constexpr size_t AARCH64_GENERAL_PURPOSE_REGISTERS = 31;
 
 class AArch64Cpu {
 private:
@@ -33,5 +33,5 @@ public:
 	 */
 	void createThread(uint64_t id);
 
-	CpuVirtualMemory& getMemory();
+	CpuVirtualMemory & getMemory() const;
 };

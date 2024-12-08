@@ -22,6 +22,13 @@ public:
 		return this->_stackMemory->size();
 	}
 
+	[[nodiscard]] size_t getStackPointer() const {
+		return this->_stackPointer;
+	}
+	void setStackPointer(size_t sp) {
+		this->_stackPointer = sp;
+	}
+
 	template <typename T>
 	void push(T value) {
 		this->_stackPointer -= sizeof(T);

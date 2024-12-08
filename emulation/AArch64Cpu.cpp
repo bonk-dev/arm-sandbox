@@ -1,5 +1,6 @@
 #include <format>
 #include "AArch64Cpu.h"
+#include "registers.h"
 
 AArch64Cpu::AArch64Cpu() : _memory(std::make_unique<CpuVirtualMemory>()),
 													 _programCounter(0),
@@ -9,23 +10,47 @@ AArch64Cpu::AArch64Cpu() : _memory(std::make_unique<CpuVirtualMemory>()),
 	this->createThread(AARCH64_MAIN_THREAD_ID);
 }
 
+// TODO: might rename to just writeRegister[32/64]
 void AArch64Cpu::writeGpRegister32(regindex_t index, uint32_t val) {
-    this->_generalRegisters[index] = val;
+	switch (static_cast<Emulation::Registers>(index)) {
+		case Emulation::Registers::Sp:
+			this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->setStackPointer(val);
+			break;
+		default:
+			this->_generalRegisters[index] = val;
+	}
 }
 
+// TODO: might rename to just writeRegister[32/64]
 void AArch64Cpu::writeGpRegister64(regindex_t index, uint64_t val) {
-    this->_generalRegisters[index] = val;
+	switch (static_cast<Emulation::Registers>(index)) {
+		case Emulation::Registers::Sp:
+			this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->setStackPointer(val);
+			break;
+		default:
+			this->_generalRegisters[index] = val;
+	}
 }
 
 uint32_t AArch64Cpu::readGpRegister32(regindex_t index) const {
-    return this->_generalRegisters[index];
+	switch (static_cast<Emulation::Registers>(index)) {
+		case Emulation::Registers::Sp:
+			return this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->getStackPointer();
+		default:
+			return this->_generalRegisters[index];
+	}
 }
 
 uint64_t AArch64Cpu::readGpRegister64(regindex_t index) const {
-    return this->_generalRegisters[index];
+	switch (static_cast<Emulation::Registers>(index)) {
+		case Emulation::Registers::Sp:
+			return this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->getStackPointer();
+		default:
+			return this->_generalRegisters[index];
+	}
 }
 
-CpuVirtualMemory &AArch64Cpu::getMemory() {
+CpuVirtualMemory & AArch64Cpu::getMemory() const {
 	return *this->_memory;
 }
 
