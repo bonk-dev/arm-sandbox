@@ -24,6 +24,19 @@ void map_e(std::map<InstructionType, std::unique_ptr<ExecutorBase>>& map, Instru
 	map[instructionType] = std::make_unique<ExecutorType>(c);
 }
 
+std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const std::shared_ptr<AArch64Cpu>& sharedCpu) {
+	std::map<InstructionType, std::unique_ptr<ExecutorBase>> executors;
+
+	map_e<AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate, sharedCpu);
+	map_e<FormPcRelAddressExecutor>(executors, InstructionType::PcRelativeAddressing, sharedCpu);
+	map_e<MoveWideImmediateExecutor>(executors, InstructionType::MoveWideImmediate, sharedCpu);
+	map_e<UnconditionalBranchImmediateExecutor>(executors, InstructionType::UnconditionalBranchImmediate, sharedCpu);
+	map_e<LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair, sharedCpu);
+	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm, sharedCpu);
+
+	return executors;
+}
+
 int prototype_main() {
 	std::vector<std::byte> sample_code = {
 			// ADD X25, X0, #0x7C0
@@ -61,14 +74,7 @@ int prototype_main() {
 	};
 
 	const auto shared_cpu = std::make_shared<AArch64Cpu>();
-
-	std::map<InstructionType, std::unique_ptr<ExecutorBase>> executors;
-	map_e<AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate, shared_cpu);
-	map_e<FormPcRelAddressExecutor>(executors, InstructionType::PcRelativeAddressing, shared_cpu);
-	map_e<MoveWideImmediateExecutor>(executors, InstructionType::MoveWideImmediate, shared_cpu);
-	map_e<UnconditionalBranchImmediateExecutor>(executors, InstructionType::UnconditionalBranchImmediate, shared_cpu);
-	map_e<LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair, shared_cpu);
-	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm, shared_cpu);
+	const auto executors = map_all_executors(shared_cpu);
 
 	A64Decoder dec(sample_code);
 	InstructionType inst = dec.decodeNextType();
