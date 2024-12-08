@@ -21,6 +21,11 @@ void print_disassembly(InstDetails& i) {
 	std::cout << "Disassembly: " << disassembly::to_pretty_string(i) << std::endl;
 }
 
+template<typename ExecutorType>
+void map_e(std::map<InstructionType, std::unique_ptr<ExecutorBase>>& map, InstructionType instructionType, const std::shared_ptr<AArch64Cpu>& c) {
+	map[instructionType] = std::make_unique<ExecutorType>(c);
+}
+
 int prototype_main() {
 	std::vector<std::byte> sample_code = {
 			// ADD X25, X0, #0x7C0
@@ -56,7 +61,6 @@ int prototype_main() {
 			// LDR X17, [X16, #0x20]
 			std::byte(0x11), std::byte(0x12), std::byte(0x40), std::byte(0xF9)
 	};
-	A64Decoder dec(sample_code);
 
 	constexpr size_t INITIAL_CPU_MEMORY = 10240; // bytes
 	const auto shared_cpu = std::make_shared<AArch64Cpu>(INITIAL_CPU_MEMORY);
@@ -70,74 +74,19 @@ int prototype_main() {
 	shared_cpu->getMemory().allocateSegment(10240);
 	shared_cpu->getMemory().allocateSegment(10240);
 
-	AddSubImmediateExecutor add_sub_immediate_executor(shared_cpu);
-	FormPcRelAddressExecutor form_pc_rel_address_executor(shared_cpu);
-	MoveWideImmediateExecutor move_wide_imm_executor(shared_cpu);
-	UnconditionalBranchImmediateExecutor unconditional_branch_imm_executor(shared_cpu);
-	LoadStoreRegPairExecutor load_store_pair_executor(shared_cpu);
-	Executors::LoadsAndStores::LoadStoreRegUnsignedImm load_store_unsigned_imm_executor(shared_cpu);
-
-	InstructionType inst = dec.decode_next();
 	std::map<InstructionType, std::unique_ptr<ExecutorBase>> executors;
-	executors[InstructionType::AddOrSubImmediate] = std::make_unique<AddSubImmediateExecutor>(shared_cpu);
+	map_e<AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate, shared_cpu);
+	map_e<FormPcRelAddressExecutor>(executors, InstructionType::PcRelativeAddressing, shared_cpu);
+	map_e<MoveWideImmediateExecutor>(executors, InstructionType::MoveWideImmediate, shared_cpu);
+	map_e<UnconditionalBranchImmediateExecutor>(executors, InstructionType::UnconditionalBranchImmediate, shared_cpu);
+	map_e<LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair, shared_cpu);
+	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm, shared_cpu);
 
-	auto& exec = executors.at(inst);
-	exec->decodeAndExecute(0x911F0019);
-
+	A64Decoder dec(sample_code);
+	InstructionType inst = dec.decode_next();
 	while (inst != InstructionType::Undefined) {
-		switch (inst) {
-			case InstructionType::AddOrSubImmediate:
-			{
-				auto details = dec.decode_details<InstructionDefs::DataProcImm::AddImmediate>();
-				print_disassembly(details);
-
-				add_sub_immediate_executor.execute(details);
-				break;
-			}
-			case InstructionType::PcRelativeAddressing:
-			{
-				auto details = dec.decode_details<InstructionDefs::DataProcImm::FormPcRelAddress>();
-				print_disassembly(details);
-
-				form_pc_rel_address_executor.execute(details);
-				break;
-			}
-			case InstructionType::MoveWideImmediate:
-			{
-				auto details = dec.decode_details<InstructionDefs::DataProcImm::MoveWideImmediate>();
-				print_disassembly(details);
-
-				move_wide_imm_executor.execute(details);
-				break;
-			}
-			case InstructionType::UnconditionalBranchImmediate:
-			{
-				auto details = dec.decode_details<InstructionDefs::Begsi::UnconditionalBranchImmediate>();
-				print_disassembly(details);
-
-				unconditional_branch_imm_executor.execute(details);
-				break;
-			}
-			case InstructionType::LoadStoreRegisterPair:
-			{
-				auto details = dec.decode_details<InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction>();
-				print_disassembly(details);
-
-				load_store_pair_executor.execute(details);
-				break;
-			}
-			case InstructionType::LoadStoreRegisterUnsignedImm:
-			{
-				auto details = dec.decode_details<InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm>();
-				print_disassembly(details);
-
-				load_store_unsigned_imm_executor.execute(details);
-				break;
-			}
-			default:
-				std::cout << "Invalid instruction" << std::endl;
-				break;
-		}
+		auto& exec = executors.at(inst);
+		exec->decodeAndExecute(dec.getRawInstruction());
 
 		inst = dec.decode_next();
 	}
