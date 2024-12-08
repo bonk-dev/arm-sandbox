@@ -143,3 +143,7 @@ InstructionType A64Decoder::decode_next() {
 		return decode_func(this->_last_raw_instruction);
 	}
 }
+
+uint32_t A64Decoder::getRawInstruction() {
+	return this->_last_raw_instruction;
+}

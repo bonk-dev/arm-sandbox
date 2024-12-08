@@ -22,6 +22,7 @@ private:
 public:
 	explicit A64Decoder(std::vector<std::byte>& code);
 	InstructionType decode_next();
+	uint32_t getRawInstruction();
 
 	template<class InstructionDetailsT>
 	[[nodiscard]] InstructionDetailsT decode_details() const {
