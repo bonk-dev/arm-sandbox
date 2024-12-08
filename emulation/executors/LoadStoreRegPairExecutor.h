@@ -3,7 +3,7 @@
 #include "ExecutorBase.h"
 #include "../../disassembly/instructions/loads_and_stores/LoadRegisterPair.h"
 
-class LoadStoreRegPairExecutor : ExecutorBase {
+class LoadStoreRegPairExecutor : public ExecutorBase {
 private:
 	uintptr_t calc_next_address(InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction& instruction);
 public:
