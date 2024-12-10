@@ -94,19 +94,34 @@ int read_elf_main(const char* path) {
 	loader.loadEntireFile();
 	loader.parse();
 
-	CpuVirtualMemory mem{};
-	loader.allocateSections(mem);
+	std::shared_ptr<AArch64Cpu> cpu = std::make_shared<AArch64Cpu>();
+	loader.allocateSections(cpu->getMemory());
 
 	// Normally we would start executing at "entry" - this offset is in the ELF header
 	// but we are going to cheat for now
 	constexpr virtual_address_t intMainOffset = 0x640;
+	cpu->setProgramCounter(intMainOffset);
 
-	for (virtual_address_t i = intMainOffset; i <= intMainOffset + 0x20; ++i) {
-		std::cout << std::format("{:#04x} ", static_cast<int>(mem.read<uint8_t>(i)));
-		if (i % 4 == 3) {
-			std::cout << std::endl;
+	auto executors = map_all_executors(cpu);
+	A64Decoder dec{};
+	InstructionType type;
+
+	do {
+		virtual_address_t pc = cpu->getProgramCounter();
+		std::cout << "[ElfMain] Program counter: " << std::hex << std::showbase << pc << std::endl;
+
+		const auto encodedInstruction = cpu->getMemory().read<uint32_t>(pc);
+		type = dec.decodeNextType(encodedInstruction);
+		std::cout << "[ElfMain] Instruction: " << std::hex << std::showbase << encodedInstruction << std::endl;
+
+		executors[type]->decodeAndExecute(encodedInstruction);
+
+		virtual_address_t newPc = cpu->getProgramCounter();
+		if (newPc == pc) {
+			// if the program counter wasn't changed by an executor, increment it
+			cpu->setProgramCounter(pc + sizeof(uint32_t));
 		}
-	}
+	} while (type != InstructionType::Undefined);
 
 	return 0;
 }
