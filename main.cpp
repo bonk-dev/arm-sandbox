@@ -106,12 +106,12 @@ int read_elf_main(const char* path) {
 	A64Decoder dec{};
 	InstructionType type;
 
-	do {
-		virtual_address_t pc = cpu->getProgramCounter();
-		std::cout << "[ElfMain] Program counter: " << std::hex << std::showbase << pc << std::endl;
+	virtual_address_t pc = cpu->getProgramCounter();
+	auto encodedInstruction = cpu->getMemory().read<uint32_t>(pc);
+	type = dec.decodeNextType(encodedInstruction);
 
-		const auto encodedInstruction = cpu->getMemory().read<uint32_t>(pc);
-		type = dec.decodeNextType(encodedInstruction);
+	while (type != InstructionType::Undefined) {
+		std::cout << "[ElfMain] Program counter: " << std::hex << std::showbase << pc << std::endl;
 		std::cout << "[ElfMain] Instruction: " << std::hex << std::showbase << encodedInstruction << std::endl;
 
 		executors[type]->decodeAndExecute(encodedInstruction);
@@ -119,9 +119,18 @@ int read_elf_main(const char* path) {
 		virtual_address_t newPc = cpu->getProgramCounter();
 		if (newPc == pc) {
 			// if the program counter wasn't changed by an executor, increment it
-			cpu->setProgramCounter(pc + sizeof(uint32_t));
+			pc += sizeof(uint32_t);
+			cpu->setProgramCounter(pc);
 		}
-	} while (type != InstructionType::Undefined);
+		else {
+			pc = newPc;
+		}
+
+		encodedInstruction = cpu->getMemory().read<uint32_t>(pc);
+	 	type = dec.decodeNextType(encodedInstruction);
+	}
+
+	std::cerr << "[ElfMain] Undefined instruction: " << std::hex << std::showbase << encodedInstruction << std::endl;
 
 	return 0;
 }
