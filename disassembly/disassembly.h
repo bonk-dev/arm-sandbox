@@ -8,10 +8,10 @@
 #include "instructions/loads_and_stores/LoadStoreRegUnsignedImm.h"
 
 namespace disassembly {
-	std::string to_pretty_string(InstructionDefs::DataProcImm::AddImmediate& i);
-	std::string to_pretty_string(InstructionDefs::DataProcImm::FormPcRelAddress& i);
-	std::string to_pretty_string(InstructionDefs::DataProcImm::MoveWideImmediate& i);
-	std::string to_pretty_string(InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm& i);
-	std::string to_pretty_string(InstructionDefs::LoadsAndStores::LoadRegisterPair& i);
-	std::string to_pretty_string(InstructionDefs::Begsi::UnconditionalBranchImmediate& i);
+	std::string to_pretty_string(const InstructionDefs::DataProcImm::AddImmediate& i);
+	std::string to_pretty_string(const InstructionDefs::DataProcImm::FormPcRelAddress& i);
+	std::string to_pretty_string(const InstructionDefs::DataProcImm::MoveWideImmediate& i);
+	std::string to_pretty_string(const InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm& i);
+	std::string to_pretty_string(const InstructionDefs::LoadsAndStores::LoadRegisterPair& i);
+	std::string to_pretty_string(const InstructionDefs::Begsi::UnconditionalBranchImmediate& i);
 }

@@ -35,7 +35,7 @@ std::string gp_reg_name(regindex_t index, bool is_64bit) {
 	return gp_reg_name(index, static_cast<unsigned int>(is_64bit ? 64 : 32));
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::DataProcImm::AddImmediate &i) {
+std::string disassembly::to_pretty_string(const InstructionDefs::DataProcImm::AddImmediate &i) {
 	std::stringstream ss;
 	if (i.set_flags) {
 		ss << (i.is_subtraction
@@ -58,7 +58,7 @@ std::string disassembly::to_pretty_string(InstructionDefs::DataProcImm::AddImmed
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::DataProcImm::FormPcRelAddress &i) {
+std::string disassembly::to_pretty_string(const InstructionDefs::DataProcImm::FormPcRelAddress &i) {
 	std::stringstream ss;
 
 	if (i.rel_to_4kb_page) {
@@ -72,7 +72,7 @@ std::string disassembly::to_pretty_string(InstructionDefs::DataProcImm::FormPcRe
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::DataProcImm::MoveWideImmediate &i) {
+std::string disassembly::to_pretty_string(const InstructionDefs::DataProcImm::MoveWideImmediate &i) {
 	// TODO: Add aliases
 
 	std::stringstream ss;
@@ -121,7 +121,7 @@ namespace {
 	}
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm &i) {
+std::string disassembly::to_pretty_string(const InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm &i) {
 	std::stringstream ss;
 
 	if (i.get_is_prefetch()) {
@@ -159,7 +159,7 @@ std::string disassembly::to_pretty_string(InstructionDefs::LoadsAndStores::LoadS
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::LoadsAndStores::LoadRegisterPair &i) {
+std::string disassembly::to_pretty_string(const InstructionDefs::LoadsAndStores::LoadRegisterPair &i) {
 	std::stringstream ss;
 
 	if (i.is_load) {
@@ -185,7 +185,7 @@ std::string disassembly::to_pretty_string(InstructionDefs::LoadsAndStores::LoadR
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(InstructionDefs::Begsi::UnconditionalBranchImmediate &i) {
+std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::UnconditionalBranchImmediate &i) {
 	std::stringstream ss;
 
 	ss << (i.is_with_link ? "BL " : "B ");
