@@ -107,29 +107,14 @@ InstructionType decode_load_and_store_type(uint32_t raw_instruction) {
 	return result;
 }
 
-A64Decoder::A64Decoder(std::vector<std::byte>& code) {
-	if (code.size() % sizeof(uint32_t) != 0) {
-		throw std::runtime_error("The code bytes must be aligned to 4 bytes");
-	}
-
-	this->_code = std::move(code);
-	this->_index = 0;
-	this->_last_raw_instruction = 0;
-}
-
 typedef InstructionType (*decode_sublevel_instruction_t)(uint32_t);
 static std::map<mask_values_t, decode_sublevel_instruction_t> top_level_op1 {
 		{ mask_values_t(0b1110, 0b1000), &decode_data_processing_type },
 		{ mask_values_t(0b1110, 0b1010), &decode_branches_exc_sys },
 		{ mask_values_t(0b0101, 0b0100), &decode_load_and_store_type }
 };
-InstructionType A64Decoder::decodeNextType() {
-	if (this->_index >= this->_code.size()) {
-		return InstructionType::Undefined;
-	}
-
-	this->_last_raw_instruction = read_uint_le(this->_code, this->_index);
-	this->_index += sizeof(uint32_t);
+InstructionType A64Decoder::decodeNextType(const uint32_t encodedInstruction) {
+	this->_last_raw_instruction = encodedInstruction;
 
 	constexpr uint8_t OP1_MASK = 0b1111;
 	uint8_t op1_field = (this->_last_raw_instruction >> 25) & OP1_MASK;

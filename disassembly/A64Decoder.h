@@ -16,12 +16,9 @@ enum class InstructionType {
 
 class A64Decoder {
 private:
-	std::vector<std::byte> _code;
-	int _index;
 	uint32_t _last_raw_instruction;
 public:
-	explicit A64Decoder(std::vector<std::byte>& code);
-	InstructionType decodeNextType();
+	InstructionType decodeNextType(uint32_t encodedInstruction);
 	uint32_t getRawInstruction();
 
 	template<class InstructionDetailsT>

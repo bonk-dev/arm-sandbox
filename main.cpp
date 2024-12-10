@@ -76,13 +76,14 @@ int prototype_main() {
 	const auto shared_cpu = std::make_shared<AArch64Cpu>();
 	const auto executors = map_all_executors(shared_cpu);
 
-	A64Decoder dec(sample_code);
-	InstructionType inst = dec.decodeNextType();
+	A64Decoder dec{};
+	auto* dataPtr = reinterpret_cast<uint32_t*>(sample_code.data());
+	InstructionType inst = dec.decodeNextType(*(dataPtr++));
 	while (inst != InstructionType::Undefined) {
 		auto& exec = executors.at(inst);
 		exec->decodeAndExecute(dec.getRawInstruction());
 
-		inst = dec.decodeNextType();
+		inst = dec.decodeNextType(*(dataPtr++));
 	}
 
 	return 0;
