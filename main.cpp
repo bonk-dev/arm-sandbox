@@ -14,6 +14,7 @@
 #include "emulation/executors/loads_and_stores/LoadStoreRegUnsignedImm.h"
 #include "loaders/elf/ElfLoader.h"
 #include "disassembly/instructions/begsi/UnconditionalBranchRegister.h"
+#include "emulation/executors/UnconditionalBranchRegisterExecutor.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -32,6 +33,7 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 	map_e<FormPcRelAddressExecutor>(executors, InstructionType::PcRelativeAddressing, sharedCpu);
 	map_e<MoveWideImmediateExecutor>(executors, InstructionType::MoveWideImmediate, sharedCpu);
 	map_e<UnconditionalBranchImmediateExecutor>(executors, InstructionType::UnconditionalBranchImmediate, sharedCpu);
+	map_e<UnconditionalBranchRegisterExecutor>(executors, InstructionType::UnconditionalBranchRegister, sharedCpu);
 	map_e<LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair, sharedCpu);
 	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm, sharedCpu);
 

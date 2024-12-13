@@ -1,7 +1,7 @@
 #include "UnconditionalBranchRegisterExecutor.h"
 
 UnconditionalBranchRegisterExecutor::UnconditionalBranchRegisterExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
-		: BranchingExecutor(cpu) {}
+		: BranchingExecutor<InstructionDefs::Begsi::UnconditionalBranchRegister>(cpu) {}
 
 void
 UnconditionalBranchRegisterExecutor::execute(const InstructionDefs::Begsi::UnconditionalBranchRegister &instruction) {
