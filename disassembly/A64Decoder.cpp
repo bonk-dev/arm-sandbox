@@ -55,16 +55,34 @@ InstructionType decode_data_processing_type(uint32_t raw_instruction) {
 	return result;
 }
 
-// Top-level -> Branches, Exception Generating and System instructions -> (op0 field)
-static std::map<mask_values_t, InstructionType> br_exc_sys_op0 {
-		{ mask_values_t(0b011, 0b000), InstructionType::UnconditionalBranchImmediate }
+// Top-level -> Branches, Exception Generating and System instructions -> (op0 field) -> (op1 field)
+static std::map<mask_values_t, std::map<mask_values_t, InstructionType>> br_exc_sys_op0_op1 {
+		{
+			mask_values_t(0b011, 0b000),
+			{
+					// 0,0 just means that there no other instructions with the same op0 field
+					{ mask_values_t(0, 0), InstructionType::UnconditionalBranchImmediate }
+			}
+		},
+		{
+			mask_values_t(0b111, 0b110),
+			{
+					{ mask_values_t(0b10000000000000, 0b10000000000000), InstructionType::UnconditionalBranchRegister }
+			}
+		}
 };
 InstructionType decode_branches_exc_sys(uint32_t raw_instruction) {
 	const uint32_t op0 = raw_instruction >> 29 & 0b111;
 	const uint32_t op1 = raw_instruction >> 12 & 0b11111111111111;
 
+	// TODO: check if a copy occurs here
+	std::map<mask_values_t, InstructionType> op1_map {};
+	find_instruction_type(br_exc_sys_op0_op1, op0, op1_map);
+
 	InstructionType result = InstructionType::Undefined;
-	find_instruction_type(br_exc_sys_op0, op0, result);
+	if (!op1_map.empty()) {
+		find_instruction_type(op1_map, op1, result);
+	}
 	return result;
 }
 
