@@ -193,3 +193,7 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::Uncondit
 
 	return ss.str();
 }
+
+std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::UnconditionalBranchRegister &i) {
+	return std::string("<not implemented>");
+}

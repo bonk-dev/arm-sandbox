@@ -52,4 +52,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/begsi/UnconditionalBranchRegister.h
         disassembly/instructions/begsi/UnconditionalBranchRegister.cpp
         emulation/executors/BranchingExecutor.h
+        emulation/executors/UnconditionalBranchRegisterExecutor.h
+        emulation/executors/UnconditionalBranchRegisterExecutor.cpp
 )
