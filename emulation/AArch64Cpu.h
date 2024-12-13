@@ -33,5 +33,5 @@ public:
 	 */
 	void createThread(uint64_t id);
 
-	CpuVirtualMemory & getMemory() const;
+	[[nodiscard]] CpuVirtualMemory & getMemory() const;
 };
