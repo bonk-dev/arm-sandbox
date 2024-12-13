@@ -31,14 +31,6 @@ void find_instruction_type(std::map<mask_values_t, EnumType>& mask_type_map, uin
 	}
 }
 
-uint32_t read_uint_le(const std::vector<std::byte>& v, const int index) {
-	uint32_t value = 0;
-	for (int i = 3; i >= 0; --i) {
-		value |= static_cast<uint32_t>(v[index + i]) << (i * 8);
-	}
-	return value;
-}
-
 // Top-level -> Data processing -> (op1 field)
 static std::map<mask_values_t, InstructionType> data_proc_op1 {
 		{ mask_values_t(0b1110, 0b0100), InstructionType::AddOrSubImmediate },
