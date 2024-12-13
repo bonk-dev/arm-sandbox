@@ -195,5 +195,9 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::Uncondit
 }
 
 std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::UnconditionalBranchRegister &i) {
-	return std::string("<not implemented>");
+	std::stringstream ss;
+
+	ss << (i.branch_with_link ? "BLR " : "BR ") << gp_reg_name(i.destination_reg);
+
+	return ss.str();
 }
