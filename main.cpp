@@ -13,6 +13,7 @@
 #include "emulation/executors/MoveWideImmediateExecutor.h"
 #include "emulation/executors/loads_and_stores/LoadStoreRegUnsignedImm.h"
 #include "loaders/elf/ElfLoader.h"
+#include "disassembly/instructions/begsi/UnconditionalBranchRegister.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
