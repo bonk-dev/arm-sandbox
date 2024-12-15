@@ -95,12 +95,30 @@ namespace Loaders {
 		this->_elfSectionHeaders = this->_parseStructs<Elf64_Shdr>(
 				elfHeader->e_shnum, elfHeader->e_shoff, elfHeader->e_shentsize);
 
+		unsigned long amountOfPltRelocs = 0;
+		Elf64_Rela* relaPtr = nullptr;
 		for (Elf64_Shdr* header : *this->_elfSectionHeaders) {
 			const char* sectionName = this->_getSectionName(header);
 			std::cout << "Section: " << sectionName << std::endl;
+
+			if (strcmp(sectionName, ".dynamic") == 0) {
+				auto* dynEntry = reinterpret_cast<Elf64_Dyn*>(this->_rawFile->data() + header->sh_offset);
+				while (dynEntry->d_tag != DT_NULL) {
+					if (dynEntry->d_tag == DT_PLTRELSZ) {
+						amountOfPltRelocs = dynEntry->d_un.d_val / sizeof(Elf64_Rela);
+						std::cout << "Amount of plt relocs: " << amountOfPltRelocs << std::endl;
+					}
+					dynEntry++;
+				}
+			}
+			else if (strcmp(sectionName, ".rela.plt") == 0) {
+				relaPtr = reinterpret_cast<Elf64_Rela*>(this->_rawFile->data() + header->sh_offset);
+			}
 		}
 
-		int a;
+		if (relaPtr != nullptr) {
+			std::cout << "Scanning .rela.plt" << std::endl;
+		}
 	}
 
 	void ElfLoader::allocateSections(CpuVirtualMemory& memory) {
