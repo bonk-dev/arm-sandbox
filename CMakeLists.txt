@@ -63,4 +63,5 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/reserved/ReservedCall.cpp
         emulation/executors/reserved/ReservedCallExecutor.h
         emulation/executors/reserved/ReservedCallExecutor.cpp
+        emulation/emul_registers.h
 )
