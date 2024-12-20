@@ -83,6 +83,7 @@ int prototype_main() {
 
 	const auto shared_cpu = std::make_shared<AArch64Cpu>();
 	const auto executors = map_all_executors(shared_cpu);
+	shared_cpu->getMapper().allocateLinkingSegment(shared_cpu->getMemory());
 
 	A64Decoder dec{};
 	auto* dataPtr = reinterpret_cast<uint32_t*>(sample_code.data());
