@@ -21,5 +21,6 @@ namespace Emulation::Libraries {
         Mapper();
         void registerLibraryImplementation(const char* symbolName, library_impl_exec_t implementation);
         virtual_address_t mapLibraryImplementation(const char* symbolName, CpuVirtualMemory& memory);
+		[[nodiscard]] library_impl_exec_t getLibraryImplementation(symbol_index_t index) const;
     };
 }
