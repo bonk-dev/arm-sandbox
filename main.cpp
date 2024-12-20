@@ -16,6 +16,7 @@
 #include "disassembly/instructions/begsi/UnconditionalBranchRegister.h"
 #include "emulation/executors/UnconditionalBranchRegisterExecutor.h"
 #include "emulation/executors/reserved/ReservedCallExecutor.h"
+#include "emulation/libraries/DummyNamePrinter.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -84,6 +85,12 @@ int prototype_main() {
 	const auto shared_cpu = std::make_shared<AArch64Cpu>();
 	const auto executors = map_all_executors(shared_cpu);
 	shared_cpu->getMapper().allocateLinkingSegment(shared_cpu->getMemory());
+
+	// TODO: Refactor this into a single function
+	shared_cpu->getMapper().registerLibraryImplementation(
+			"test_symbol",
+			std::make_unique<Emulation::Libraries::DummyNamePrinter>("test_symbol", shared_cpu));
+	shared_cpu->getMapper().mapLibraryImplementation("test_symbol", shared_cpu->getMemory());
 
 	A64Decoder dec{};
 	auto* dataPtr = reinterpret_cast<uint32_t*>(sample_code.data());
