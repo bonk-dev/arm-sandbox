@@ -3,10 +3,11 @@
 
 #include "../CpuVirtualMemory.h"
 #include "../emu_types.h"
+#include "EmulatedSymbol.h"
 
 namespace Emulation::Libraries {
     typedef unsigned long symbol_index_t;
-    typedef void (*library_impl_exec_t)();
+    typedef std::unique_ptr<EmulatedSymbol> library_impl_exec_t;
     typedef struct library_impl_symbol_t {
         library_impl_exec_t exec;
         symbol_index_t index;
@@ -23,6 +24,7 @@ namespace Emulation::Libraries {
 		void allocateLinkingSegment(CpuVirtualMemory& memory);
         void registerLibraryImplementation(const char* symbolName, library_impl_exec_t implementation);
         virtual_address_t mapLibraryImplementation(const char* symbolName, CpuVirtualMemory& memory);
-		[[nodiscard]] library_impl_exec_t getLibraryImplementation(symbol_index_t index) const;
+		[[nodiscard]] bool hasLibraryImplementation(symbol_index_t index) const;
+		[[nodiscard]] EmulatedSymbol& getLibraryImplementation(symbol_index_t index) const;
     };
 }

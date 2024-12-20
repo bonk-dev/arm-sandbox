@@ -11,7 +11,7 @@ void Emulation::Libraries::Mapper::registerLibraryImplementation(
     const char *symbolName,
     library_impl_exec_t implementation) {
     auto sym = std::make_shared<library_impl_symbol_t>(library_impl_symbol_t{
-        implementation,
+        std::move(implementation),
         _nextIndex++
     });
     this->_implementations->emplace(symbolName, sym);
@@ -28,14 +28,13 @@ virtual_address_t Emulation::Libraries::Mapper::mapLibraryImplementation(const c
     throw std::runtime_error("Not implemented");
 }
 
-Emulation::Libraries::library_impl_exec_t
-Emulation::Libraries::Mapper::getLibraryImplementation(Emulation::Libraries::symbol_index_t index) const {
-	const auto symbolIt = this->_indexSymbols->find(index);
-	if (symbolIt == this->_indexSymbols->end()) {
-		return nullptr;
-	}
+bool Emulation::Libraries::Mapper::hasLibraryImplementation(Emulation::Libraries::symbol_index_t index) const {
+	return this->_indexSymbols->find(index) != this->_indexSymbols->end();
+}
 
-	return symbolIt->second->exec;
+EmulatedSymbol&
+Emulation::Libraries::Mapper::getLibraryImplementation(Emulation::Libraries::symbol_index_t index) const {
+	return *this->_indexSymbols->at(index)->exec.get();
 }
 
 void Emulation::Libraries::Mapper::allocateLinkingSegment(CpuVirtualMemory &memory) {
