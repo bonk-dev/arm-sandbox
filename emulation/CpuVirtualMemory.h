@@ -50,7 +50,7 @@ public:
 		return *ptr;
 	}
 
-	void allocateSegment(size_t size);
+	virtual_address_t allocateSegment(size_t size);
 	void allocateSegment(virtual_address_t virtualAddress, size_t size);
 	void freeSegment(virtual_address_t virtualAddress);
 

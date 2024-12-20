@@ -112,7 +112,7 @@ void CpuVirtualMemory::deleteStack(uint64_t threadId) {
 	this->_threadStacks.erase(threadId);
 }
 
-void CpuVirtualMemory::allocateSegment(size_t size) {
+virtual_address_t CpuVirtualMemory::allocateSegment(size_t size) {
 	virtual_address_t currentAddress = 0;
 
 	// find next available virtual address;
@@ -137,6 +137,7 @@ void CpuVirtualMemory::allocateSegment(size_t size) {
 	}
 
 	this->_allocateSegmentNoOverlapCheck(currentAddress, size);
+	return currentAddress;
 }
 
 void CpuVirtualMemory::allocateSegment(virtual_address_t virtualAddress, size_t size) {
