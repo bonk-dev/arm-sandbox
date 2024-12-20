@@ -204,6 +204,6 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::Uncondit
 
 std::string disassembly::to_pretty_string(const InstructionDefs::Reserved::ReservedCall &i) {
 	std::stringstream ss;
-	ss << "UDF #" << std::hex << std::showbase << static_cast<uint32_t>(i.call_type);
+	ss << "UDF type: " << std::hex << std::showbase << static_cast<uint32_t>(i.call_type) << ", symbol: #" << i.immediate;
 	return ss.str();
 }

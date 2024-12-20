@@ -18,8 +18,7 @@ void Emulation::Libraries::Mapper::registerLibraryImplementation(
 virtual_address_t Emulation::Libraries::Mapper::mapLibraryImplementation(const char *symbolName,
     CpuVirtualMemory &memory) {
     // A64:
-    // set EMUL_X0 to symbol index
-    // UDF <Emulation::HypervisorCalls:LibraryCall>
+	// UDF #libraryCall, #symbolIndex
 
     auto sym = this->_implementations->at(symbolName);
 
