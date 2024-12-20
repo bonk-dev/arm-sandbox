@@ -15,7 +15,7 @@ namespace Emulation::Libraries {
 
     class Mapper {
     private:
-		std::optional<int> _linkingTableAddress;
+		std::optional<virtual_address_t> _linkingTableAddress;
         symbol_index_t _nextIndex;
         std::unique_ptr<std::map<const char*, std::shared_ptr<library_impl_symbol_t>>> _implementations;
         std::unique_ptr<std::map<unsigned int, std::shared_ptr<library_impl_symbol_t>>> _indexSymbols;
