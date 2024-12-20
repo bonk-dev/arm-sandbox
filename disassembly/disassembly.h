@@ -7,6 +7,7 @@
 #include "instructions/data_proc_imm/MoveWideImmediate.h"
 #include "instructions/loads_and_stores/LoadStoreRegUnsignedImm.h"
 #include "instructions/begsi/UnconditionalBranchRegister.h"
+#include "instructions/reserved/ReservedCall.h"
 
 namespace disassembly {
 	std::string to_pretty_string(const InstructionDefs::DataProcImm::AddImmediate& i);
@@ -16,4 +17,5 @@ namespace disassembly {
 	std::string to_pretty_string(const InstructionDefs::LoadsAndStores::LoadRegisterPair& i);
 	std::string to_pretty_string(const InstructionDefs::Begsi::UnconditionalBranchImmediate& i);
 	std::string to_pretty_string(const InstructionDefs::Begsi::UnconditionalBranchRegister& i);
+	std::string to_pretty_string(const InstructionDefs::Reserved::ReservedCall& i);
 }

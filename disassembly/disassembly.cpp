@@ -201,3 +201,7 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::Uncondit
 
 	return ss.str();
 }
+
+std::string disassembly::to_pretty_string(const InstructionDefs::Reserved::ReservedCall &i) {
+	throw std::runtime_error("Not implemented");
+}
