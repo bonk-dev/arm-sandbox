@@ -10,7 +10,13 @@ void Executors::Reserved::ReservedCallExecutor::execute(const InstructionDefs::R
 			std::cout << "[ReservedCallExecutor] Calling symbol " << instruction.immediate << std::endl;
 
 			const auto libraryImplementation = this->get_cpu()->getMapper().getLibraryImplementation(instruction.immediate);
-			libraryImplementation();
+			if (libraryImplementation == nullptr) {
+				std::cerr << "[ReservedCallExecutor] No library implementation was found for symbol #" << instruction.immediate << std::endl;
+				throw std::runtime_error("No lib implementation was found");
+			}
+			else {
+				libraryImplementation();
+			}
 
 			break;
 		}

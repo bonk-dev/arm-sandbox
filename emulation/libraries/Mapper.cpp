@@ -30,6 +30,10 @@ virtual_address_t Emulation::Libraries::Mapper::mapLibraryImplementation(const c
 
 Emulation::Libraries::library_impl_exec_t
 Emulation::Libraries::Mapper::getLibraryImplementation(Emulation::Libraries::symbol_index_t index) const {
-	const auto sym = this->_indexSymbols->at(index);
-	return sym->exec;
+	const auto symbolIt = this->_indexSymbols->find(index);
+	if (symbolIt == this->_indexSymbols->end()) {
+		return nullptr;
+	}
+
+	return symbolIt->second->exec;
 }
