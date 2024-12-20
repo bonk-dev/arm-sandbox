@@ -4,5 +4,10 @@ Executors::Reserved::ReservedCallExecutor::ReservedCallExecutor(const std::share
 	: ExecutorBaseT<InstructionDefs::Reserved::ReservedCall>(cpu) {}
 
 void Executors::Reserved::ReservedCallExecutor::execute(const InstructionDefs::Reserved::ReservedCall &instruction) {
-	throw std::runtime_error("Not implemented");
+	switch (instruction.call_type) {
+		case InstructionDefs::Reserved::ReservedCalls::LibraryCall:
+			break;
+		default:
+			throw std::runtime_error("Unsupported reserved call");
+	}
 }
