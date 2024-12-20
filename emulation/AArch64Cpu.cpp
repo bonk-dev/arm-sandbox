@@ -12,10 +12,6 @@ AArch64Cpu::AArch64Cpu() : _memory(std::make_unique<CpuVirtualMemory>()),
 	this->createThread(AARCH64_MAIN_THREAD_ID);
 }
 
-void AArch64Cpu::writeEmulRegister(regindex_t index, uint64_t val) {
-	this->_emulRegisters[index] = val;
-}
-
 // TODO: might rename to just writeRegister[32/64]
 void AArch64Cpu::writeGpRegister32(regindex_t index, uint32_t val) {
 	switch (static_cast<Emulation::Registers>(index)) {
@@ -66,10 +62,6 @@ uint64_t AArch64Cpu::getProgramCounter() const {
 
 void AArch64Cpu::setProgramCounter(uint64_t pc) {
 	this->_programCounter = pc;
-}
-
-uint64_t AArch64Cpu::readEmulRegister(regindex_t index) const {
-	return this->_emulRegisters[index];
 }
 
 void AArch64Cpu::createThread(uint64_t id) {
