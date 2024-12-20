@@ -60,4 +60,5 @@ add_executable(arm_sandbox main.cpp
         emulation/libraries/Mapper.h
         disassembly/instructions/reserved/reserved_calls.h
         disassembly/instructions/reserved/ReservedCall.h
+        disassembly/instructions/reserved/ReservedCall.cpp
 )
