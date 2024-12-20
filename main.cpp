@@ -44,6 +44,9 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 
 int prototype_main() {
 	std::vector<std::byte> sample_code = {
+			// UDF #1 (special library call)
+			std::byte(0x01), std::byte(0x00), std::byte(0x00), std::byte(0x00),
+
 			// ADD X25, X0, #0x7C0
 			std::byte(0x19), std::byte(0x00), std::byte(0x1F), std::byte(0x91),
 
@@ -75,10 +78,7 @@ int prototype_main() {
 			std::byte(0xFD), std::byte(0x7B), std::byte(0xC1), std::byte(0xA8),
 
 			// LDR X17, [X16, #0x20]
-			std::byte(0x11), std::byte(0x12), std::byte(0x40), std::byte(0xF9),
-
-			// UDF #1 (special library call)
-			std::byte(0x01), std::byte(0x00), std::byte(0x00), std::byte(0x00)
+			std::byte(0x11), std::byte(0x12), std::byte(0x40), std::byte(0xF9)
 	};
 
 	const auto shared_cpu = std::make_shared<AArch64Cpu>();
