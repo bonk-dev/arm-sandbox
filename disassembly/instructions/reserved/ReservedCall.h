@@ -6,5 +6,6 @@ namespace InstructionDefs::Reserved {
 		ReservedCalls call_type;
 
 		explicit ReservedCall(uint32_t encoded);
+		[[nodiscard]] uint32_t encode() const;
 	} ReservedCall;
 }
