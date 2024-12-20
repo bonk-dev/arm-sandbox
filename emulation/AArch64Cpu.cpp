@@ -4,10 +4,15 @@
 
 AArch64Cpu::AArch64Cpu() : _memory(std::make_unique<CpuVirtualMemory>()),
 													 _programCounter(0),
-													 _threads() {
+													 _threads(),
+													 _generalRegisters(AARCH64_EMUL_REGISTERS) {
     this->_generalRegisters = std::vector<uint64_t>(
         AARCH64_GENERAL_PURPOSE_REGISTERS);
 	this->createThread(AARCH64_MAIN_THREAD_ID);
+}
+
+void AArch64Cpu::writeEmulRegister(regindex_t index, uint64_t val) {
+	this->_emulRegisters[index] = val;
 }
 
 // TODO: might rename to just writeRegister[32/64]
@@ -60,6 +65,10 @@ uint64_t AArch64Cpu::getProgramCounter() const {
 
 void AArch64Cpu::setProgramCounter(uint64_t pc) {
 	this->_programCounter = pc;
+}
+
+uint64_t AArch64Cpu::readEmulRegister(regindex_t index) const {
+	return this->_emulRegisters[index];
 }
 
 void AArch64Cpu::createThread(uint64_t id) {
