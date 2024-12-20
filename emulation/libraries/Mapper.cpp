@@ -15,7 +15,7 @@ void Emulation::Libraries::Mapper::registerLibraryImplementation(
         _nextIndex++
     });
     this->_implementations->emplace(symbolName, sym);
-    this->_indexSymbols->insert_or_assign(sym->index, sym);
+    this->_indexSymbols->emplace(sym->index, sym);
 }
 
 virtual_address_t Emulation::Libraries::Mapper::mapLibraryImplementation(const char *symbolName,
