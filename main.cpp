@@ -37,7 +37,7 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 	map_e<UnconditionalBranchRegisterExecutor>(executors, InstructionType::UnconditionalBranchRegister, sharedCpu);
 	map_e<LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair, sharedCpu);
 	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm, sharedCpu);
-	map_e<Executors::Reserved::ReservedCallExecutor>(executors, InstructionType::SpecialLibraryCall, sharedCpu);
+	map_e<Executors::Reserved::ReservedCallExecutor>(executors, InstructionType::ReservedCall, sharedCpu);
 
 	return executors;
 }

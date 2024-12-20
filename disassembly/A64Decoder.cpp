@@ -124,7 +124,7 @@ InstructionType decode_reserved(uint32_t raw_instruction) {
 	// Normally this would be UDF ("permanently undefined"), but we are using it for emulating libraries
 	// so kind of weird system call
 	return op0 == 0 && op1 == 0
-		? InstructionType::SpecialLibraryCall
+		? InstructionType::ReservedCall
 		: InstructionType::Undefined;
 }
 
