@@ -73,7 +73,10 @@ int prototype_main() {
 			std::byte(0xFD), std::byte(0x7B), std::byte(0xC1), std::byte(0xA8),
 
 			// LDR X17, [X16, #0x20]
-			std::byte(0x11), std::byte(0x12), std::byte(0x40), std::byte(0xF9)
+			std::byte(0x11), std::byte(0x12), std::byte(0x40), std::byte(0xF9),
+
+			// UDF #1 (special library call)
+			std::byte(0x01), std::byte(0x00), std::byte(0x00), std::byte(0x00)
 	};
 
 	const auto shared_cpu = std::make_shared<AArch64Cpu>();

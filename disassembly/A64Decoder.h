@@ -12,6 +12,7 @@ enum class InstructionType {
 	MoveWideImmediate,
 	LoadStoreRegisterPair,
 	LoadStoreRegisterUnsignedImm,
+	SpecialLibraryCall,
 	Undefined = 0xFFFFFFF
 };
 
