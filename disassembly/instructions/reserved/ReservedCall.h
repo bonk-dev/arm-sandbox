@@ -12,6 +12,7 @@ namespace InstructionDefs::Reserved {
 		uint16_t immediate;
 
 		explicit ReservedCall(uint32_t encoded);
+		ReservedCall(InstructionDefs::Reserved::ReservedCalls callType, uint16_t imm);
 		[[nodiscard]] uint32_t encode() const;
 	} ReservedCall;
 }

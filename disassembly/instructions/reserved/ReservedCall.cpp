@@ -16,3 +16,6 @@ uint32_t InstructionDefs::Reserved::ReservedCall::encode() const {
 	enc |= this->immediate;
 	return enc;
 }
+
+InstructionDefs::Reserved::ReservedCall::ReservedCall(InstructionDefs::Reserved::ReservedCalls callType, uint16_t imm) :
+	call_type(callType), immediate(imm) {}
