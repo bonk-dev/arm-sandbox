@@ -1,4 +1,5 @@
 #include "Mapper.h"
+#include "../../disassembly/instructions/reserved/ReservedCall.h"
 
 #include <stdexcept>
 
@@ -23,9 +24,19 @@ virtual_address_t Emulation::Libraries::Mapper::mapLibraryImplementation(const c
     // A64:
 	// UDF #libraryCall, #symbolIndex
 
-    auto sym = this->_implementations->at(symbolName);
+	if (!this->_linkingTableAddress.has_value()) {
+		throw std::runtime_error("Linking table has not been allocated yet");
+	}
 
-    throw std::runtime_error("Not implemented");
+    auto sym = this->_implementations->at(symbolName);
+	virtual_address_t jumpAddress = this->_linkingTableAddress.value() + sym->index;
+
+	const InstructionDefs::Reserved::ReservedCall reservedCall(
+			InstructionDefs::Reserved::ReservedCalls::LibraryCall, sym->index);
+	const uint32_t encodedResCallInstruction = reservedCall.encode();
+
+	memory.write(jumpAddress, encodedResCallInstruction);
+	return jumpAddress;
 }
 
 bool Emulation::Libraries::Mapper::hasLibraryImplementation(Emulation::Libraries::symbol_index_t index) const {
