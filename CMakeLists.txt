@@ -54,4 +54,7 @@ add_executable(arm_sandbox main.cpp
         emulation/executors/BranchingExecutor.h
         emulation/executors/UnconditionalBranchRegisterExecutor.h
         emulation/executors/UnconditionalBranchRegisterExecutor.cpp
+        emulation/libraries/Mapper.cpp
+        emulation/libraries/Mapper.h
+        emulation/reserved_calls.h
 )
