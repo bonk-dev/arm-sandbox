@@ -45,6 +45,9 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 
 int prototype_main() {
 	std::vector<std::byte> sample_code = {
+			// UDF #1 (special library call), #1 (symbol 0)
+			std::byte(0x00), std::byte(0x00), std::byte(0x01), std::byte(0x00),
+
 			// UDF #1 (special library call), #1 (symbol 1)
 			std::byte(0x01), std::byte(0x00), std::byte(0x01), std::byte(0x00),
 
