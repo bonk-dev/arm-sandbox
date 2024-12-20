@@ -203,5 +203,7 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::Uncondit
 }
 
 std::string disassembly::to_pretty_string(const InstructionDefs::Reserved::ReservedCall &i) {
-	throw std::runtime_error("Not implemented");
+	std::stringstream ss;
+	ss << "UDF #" << std::hex << std::showbase << static_cast<uint32_t>(i.call_type);
+	return ss.str();
 }
