@@ -1,12 +1,11 @@
 #include "Mapper.h"
 #include "../../disassembly/instructions/reserved/ReservedCall.h"
-
 #include <stdexcept>
 
 Emulation::Libraries::Mapper::Mapper() :
 	_nextIndex(0),
 	_indexSymbols(std::make_unique<std::map<unsigned int, std::shared_ptr<library_impl_symbol_t>>>()),
-	_implementations(std::make_unique<std::map<const char*, std::shared_ptr<library_impl_symbol_t>>>()) {}
+	_implementations(std::make_unique<std::map<const char*, std::shared_ptr<library_impl_symbol_t>, str_cmp>>()) {}
 
 void Emulation::Libraries::Mapper::registerLibraryImplementation(
     const char *symbolName,

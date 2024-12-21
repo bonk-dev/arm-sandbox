@@ -1,9 +1,9 @@
 #pragma once
 #include <map>
-
 #include "../CpuVirtualMemory.h"
 #include "../emu_types.h"
 #include "EmulatedSymbol.h"
+#include <cstring>
 
 namespace Emulation::Libraries {
     typedef unsigned long symbol_index_t;
@@ -15,9 +15,17 @@ namespace Emulation::Libraries {
 
     class Mapper {
     private:
+        struct str_cmp
+        {
+            bool operator()(char const *a, char const *b) const
+            {
+                return std::strcmp(a, b) < 0;
+            }
+        };
+
 		std::optional<virtual_address_t> _linkingTableAddress;
         symbol_index_t _nextIndex;
-        std::unique_ptr<std::map<const char*, std::shared_ptr<library_impl_symbol_t>>> _implementations;
+        std::unique_ptr<std::map<const char*, std::shared_ptr<library_impl_symbol_t>, str_cmp>> _implementations;
         std::unique_ptr<std::map<unsigned int, std::shared_ptr<library_impl_symbol_t>>> _indexSymbols;
     public:
         Mapper();
