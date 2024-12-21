@@ -95,7 +95,6 @@ namespace Loaders {
 		this->_elfSectionHeaders = this->_parseStructs<Elf64_Shdr>(
 				elfHeader->e_shnum, elfHeader->e_shoff, elfHeader->e_shentsize);
 
-		unsigned long amountOfPltRelocs = 0;
 		Elf64_Rela* relaPtr = nullptr;
 		const char* dynstr = nullptr;
 		Elf64_Sym* dynsym = nullptr;
@@ -107,26 +106,29 @@ namespace Loaders {
 				auto* dynEntry = reinterpret_cast<Elf64_Dyn*>(this->_rawFile->data() + header->sh_offset);
 				while (dynEntry->d_tag != DT_NULL) {
 					if (dynEntry->d_tag == DT_PLTRELSZ) {
-						amountOfPltRelocs = dynEntry->d_un.d_val / sizeof(Elf64_Rela);
-						std::cout << "Amount of plt relocs: " << amountOfPltRelocs << std::endl;
+						_pltRelocs = dynEntry->d_un.d_val / sizeof(Elf64_Rela);
+						std::cout << "Amount of plt relocs: " << _pltRelocs << std::endl;
 					}
 					dynEntry++;
 				}
 			}
 			else if (strcmp(sectionName, ".rela.plt") == 0) {
+				_relaPltOffset = header->sh_offset;
 				relaPtr = reinterpret_cast<Elf64_Rela*>(this->_rawFile->data() + header->sh_offset);
 			}
 			else if (strcmp(sectionName, ".dynstr") == 0) {
+				_dynStrOffset = header->sh_offset;
 				dynstr = reinterpret_cast<const char*>(this->_rawFile->data() + header->sh_offset);
 			}
 			else if (strcmp(sectionName, ".dynsym") == 0) {
+				_dynSymOffset = header->sh_offset;
 				dynsym = reinterpret_cast<Elf64_Sym*>(this->_rawFile->data() + header->sh_offset);
 			}
 		}
 
 		if (relaPtr != nullptr && dynstr != nullptr && dynsym != nullptr) {
 			std::cout << "Scanning .rela.plt" << std::endl;
-			for (int i = 0; i < amountOfPltRelocs; ++i) {
+			for (int i = 0; i < _pltRelocs; ++i) {
 				Elf64_Rela* rela = relaPtr + i;
 
 				auto type = ELF64_R_TYPE(rela->r_info);
@@ -172,6 +174,10 @@ namespace Loaders {
 				std::cout << "[ElfLoader] not allocating " << this->_getSectionName(header) << std::endl;
 			}
 		}
+	}
+
+	void ElfLoader::linkSymbols(Emulation::Libraries::Mapper mapper) {
+
 	}
 
 	char const *ElfLoader::_getSectionName(Elf64_Shdr *const sectionHeader) {

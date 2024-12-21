@@ -5,6 +5,7 @@
 #include <memory>
 #include "elf.h"
 #include "../../emulation/CpuVirtualMemory.h"
+#include "../../emulation/libraries/Mapper.h"
 
 namespace Loaders {
 	class ElfLoader {
@@ -26,6 +27,11 @@ namespace Loaders {
 		 * @brief Lazily allocated std::vector of ELF64 section headers std::vector
 		 */
 		std::unique_ptr<std::vector<Elf64_Shdr*>> _elfSectionHeaders;
+
+		size_t _relaPltOffset;
+		size_t _dynStrOffset;
+		size_t _dynSymOffset;
+		unsigned long _pltRelocs;
 
 		template<class T>
 		std::unique_ptr<std::vector<T*>> _parseStructs(Elf64_Half count, Elf64_Off fileOffset, Elf64_Half size) {
@@ -66,5 +72,7 @@ namespace Loaders {
 		 * @brief Allocates appropriate sections in the virtual memory
 		 */
 		void allocateSections(CpuVirtualMemory& memory);
+
+		void linkSymbols(Emulation::Libraries::Mapper mapper);
 	};
 }
