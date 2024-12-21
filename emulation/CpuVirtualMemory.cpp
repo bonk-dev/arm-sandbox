@@ -21,8 +21,12 @@ namespace {
 		const virtual_address_t allocatedStart = pair.first;
 		const size_t allocatedSize = pair.second.size();
 		const virtual_address_t allocatedEnd = allocatedStart + allocatedSize - 1;
-		bool resutl = is_in_range(allocatedStart, allocatedEnd, start)
-					  || is_in_range(allocatedStart, allocatedEnd, start + size - 1);;
+
+		const virtual_address_t end = start + size - 1;
+
+		bool resutl = (start <= allocatedStart && end >= allocatedEnd)
+			          || is_in_range(allocatedStart, allocatedEnd, start)
+					  || is_in_range(allocatedStart, allocatedEnd, end);;
 		return resutl;
 	}
 }
