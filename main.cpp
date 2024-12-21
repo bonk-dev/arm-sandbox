@@ -116,6 +116,23 @@ int read_elf_main(const char* path) {
 	std::shared_ptr<AArch64Cpu> cpu = std::make_shared<AArch64Cpu>();
 	loader.allocateSections(cpu->getMemory());
 
+	// Register stub implementations for some basic symbols
+	cpu->getMapper().registerLibraryImplementation(
+		"__libc_start_main",
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__libc_start_main", cpu));
+	cpu->getMapper().registerLibraryImplementation(
+		"__cxa_finalize",
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__cxa_finalize", cpu));
+	cpu->getMapper().registerLibraryImplementation(
+		"__gmon_start__",
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__gmon_start__", cpu));
+	cpu->getMapper().registerLibraryImplementation(
+		"abort",
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("abort", cpu));
+	cpu->getMapper().registerLibraryImplementation(
+		"puts",
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("puts", cpu));
+
 	// Dynamic link
 	cpu->getMapper().allocateLinkingSegment(cpu->getMemory());
 	loader.linkSymbols(cpu->getMapper(), cpu->getMemory());

@@ -178,7 +178,7 @@ namespace Loaders {
 			const virtual_address_t jumpAddress = mapper.mapLibraryImplementation(symbolName, memory);
 			std::cout << "[ElfLoader] Jump address: " << jumpAddress << std::endl;
 
-			std::cout << "[ElfLoader] Updating the PLT" << std::endl;
+			std::cout << "[ElfLoader] Updating the PLT GOT" << std::endl;
 			throw std::runtime_error("Not implemented");
 		}
 	}
