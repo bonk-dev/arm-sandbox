@@ -95,9 +95,6 @@ namespace Loaders {
 		this->_elfSectionHeaders = this->_parseStructs<Elf64_Shdr>(
 				elfHeader->e_shnum, elfHeader->e_shoff, elfHeader->e_shentsize);
 
-		Elf64_Rela* relaPtr = nullptr;
-		const char* dynstr = nullptr;
-		Elf64_Sym* dynsym = nullptr;
 		for (Elf64_Shdr* header : *this->_elfSectionHeaders) {
 			const char* sectionName = this->_getSectionName(header);
 			std::cout << "Section: " << sectionName << std::endl;
@@ -114,33 +111,12 @@ namespace Loaders {
 			}
 			else if (strcmp(sectionName, ".rela.plt") == 0) {
 				_relaPltOffset = header->sh_offset;
-				relaPtr = reinterpret_cast<Elf64_Rela*>(this->_rawFile->data() + header->sh_offset);
 			}
 			else if (strcmp(sectionName, ".dynstr") == 0) {
 				_dynStrOffset = header->sh_offset;
-				dynstr = reinterpret_cast<const char*>(this->_rawFile->data() + header->sh_offset);
 			}
 			else if (strcmp(sectionName, ".dynsym") == 0) {
 				_dynSymOffset = header->sh_offset;
-				dynsym = reinterpret_cast<Elf64_Sym*>(this->_rawFile->data() + header->sh_offset);
-			}
-		}
-
-		if (relaPtr != nullptr && dynstr != nullptr && dynsym != nullptr) {
-			std::cout << "Scanning .rela.plt" << std::endl;
-			for (int i = 0; i < _pltRelocs; ++i) {
-				Elf64_Rela* rela = relaPtr + i;
-
-				auto type = ELF64_R_TYPE(rela->r_info);
-				if (type != R_AARCH64_JUMP_SLOT) {
-					continue;
-				}
-
-				auto symbolIndex = ELF64_R_SYM(rela->r_info);
-				Elf64_Sym* symbolInfo = dynsym + symbolIndex;
-				const char* symbolName = &dynstr[symbolInfo->st_name];
-
-				std::cout << "R_AARCH64_JUMP_SLOT symbol name: " << symbolName << std::endl;
 			}
 		}
 	}
@@ -176,8 +152,29 @@ namespace Loaders {
 		}
 	}
 
-	void ElfLoader::linkSymbols(Emulation::Libraries::Mapper mapper) {
+	void ElfLoader::linkSymbols(Emulation::Libraries::Mapper& mapper) {
+		if (_dynStrOffset == 0 || _dynSymOffset == 0 || _relaPltOffset == 0) {
+			throw std::runtime_error("Invalid ELF section offsets");
+		}
 
+		const auto relaPtr = reinterpret_cast<Elf64_Rela*>(_rawFile->data() + _relaPltOffset);
+		const auto dynsym = reinterpret_cast<Elf64_Sym*>(_rawFile->data() + _dynSymOffset);
+		const auto dynstr = reinterpret_cast<const char*>(_rawFile->data() + _dynStrOffset);
+
+		std::cout << "[ElfLoader] Scanning .rela.plt" << std::endl;
+		for (int i = 0; i < _pltRelocs; ++i) {
+			const Elf64_Rela* rela = relaPtr + i;
+
+			if (const auto type = ELF64_R_TYPE(rela->r_info); type != R_AARCH64_JUMP_SLOT) {
+				continue;
+			}
+
+			const auto symbolIndex = ELF64_R_SYM(rela->r_info);
+			const Elf64_Sym* symbolInfo = dynsym + symbolIndex;
+			const char* symbolName = &dynstr[symbolInfo->st_name];
+
+			std::cout << "[ElfLoader] R_AARCH64_JUMP_SLOT symbol name: " << symbolName << std::endl;
+		}
 	}
 
 	char const *ElfLoader::_getSectionName(Elf64_Shdr *const sectionHeader) {

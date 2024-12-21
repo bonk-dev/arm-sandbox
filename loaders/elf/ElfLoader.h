@@ -73,6 +73,6 @@ namespace Loaders {
 		 */
 		void allocateSections(CpuVirtualMemory& memory);
 
-		void linkSymbols(Emulation::Libraries::Mapper mapper);
+		void linkSymbols(Emulation::Libraries::Mapper& mapper);
 	};
 }

@@ -116,6 +116,10 @@ int read_elf_main(const char* path) {
 	std::shared_ptr<AArch64Cpu> cpu = std::make_shared<AArch64Cpu>();
 	loader.allocateSections(cpu->getMemory());
 
+	// Dynamic link
+	cpu->getMapper().allocateLinkingSegment(cpu->getMemory());
+	loader.linkSymbols(cpu->getMapper());
+
 	// Normally we would start executing at "entry" - this offset is in the ELF header
 	// but we are going to cheat for now
 	constexpr virtual_address_t intMainOffset = 0x640;
