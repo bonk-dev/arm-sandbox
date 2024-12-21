@@ -152,7 +152,7 @@ namespace Loaders {
 		}
 	}
 
-	void ElfLoader::linkSymbols(Emulation::Libraries::Mapper& mapper) {
+	void ElfLoader::linkSymbols(Emulation::Libraries::Mapper& mapper, CpuVirtualMemory& memory) {
 		if (_dynStrOffset == 0 || _dynSymOffset == 0 || _relaPltOffset == 0) {
 			throw std::runtime_error("Invalid ELF section offsets");
 		}
@@ -174,6 +174,12 @@ namespace Loaders {
 			const char* symbolName = &dynstr[symbolInfo->st_name];
 
 			std::cout << "[ElfLoader] R_AARCH64_JUMP_SLOT symbol name: " << symbolName << std::endl;
+			std::cout << "[ElfLoader] Trying to link with the Mapper" << std::endl;
+			const virtual_address_t jumpAddress = mapper.mapLibraryImplementation(symbolName, memory);
+			std::cout << "[ElfLoader] Jump address: " << jumpAddress << std::endl;
+
+			std::cout << "[ElfLoader] Updating the PLT" << std::endl;
+			throw std::runtime_error("Not implemented");
 		}
 	}
 
