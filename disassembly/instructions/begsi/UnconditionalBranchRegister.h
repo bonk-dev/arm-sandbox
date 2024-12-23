@@ -34,5 +34,6 @@ namespace InstructionDefs::Begsi {
 		regindex_t destination_reg;
 
 		explicit UnconditionalBranchRegister(uint32_t encoded);
+		UnconditionalBranchRegister(OperationOpc opc, regindex_t regindex);
 	} UnconditionalBranchRegister;
 }

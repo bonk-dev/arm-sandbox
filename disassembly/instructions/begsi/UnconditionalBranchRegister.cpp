@@ -38,3 +38,8 @@ InstructionDefs::Begsi::UnconditionalBranchRegister::UnconditionalBranchRegister
 		throw std::runtime_error("Unimplemented unconditional branch (register) variant");
 	}
 }
+
+InstructionDefs::Begsi::UnconditionalBranchRegister::
+UnconditionalBranchRegister(OperationOpc opc, regindex_t regindex) :
+	operation_opc(opc),
+	destination_reg(regindex) {}
