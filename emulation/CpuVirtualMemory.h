@@ -52,10 +52,15 @@ public:
 
 	template<typename T>
 	T read(virtual_address_t virtualAddress) {
-		virtual_address_t base = 0;
-		auto& segment = this->_getSegment(virtualAddress, base);
-		T* ptr = reinterpret_cast<T*>(segment.data() + (virtualAddress - base));
-		return *ptr;
+		if (_isStackArea(virtualAddress)) {
+			return this->getStack(AARCH64_MAIN_THREAD_ID)->read<T>(virtualAddress);
+		}
+		else {
+			virtual_address_t base = 0;
+			auto& segment = this->_getSegment(virtualAddress, base);
+			T* ptr = reinterpret_cast<T*>(segment.data() + (virtualAddress - base));
+			return *ptr;
+		}
 	}
 
 	virtual_address_t allocateSegment(size_t size);
