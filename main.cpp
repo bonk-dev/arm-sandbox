@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <format>
-#include <memory>
 #include "disassembly/A64Decoder.h"
 #include "disassembly/disassembly.h"
 #include "emulation/AArch64Cpu.h"
@@ -9,11 +8,9 @@
 #include "emulation/executors/LoadStoreRegPairExecutor.h"
 #include "emulation/executors/FormPcRelAddressExecutor.h"
 #include "emulation/executors/UnconditionalBranchImmediateExecutor.h"
-#include "disassembly/instructions/data_proc_imm/AddImmediate.h"
 #include "emulation/executors/MoveWideImmediateExecutor.h"
 #include "emulation/executors/loads_and_stores/LoadStoreRegUnsignedImm.h"
 #include "loaders/elf/ElfLoader.h"
-#include "disassembly/instructions/begsi/UnconditionalBranchRegister.h"
 #include "emulation/executors/UnconditionalBranchRegisterExecutor.h"
 #include "emulation/executors/reserved/ReservedCallExecutor.h"
 #include "emulation/libraries/DummyNamePrinter.h"
