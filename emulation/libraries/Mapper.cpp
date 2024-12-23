@@ -2,6 +2,9 @@
 #include "../../disassembly/instructions/reserved/ReservedCall.h"
 #include <stdexcept>
 
+#include "../../disassembly/instructions/begsi/UnconditionalBranchImmediate.h"
+#include "../../disassembly/instructions/begsi/UnconditionalBranchRegister.h"
+
 Emulation::Libraries::Mapper::Mapper() :
 	_nextIndex(0),
 	_indexSymbols(std::make_unique<std::map<unsigned int, std::shared_ptr<library_impl_symbol_t>>>()),
@@ -22,19 +25,28 @@ virtual_address_t Emulation::Libraries::Mapper::mapLibraryImplementation(const c
     CpuVirtualMemory &memory) {
     // A64:
 	// UDF #libraryCall, #symbolIndex
+	// RET
 
 	if (!this->_linkingTableAddress.has_value()) {
 		throw std::runtime_error("Linking table has not been allocated yet");
 	}
 
     auto sym = this->_implementations->at(symbolName);
-	virtual_address_t jumpAddress = this->_linkingTableAddress.value() + sym->index;
+
+	// * 2, because each symbol has two instructions: UDF and RET
+	virtual_address_t jumpAddress = this->_linkingTableAddress.value() + (sym->index * 2);
 
 	const InstructionDefs::Reserved::ReservedCall reservedCall(
 			InstructionDefs::Reserved::ReservedCalls::LibraryCall, sym->index);
 	const uint32_t encodedResCallInstruction = reservedCall.encode();
 
+	const InstructionDefs::Begsi::UnconditionalBranchRegister ret(
+		InstructionDefs::Begsi::UnconditionalBranchRegister::OperationOpc::Return,
+		30); // X30 == LR
+	const uint32_t encodedRetInstruction = ret.encode();
+
 	memory.write(jumpAddress, encodedResCallInstruction);
+	memory.write(jumpAddress + sizeof(uint32_t), encodedRetInstruction);
 	return jumpAddress;
 }
 
