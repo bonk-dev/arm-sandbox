@@ -59,6 +59,16 @@ void CpuVirtualMemory::write(uintptr_t addr, uint32_t value) {
 	else {
 		ss << "[Memory] 32bit Write to address: " << std::hex << std::showbase << addr << " (val: " << value << ")";
 
+		virtual_address_t start;
+		std::vector<std::byte>& segment = this->_getSegment(addr, start);
+		const size_t offset = addr - start;
+		if (offset + sizeof(uint32_t) > segment.size()) {
+			throw std::runtime_error("Emulation segmentation fault");
+		}
+
+		auto* ptr = reinterpret_cast<uint64_t*>(segment.data() + offset);
+		*ptr = value;
+
 		// std::cout will be replaced
 		std::cout << ss.str().c_str() << std::endl;
 	}
@@ -68,11 +78,21 @@ void CpuVirtualMemory::write(uintptr_t addr, uint64_t value) {
 	std::stringstream ss;
 	const size_t STACK_END = this->getStack(AARCH64_MAIN_THREAD_ID)->getStackSize();
 	if (addr <= Emulation::STACK_START && addr >= STACK_END && Emulation::STACK_START - STACK_END >= sizeof(uint64_t)) {
-		ss << "[Memory] 32bit write to stack: " << std::hex << std::showbase << addr;
+		ss << "[Memory] 64bit write to stack: " << std::hex << std::showbase << addr;
 		this->getStack(AARCH64_MAIN_THREAD_ID)->write(addr, value);
 	}
 	else {
 		ss << "[Memory] 64bit Write to address: " << std::hex << std::showbase << addr << " (val: " << value << ")";
+
+		virtual_address_t start;
+		std::vector<std::byte>& segment = this->_getSegment(addr, start);
+		const size_t offset = addr - start;
+		if (offset + sizeof(uint64_t) > segment.size()) {
+			throw std::runtime_error("Emulation segmentation fault");
+		}
+
+		auto* ptr = reinterpret_cast<uint64_t*>(segment.data() + offset);
+		*ptr = value;
 
 		// std::cout will be replaced
 		std::cout << ss.str().c_str() << std::endl;
