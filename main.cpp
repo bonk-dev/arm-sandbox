@@ -15,6 +15,8 @@
 #include "loaders/elf/ElfLoader.h"
 #include "disassembly/instructions/begsi/UnconditionalBranchRegister.h"
 #include "emulation/executors/UnconditionalBranchRegisterExecutor.h"
+#include "emulation/executors/reserved/ReservedCallExecutor.h"
+#include "emulation/libraries/DummyNamePrinter.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -36,12 +38,19 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 	map_e<UnconditionalBranchRegisterExecutor>(executors, InstructionType::UnconditionalBranchRegister, sharedCpu);
 	map_e<LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair, sharedCpu);
 	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm, sharedCpu);
+	map_e<Executors::Reserved::ReservedCallExecutor>(executors, InstructionType::ReservedCall, sharedCpu);
 
 	return executors;
 }
 
 int prototype_main() {
 	std::vector<std::byte> sample_code = {
+			// UDF #1 (special library call), #1 (symbol 0)
+			std::byte(0x00), std::byte(0x00), std::byte(0x01), std::byte(0x00),
+
+			// UDF #1 (special library call), #1 (symbol 1)
+			std::byte(0x01), std::byte(0x00), std::byte(0x01), std::byte(0x00),
+
 			// ADD X25, X0, #0x7C0
 			std::byte(0x19), std::byte(0x00), std::byte(0x1F), std::byte(0x91),
 
@@ -78,6 +87,13 @@ int prototype_main() {
 
 	const auto shared_cpu = std::make_shared<AArch64Cpu>();
 	const auto executors = map_all_executors(shared_cpu);
+	shared_cpu->getMapper().allocateLinkingSegment(shared_cpu->getMemory());
+
+	// TODO: Refactor this into a single function
+	shared_cpu->getMapper().registerLibraryImplementation(
+			"test_symbol",
+			std::make_unique<Emulation::Libraries::DummyNamePrinter>("test_symbol", shared_cpu));
+	shared_cpu->getMapper().mapLibraryImplementation("test_symbol", shared_cpu->getMemory());
 
 	A64Decoder dec{};
 	auto* dataPtr = reinterpret_cast<uint32_t*>(sample_code.data());
@@ -100,8 +116,26 @@ int read_elf_main(const char* path) {
 	std::shared_ptr<AArch64Cpu> cpu = std::make_shared<AArch64Cpu>();
 	loader.allocateSections(cpu->getMemory());
 
-	// TODO: dont execute until we do some linking
-	return 2;
+	// Register stub implementations for some basic symbols
+	cpu->getMapper().registerLibraryImplementation(
+		"__libc_start_main",
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__libc_start_main", cpu));
+	cpu->getMapper().registerLibraryImplementation(
+		"__cxa_finalize",
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__cxa_finalize", cpu));
+	cpu->getMapper().registerLibraryImplementation(
+		"__gmon_start__",
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__gmon_start__", cpu));
+	cpu->getMapper().registerLibraryImplementation(
+		"abort",
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("abort", cpu));
+	cpu->getMapper().registerLibraryImplementation(
+		"puts",
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("puts", cpu));
+
+	// Dynamic link
+	cpu->getMapper().allocateLinkingSegment(cpu->getMemory());
+	loader.linkSymbols(cpu->getMapper(), cpu->getMemory());
 
 	// Normally we would start executing at "entry" - this offset is in the ELF header
 	// but we are going to cheat for now
@@ -111,6 +145,8 @@ int read_elf_main(const char* path) {
 	auto executors = map_all_executors(cpu);
 	A64Decoder dec{};
 	InstructionType type;
+
+	std::cout << std::endl <<  "============ [main] Setup done. Starting the execution ============" << std::endl << std::endl;
 
 	virtual_address_t pc = cpu->getProgramCounter();
 	auto encodedInstruction = cpu->getMemory().read<uint32_t>(pc);

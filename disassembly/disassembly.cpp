@@ -197,7 +197,28 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::Uncondit
 std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::UnconditionalBranchRegister &i) {
 	std::stringstream ss;
 
-	ss << (i.branch_with_link ? "BLR " : "BR ") << gp_reg_name(i.destination_reg);
+	bool addReg = true;
+	switch (i.operation_opc) {
+		case InstructionDefs::Begsi::UnconditionalBranchRegister::OperationOpc::Normal:
+			ss << "BR";
+			break;
+		case InstructionDefs::Begsi::UnconditionalBranchRegister::OperationOpc::Link:
+			ss << "BLR";
+			break;
+		case InstructionDefs::Begsi::UnconditionalBranchRegister::OperationOpc::Return:
+			addReg = i.destination_reg != 30;
+			ss << "RET";
+			break;
+	}
+	if (addReg) {
+		ss << ' ' << gp_reg_name(i.destination_reg);
+	}
 
+	return ss.str();
+}
+
+std::string disassembly::to_pretty_string(const InstructionDefs::Reserved::ReservedCall &i) {
+	std::stringstream ss;
+	ss << "UDF type: " << std::hex << std::showbase << static_cast<uint32_t>(i.call_type) << ", symbol: #" << i.immediate;
 	return ss.str();
 }

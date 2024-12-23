@@ -21,8 +21,12 @@ namespace {
 		const virtual_address_t allocatedStart = pair.first;
 		const size_t allocatedSize = pair.second.size();
 		const virtual_address_t allocatedEnd = allocatedStart + allocatedSize - 1;
-		bool resutl = is_in_range(allocatedStart, allocatedEnd, start)
-					  || is_in_range(allocatedStart, allocatedEnd, start + size - 1);;
+
+		const virtual_address_t end = start + size - 1;
+
+		bool resutl = (start <= allocatedStart && end >= allocatedEnd)
+			          || is_in_range(allocatedStart, allocatedEnd, start)
+					  || is_in_range(allocatedStart, allocatedEnd, end);;
 		return resutl;
 	}
 }
@@ -47,32 +51,47 @@ std::vector<std::byte> &CpuVirtualMemory::_getSegment(virtual_address_t virtualA
 
 void CpuVirtualMemory::write(uintptr_t addr, uint32_t value) {
 	std::stringstream ss;
-	const size_t STACK_END = this->getStack(AARCH64_MAIN_THREAD_ID)->getStackSize();
-	if (addr <= Emulation::STACK_START && addr >= STACK_END && Emulation::STACK_START - STACK_END >= sizeof(uint32_t)) {
+	if (_isStackArea(addr)) {
 		ss << "[Memory] 32bit write to stack: " << std::hex << std::showbase << addr;
 		this->getStack(AARCH64_MAIN_THREAD_ID)->write(addr, value);
 	}
 	else {
 		ss << "[Memory] 32bit Write to address: " << std::hex << std::showbase << addr << " (val: " << value << ")";
 
-		// std::cout will be replaced
-		std::cout << ss.str().c_str() << std::endl;
+		virtual_address_t start;
+		std::vector<std::byte>& segment = this->_getSegment(addr, start);
+		const size_t offset = addr - start;
+		if (offset + sizeof(uint32_t) > segment.size()) {
+			throw std::runtime_error("Emulation segmentation fault");
+		}
+
+		auto* ptr = reinterpret_cast<uint64_t*>(segment.data() + offset);
+		*ptr = value;
 	}
+	std::cout << ss.str().c_str() << std::endl;
 }
 
 void CpuVirtualMemory::write(uintptr_t addr, uint64_t value) {
 	std::stringstream ss;
-	const size_t STACK_END = this->getStack(AARCH64_MAIN_THREAD_ID)->getStackSize();
-	if (addr <= Emulation::STACK_START && addr >= STACK_END && Emulation::STACK_START - STACK_END >= sizeof(uint64_t)) {
-		ss << "[Memory] 32bit write to stack: " << std::hex << std::showbase << addr;
+	if (_isStackArea(addr)) {
+		ss << "[Memory] 64bit write to stack: " << std::hex << std::showbase << addr;
 		this->getStack(AARCH64_MAIN_THREAD_ID)->write(addr, value);
 	}
 	else {
 		ss << "[Memory] 64bit Write to address: " << std::hex << std::showbase << addr << " (val: " << value << ")";
 
-		// std::cout will be replaced
-		std::cout << ss.str().c_str() << std::endl;
+		virtual_address_t start;
+		std::vector<std::byte>& segment = this->_getSegment(addr, start);
+		const size_t offset = addr - start;
+		if (offset + sizeof(uint64_t) > segment.size()) {
+			throw std::runtime_error("Emulation segmentation fault");
+		}
+
+		auto* ptr = reinterpret_cast<uint64_t*>(segment.data() + offset);
+		*ptr = value;
 	}
+
+	std::cout << ss.str().c_str() << std::endl;
 }
 
 void CpuVirtualMemory::write(virtual_address_t destination,
@@ -112,7 +131,7 @@ void CpuVirtualMemory::deleteStack(uint64_t threadId) {
 	this->_threadStacks.erase(threadId);
 }
 
-void CpuVirtualMemory::allocateSegment(size_t size) {
+virtual_address_t CpuVirtualMemory::allocateSegment(size_t size) {
 	virtual_address_t currentAddress = 0;
 
 	// find next available virtual address;
@@ -137,6 +156,7 @@ void CpuVirtualMemory::allocateSegment(size_t size) {
 	}
 
 	this->_allocateSegmentNoOverlapCheck(currentAddress, size);
+	return currentAddress;
 }
 
 void CpuVirtualMemory::allocateSegment(virtual_address_t virtualAddress, size_t size) {

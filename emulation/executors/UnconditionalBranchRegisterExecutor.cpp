@@ -10,5 +10,5 @@ UnconditionalBranchRegisterExecutor::execute(const InstructionDefs::Begsi::Uncon
 			target,
 			Emulation::BranchType::IndirectCall,
 			false,
-			instruction.branch_with_link);
+			instruction.operation_opc == InstructionDefs::Begsi::UnconditionalBranchRegister::OperationOpc::Link);
 }

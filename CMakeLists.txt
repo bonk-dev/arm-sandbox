@@ -54,4 +54,15 @@ add_executable(arm_sandbox main.cpp
         emulation/executors/BranchingExecutor.h
         emulation/executors/UnconditionalBranchRegisterExecutor.h
         emulation/executors/UnconditionalBranchRegisterExecutor.cpp
+        emulation/libraries/DummyNamePrinter.cpp
+        emulation/libraries/DummyNamePrinter.h
+        emulation/libraries/Mapper.cpp
+        emulation/libraries/Mapper.h
+        disassembly/instructions/reserved/reserved_calls.h
+        disassembly/instructions/reserved/ReservedCall.h
+        disassembly/instructions/reserved/ReservedCall.cpp
+        emulation/executors/reserved/ReservedCallExecutor.h
+        emulation/executors/reserved/ReservedCallExecutor.cpp
+        emulation/emul_registers.h
+        emulation/libraries/EmulatedSymbol.h
 )

@@ -27,6 +27,14 @@ private:
 
 	void _allocateSegmentNoOverlapCheck(virtual_address_t address, size_t size);
 	std::vector<std::byte>& _getSegment(virtual_address_t virtualAddress, virtual_address_t& segmentStart);
+
+	bool _isStackArea(const virtual_address_t address) {
+		const size_t STACK_END = this->getStack(AARCH64_MAIN_THREAD_ID)->getStackSize();
+		return address <= Emulation::STACK_START
+			   && address >= STACK_END
+		       && Emulation::STACK_START - STACK_END >= sizeof(uint32_t);
+	}
+
 public:
 	void write(uintptr_t addr, int value) {
 		this->write(addr, static_cast<uint32_t>(value));
@@ -44,13 +52,18 @@ public:
 
 	template<typename T>
 	T read(virtual_address_t virtualAddress) {
-		virtual_address_t base = 0;
-		auto& segment = this->_getSegment(virtualAddress, base);
-		T* ptr = reinterpret_cast<T*>(segment.data() + (virtualAddress - base));
-		return *ptr;
+		if (_isStackArea(virtualAddress)) {
+			return this->getStack(AARCH64_MAIN_THREAD_ID)->read<T>(virtualAddress);
+		}
+		else {
+			virtual_address_t base = 0;
+			auto& segment = this->_getSegment(virtualAddress, base);
+			T* ptr = reinterpret_cast<T*>(segment.data() + (virtualAddress - base));
+			return *ptr;
+		}
 	}
 
-	void allocateSegment(size_t size);
+	virtual_address_t allocateSegment(size_t size);
 	void allocateSegment(virtual_address_t virtualAddress, size_t size);
 	void freeSegment(virtual_address_t virtualAddress);
 
