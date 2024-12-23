@@ -68,10 +68,8 @@ void CpuVirtualMemory::write(uintptr_t addr, uint32_t value) {
 
 		auto* ptr = reinterpret_cast<uint64_t*>(segment.data() + offset);
 		*ptr = value;
-
-		// std::cout will be replaced
-		std::cout << ss.str().c_str() << std::endl;
 	}
+	std::cout << ss.str().c_str() << std::endl;
 }
 
 void CpuVirtualMemory::write(uintptr_t addr, uint64_t value) {
@@ -93,10 +91,9 @@ void CpuVirtualMemory::write(uintptr_t addr, uint64_t value) {
 
 		auto* ptr = reinterpret_cast<uint64_t*>(segment.data() + offset);
 		*ptr = value;
-
-		// std::cout will be replaced
-		std::cout << ss.str().c_str() << std::endl;
 	}
+
+	std::cout << ss.str().c_str() << std::endl;
 }
 
 void CpuVirtualMemory::write(virtual_address_t destination,
