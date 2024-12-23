@@ -146,6 +146,8 @@ int read_elf_main(const char* path) {
 	A64Decoder dec{};
 	InstructionType type;
 
+	std::cout << std::endl <<  "============ [main] Setup done. Starting the execution ============" << std::endl << std::endl;
+
 	virtual_address_t pc = cpu->getProgramCounter();
 	auto encodedInstruction = cpu->getMemory().read<uint32_t>(pc);
 	type = dec.decodeNextType(encodedInstruction);
