@@ -174,12 +174,13 @@ namespace Loaders {
 			const char* symbolName = &dynstr[symbolInfo->st_name];
 
 			std::cout << "[ElfLoader] R_AARCH64_JUMP_SLOT symbol name: " << symbolName << std::endl;
+			std::cout << "[ElfLoader] R_AARCH64_JUMP_SLOT slot offset: " << rela->r_offset << std::endl;
 			std::cout << "[ElfLoader] Trying to link with the Mapper" << std::endl;
 			const virtual_address_t jumpAddress = mapper.mapLibraryImplementation(symbolName, memory);
 			std::cout << "[ElfLoader] Jump address: " << jumpAddress << std::endl;
 
 			std::cout << "[ElfLoader] Updating the PLT GOT" << std::endl;
-			throw std::runtime_error("Not implemented");
+			memory.write(rela->r_offset, static_cast<uint32_t>(jumpAddress));
 		}
 	}
 
