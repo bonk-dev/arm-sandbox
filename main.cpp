@@ -45,44 +45,44 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 
 int prototype_main() {
 	std::vector<std::byte> sample_code = {
-			// UDF #1 (special library call), #1 (symbol 0)
-			std::byte(0x00), std::byte(0x00), std::byte(0x01), std::byte(0x00),
+		// UDF #1 (special library call), #1 (symbol 0)
+		std::byte(0x00), std::byte(0x00), std::byte(0x01), std::byte(0x00),
 
-			// UDF #1 (special library call), #1 (symbol 1)
-			std::byte(0x01), std::byte(0x00), std::byte(0x01), std::byte(0x00),
+		// UDF #1 (special library call), #1 (symbol 1)
+		std::byte(0x01), std::byte(0x00), std::byte(0x01), std::byte(0x00),
 
-			// ADD X25, X0, #0x7C0
-			std::byte(0x19), std::byte(0x00), std::byte(0x1F), std::byte(0x91),
+		// ADD X25, X0, #0x7C0
+		std::byte(0x19), std::byte(0x00), std::byte(0x1F), std::byte(0x91),
 
-			// STP X29, X30, [SP, #-0x10]!
-			std::byte(0xFD), std::byte(0x7B), std::byte(0xBF), std::byte(0xA9),
+		// STP X29, X30, [SP, #-0x10]!
+		std::byte(0xFD), std::byte(0x7B), std::byte(0xBF), std::byte(0xA9),
 
-			// ADRP X0, #0
-			std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x90),
+		// ADRP X0, #0
+		std::byte(0x00), std::byte(0x00), std::byte(0x00), std::byte(0x90),
 
-			// ADR X0, #0x2001
-			std::byte(0x00), std::byte(0x00), std::byte(0x01), std::byte(0x30),
+		// ADR X0, #0x2001
+		std::byte(0x00), std::byte(0x00), std::byte(0x01), std::byte(0x30),
 
-			// MOV X29, SP (alias of ADD X29, SP, #0)
-			std::byte(0xFD), std::byte(0x03), std::byte(0x00), std::byte(0x91),
+		// MOV X29, SP (alias of ADD X29, SP, #0)
+		std::byte(0xFD), std::byte(0x03), std::byte(0x00), std::byte(0x91),
 
-			// BL (offset -0x20)
-			std::byte(0xF8), std::byte(0xFF), std::byte(0xFF), std::byte(0x97),
+		// BL (offset -0x20)
+		std::byte(0xF8), std::byte(0xFF), std::byte(0xFF), std::byte(0x97),
 
-			// B (offset -0x20)
-			std::byte(0xF8), std::byte(0xFF), std::byte(0xFF), std::byte(0x17),
+		// B (offset -0x20)
+		std::byte(0xF8), std::byte(0xFF), std::byte(0xFF), std::byte(0x17),
 
-			// MOV W0, #0 (alias of MOVZ W0, #0)
-			std::byte(0x00), std::byte(0x00), std::byte(0x80), std::byte(0x52),
+		// MOV W0, #0 (alias of MOVZ W0, #0)
+		std::byte(0x00), std::byte(0x00), std::byte(0x80), std::byte(0x52),
 
-			// MOV W15, #55 (alias of MOVZ W15, #55)
-			std::byte(0xEF), std::byte(0x06), std::byte(0x80), std::byte(0x52),
+		// MOV W15, #55 (alias of MOVZ W15, #55)
+		std::byte(0xEF), std::byte(0x06), std::byte(0x80), std::byte(0x52),
 
-			// LDP X29, X30, [SP], #0x10
-			std::byte(0xFD), std::byte(0x7B), std::byte(0xC1), std::byte(0xA8),
+		// LDP X29, X30, [SP], #0x10
+		std::byte(0xFD), std::byte(0x7B), std::byte(0xC1), std::byte(0xA8),
 
-			// LDR X17, [X16, #0x20]
-			std::byte(0x11), std::byte(0x12), std::byte(0x40), std::byte(0xF9)
+		// LDR X17, [X16, #0x20]
+		std::byte(0x11), std::byte(0x12), std::byte(0x40), std::byte(0xF9)
 	};
 
 	const auto shared_cpu = std::make_shared<AArch64Cpu>();
