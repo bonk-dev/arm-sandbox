@@ -23,16 +23,16 @@ namespace {
 
 		// a lot of UnconditionalBranchRegister instructions are either marked as UNALLOCATED
 		// or FEAT_PAuth (which we are not implementing for now)
-		return ((opc == 0b0000 || opc == 0b0001) && op2 == 0b11111 && op3 == 0b000000 && op4 == 0b00000);
+		return ((opc == 0b0000 || opc == 0b0001 || opc == 0b0010) && op2 == 0b11111 && op3 == 0b000000 && op4 == 0b00000);
 	}
 
-	bool decode_is_link_branch(uint32_t encoded) {
-		return decode_opc(encoded) == 0b0001;
+	InstructionDefs::Begsi::UnconditionalBranchRegister::OperationOpc decode_opc_interp(uint32_t encoded) {
+		return static_cast<InstructionDefs::Begsi::UnconditionalBranchRegister::OperationOpc>(decode_opc(encoded));
 	}
 }
 
 InstructionDefs::Begsi::UnconditionalBranchRegister::UnconditionalBranchRegister(uint32_t encoded) :
-	branch_with_link(decode_is_link_branch(encoded)),
+	operation_opc(decode_opc_interp(encoded)),
 	destination_reg((encoded >> 5) & 0b11111) {
 	if (!is_valid(encoded)) {
 		throw std::runtime_error("Unimplemented unconditional branch (register) variant");
