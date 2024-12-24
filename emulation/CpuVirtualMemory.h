@@ -58,7 +58,13 @@ public:
 		else {
 			virtual_address_t base = 0;
 			auto& segment = this->_getSegment(virtualAddress, base);
-			T* ptr = reinterpret_cast<T*>(segment.data() + (virtualAddress - base));
+			const size_t index = virtualAddress - base;
+			const size_t end = sizeof(T) + index - 1;
+			if (index >= segment.size() || end >= segment.size()) {
+				throw std::runtime_error("Emulation segmenation fault");
+			}
+
+			T* ptr = reinterpret_cast<T*>(segment.data() + index);
 			return *ptr;
 		}
 	}
