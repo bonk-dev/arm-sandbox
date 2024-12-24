@@ -14,6 +14,7 @@
 #include "emulation/executors/UnconditionalBranchRegisterExecutor.h"
 #include "emulation/executors/reserved/ReservedCallExecutor.h"
 #include "emulation/libraries/DummyNamePrinter.h"
+#include "emulation/libraries/libc/Puts.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -141,7 +142,7 @@ int read_elf_main(const char* path) {
 		std::make_unique<Emulation::Libraries::DummyNamePrinter>("abort")) ;
 	mapper->registerLibraryImplementation(
 		"puts",
-		std::make_unique<Emulation::Libraries::DummyNamePrinter>("puts"));
+		std::make_unique<Emulation::Libraries::LibC::Puts>());
 
 	// Dynamic link
 	mapper->allocateLinkingSegment(cpu->getMemory());

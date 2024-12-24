@@ -64,4 +64,6 @@ add_executable(arm_sandbox main.cpp
         emulation/executors/reserved/ReservedCallExecutor.h
         emulation/executors/reserved/ReservedCallExecutor.cpp
         emulation/libraries/EmulatedSymbol.h
+        emulation/libraries/libc/Puts.cpp
+        emulation/libraries/libc/Puts.h
 )
