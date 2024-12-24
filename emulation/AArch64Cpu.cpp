@@ -5,9 +5,7 @@
 AArch64Cpu::AArch64Cpu() : _memory(std::make_unique<CpuVirtualMemory>()),
 													 _programCounter(0),
 													 _threads(),
-													 _generalRegisters(AARCH64_EMUL_REGISTERS) {
-    this->_generalRegisters = std::vector<uint64_t>(
-        AARCH64_GENERAL_PURPOSE_REGISTERS);
+													 _generalRegisters(AARCH64_GENERAL_PURPOSE_REGISTERS) {
 	this->createThread(AARCH64_MAIN_THREAD_ID);
 }
 
