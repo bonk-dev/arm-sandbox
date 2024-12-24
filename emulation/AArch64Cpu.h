@@ -4,7 +4,6 @@
 #include <vector>
 #include "CpuVirtualMemory.h"
 #include "emu_types.h"
-#include "CpuStack.h"
 
 constexpr size_t AARCH64_GENERAL_PURPOSE_REGISTERS = 31;
 
