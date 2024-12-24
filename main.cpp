@@ -25,7 +25,16 @@ void map_e(std::map<InstructionType, std::unique_ptr<ExecutorBase>>& map, Instru
 	map[instructionType] = std::make_unique<ExecutorType>(c);
 }
 
-std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const std::shared_ptr<AArch64Cpu>& sharedCpu) {
+template<typename ExecutorType, typename... Args>
+void map_ep(
+	std::map<InstructionType, std::unique_ptr<ExecutorBase>>& map,
+	InstructionType instructionType,
+	Args&&... args) {
+	map[instructionType] = std::make_unique<ExecutorType>(std::forward<Args>(args)...);
+}
+
+std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const std::shared_ptr<AArch64Cpu>& sharedCpu,
+																		   const std::shared_ptr<Emulation::Libraries::Mapper>& mapper) {
 	std::map<InstructionType, std::unique_ptr<ExecutorBase>> executors;
 
 	map_e<AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate, sharedCpu);
