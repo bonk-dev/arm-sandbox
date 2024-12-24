@@ -63,6 +63,13 @@ public:
 		}
 	}
 
+	/**
+	 * Reads an std::string from a virtual char* (with boundary checks)
+	 * @param virtual_address The char* start
+	 * @return Read std::string
+	 */
+	std::string readCString(virtual_address_t virtual_address);
+
 	virtual_address_t allocateSegment(size_t size);
 	void allocateSegment(virtual_address_t virtualAddress, size_t size);
 	void freeSegment(virtual_address_t virtualAddress);

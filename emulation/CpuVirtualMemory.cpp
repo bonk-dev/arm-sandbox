@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include "CpuVirtualMemory.h"
+#include <cstring>
 
 namespace {
 	template<typename T>
@@ -129,6 +130,19 @@ void CpuVirtualMemory::createStack(uint64_t threadId, const size_t size) {
 
 void CpuVirtualMemory::deleteStack(uint64_t threadId) {
 	this->_threadStacks.erase(threadId);
+}
+
+std::string CpuVirtualMemory::readCString(virtual_address_t virtual_address) {
+	virtual_address_t base = 0;
+	const auto& segment = this->_getSegment(virtual_address, base);
+	const size_t index = virtual_address - base;
+
+	auto ptr = reinterpret_cast<const char*>(segment.data() + index);
+	if (const auto length = strnlen(ptr, segment.size()); length == segment.size()) {
+		throw std::runtime_error("Emulation segmentation fault");
+	}
+
+	return {ptr};
 }
 
 virtual_address_t CpuVirtualMemory::allocateSegment(size_t size) {
