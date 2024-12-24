@@ -7,11 +7,9 @@
 #include "CpuStack.h"
 
 constexpr size_t AARCH64_GENERAL_PURPOSE_REGISTERS = 31;
-constexpr size_t AARCH64_EMUL_REGISTERS = 8;
 
 class AArch64Cpu {
 private:
-	std::vector<uint64_t> _emulRegisters;
     std::vector<uint64_t> _generalRegisters;
 	uint64_t _programCounter;
 
