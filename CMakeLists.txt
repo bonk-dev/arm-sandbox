@@ -66,4 +66,6 @@ add_executable(arm_sandbox main.cpp
         emulation/libraries/EmulatedSymbol.h
         emulation/libraries/libc/Puts.cpp
         emulation/libraries/libc/Puts.h
+        emulation/exceptions/EmulSegFault.cpp
+        emulation/exceptions/EmulSegFault.h
 )

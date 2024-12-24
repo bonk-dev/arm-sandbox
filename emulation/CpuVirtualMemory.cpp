@@ -5,6 +5,8 @@
 #include "CpuVirtualMemory.h"
 #include <cstring>
 
+#include "exceptions/EmulSegFault.h"
+
 namespace {
 	template<typename T>
 	constexpr bool is_in_range(T start, T end, T value) {
@@ -43,7 +45,7 @@ std::vector<std::byte> &CpuVirtualMemory::_getSegment(virtual_address_t virtualA
 		return is_in_range(segmentStart, segmentEnd, virtualAddress);
 	});
 	if (segmentIterator == this->_segments.end()) {
-		throw std::runtime_error("Emulation segmentation fault");
+		throw Emulation::Exceptions::EmulSegFault();
 	}
 
 	segmentStart = segmentIterator->first;
@@ -63,7 +65,7 @@ void CpuVirtualMemory::write(uintptr_t addr, uint32_t value) {
 		std::vector<std::byte>& segment = this->_getSegment(addr, start);
 		const size_t offset = addr - start;
 		if (offset + sizeof(uint32_t) > segment.size()) {
-			throw std::runtime_error("Emulation segmentation fault");
+			throw Emulation::Exceptions::EmulSegFault();
 		}
 
 		auto* ptr = reinterpret_cast<uint64_t*>(segment.data() + offset);
@@ -85,7 +87,7 @@ void CpuVirtualMemory::write(uintptr_t addr, uint64_t value) {
 		std::vector<std::byte>& segment = this->_getSegment(addr, start);
 		const size_t offset = addr - start;
 		if (offset + sizeof(uint64_t) > segment.size()) {
-			throw std::runtime_error("Emulation segmentation fault");
+			throw Emulation::Exceptions::EmulSegFault();
 		}
 
 		auto* ptr = reinterpret_cast<uint64_t*>(segment.data() + offset);
@@ -105,7 +107,7 @@ void CpuVirtualMemory::write(virtual_address_t destination,
 	const auto segmentIndex = static_cast<std::vector<std::byte>::difference_type>(destination - base);
 
 	if (segment.size() - segmentIndex < size) {
-		throw std::runtime_error("Emulation segmentation fault");
+		throw Emulation::Exceptions::EmulSegFault();
 	}
 
 	std::copy(begin, begin + size, segment.begin() + segmentIndex);
@@ -139,7 +141,7 @@ std::string CpuVirtualMemory::readCString(virtual_address_t virtual_address) {
 
 	auto ptr = reinterpret_cast<const char*>(segment.data() + index);
 	if (const auto length = strnlen(ptr, segment.size()); length == segment.size()) {
-		throw std::runtime_error("Emulation segmentation fault");
+		throw Emulation::Exceptions::EmulSegFault();
 	}
 
 	return {ptr};
