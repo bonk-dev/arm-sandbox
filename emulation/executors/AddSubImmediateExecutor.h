@@ -1,7 +1,7 @@
 #pragma once
 #include "../AArch64Cpu.h"
 #include "../../disassembly/instructions/data_proc_imm/AddImmediate.h"
-#include "ExecutorBase'.h"
+#include "ExecutorBaseTemplated.h"
 
 class AddSubImmediateExecutor : public ExecutorBaseT<InstructionDefs::DataProcImm::AddImmediate> {
 public:

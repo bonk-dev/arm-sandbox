@@ -48,7 +48,7 @@ add_executable(arm_sandbox main.cpp
         loaders/elf/ElfLoader.cpp
         emulation/CpuStack.h
         emulation/CpuStack.cpp
-        emulation/executors/ExecutorBase'.h
+        emulation/executors/ExecutorBaseTemplated.h
         disassembly/instructions/begsi/UnconditionalBranchRegister.h
         disassembly/instructions/begsi/UnconditionalBranchRegister.cpp
         emulation/executors/BranchingExecutor.h

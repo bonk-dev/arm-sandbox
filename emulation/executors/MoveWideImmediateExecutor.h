@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../disassembly/instructions/data_proc_imm/MoveWideImmediate.h"
-#include "ExecutorBase'.h"
+#include "ExecutorBaseTemplated.h"
 
 class MoveWideImmediateExecutor : public ExecutorBaseT<InstructionDefs::DataProcImm::MoveWideImmediate> {
 public:

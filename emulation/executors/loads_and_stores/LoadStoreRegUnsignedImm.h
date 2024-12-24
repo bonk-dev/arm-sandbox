@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../../disassembly/instructions/loads_and_stores/LoadStoreRegUnsignedImm.h"
-#include "../ExecutorBase'.h"
+#include "../ExecutorBaseTemplated.h"
 
 namespace Executors::LoadsAndStores {
 	class LoadStoreRegUnsignedImm : public ExecutorBaseT<InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm> {

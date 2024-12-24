@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../../disassembly/instructions/reserved/ReservedCall.h"
-#include "../ExecutorBase'.h"
+#include "../ExecutorBaseTemplated.h"
 
 namespace Executors::Reserved {
 	class ReservedCallExecutor : public ExecutorBaseT<InstructionDefs::Reserved::ReservedCall> {

@@ -2,7 +2,7 @@
 
 #include "ExecutorBase.h"
 #include "../../disassembly/instructions/loads_and_stores/LoadRegisterPair.h"
-#include "ExecutorBase'.h"
+#include "ExecutorBaseTemplated.h"
 
 class LoadStoreRegPairExecutor : public ExecutorBaseT<InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction> {
 private:
