@@ -30,7 +30,7 @@ public:
 	 * Creates a new thread with a specified id
 	 * @param id The new thread id
 	 */
-	void createThread(uint64_t id);
+	void createThread(uint64_t id) const;
 
 	[[nodiscard]] CpuVirtualMemory & getMemory() const;
 };

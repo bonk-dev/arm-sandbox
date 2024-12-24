@@ -61,6 +61,6 @@ void AArch64Cpu::setProgramCounter(uint64_t pc) {
 	this->_programCounter = pc;
 }
 
-void AArch64Cpu::createThread(uint64_t id) {
+void AArch64Cpu::createThread(const uint64_t id) const {
 	this->getMemory().createStack(id, 8 * 1024 * 1024);
 }
