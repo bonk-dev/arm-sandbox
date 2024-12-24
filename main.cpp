@@ -44,7 +44,7 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 	map_e<UnconditionalBranchRegisterExecutor>(executors, InstructionType::UnconditionalBranchRegister, sharedCpu);
 	map_e<LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair, sharedCpu);
 	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm, sharedCpu);
-	map_e<Executors::Reserved::ReservedCallExecutor>(executors, InstructionType::ReservedCall, sharedCpu);
+	map_ep<Executors::Reserved::ReservedCallExecutor>(executors, InstructionType::ReservedCall, sharedCpu, mapper);
 
 	return executors;
 }
@@ -91,15 +91,17 @@ int prototype_main() {
 		std::byte(0x11), std::byte(0x12), std::byte(0x40), std::byte(0xF9)
 	};
 
+	const auto mapper = std::make_shared<Emulation::Libraries::Mapper>();
+
 	const auto shared_cpu = std::make_shared<AArch64Cpu>();
-	const auto executors = map_all_executors(shared_cpu);
-	shared_cpu->getMapper().allocateLinkingSegment(shared_cpu->getMemory());
+	const auto executors = map_all_executors(shared_cpu, mapper);
+	mapper->allocateLinkingSegment(shared_cpu->getMemory());
 
 	// TODO: Refactor this into a single function
-	shared_cpu->getMapper().registerLibraryImplementation(
+	mapper->registerLibraryImplementation(
 			"test_symbol",
 			std::make_unique<Emulation::Libraries::DummyNamePrinter>("test_symbol", shared_cpu));
-	shared_cpu->getMapper().mapLibraryImplementation("test_symbol", shared_cpu->getMemory());
+	mapper->mapLibraryImplementation("test_symbol", shared_cpu->getMemory());
 
 	A64Decoder dec{};
 	auto* dataPtr = reinterpret_cast<uint32_t*>(sample_code.data());
@@ -122,33 +124,35 @@ int read_elf_main(const char* path) {
 	std::shared_ptr<AArch64Cpu> cpu = std::make_shared<AArch64Cpu>();
 	loader.allocateSections(cpu->getMemory());
 
+	const auto mapper = std::make_shared<Emulation::Libraries::Mapper>();
+
 	// Register stub implementations for some basic symbols
-	cpu->getMapper().registerLibraryImplementation(
+	mapper->registerLibraryImplementation(
 		"__libc_start_main",
 		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__libc_start_main", cpu));
-	cpu->getMapper().registerLibraryImplementation(
+	mapper->registerLibraryImplementation(
 		"__cxa_finalize",
 		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__cxa_finalize", cpu));
-	cpu->getMapper().registerLibraryImplementation(
+	mapper->registerLibraryImplementation(
 		"__gmon_start__",
 		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__gmon_start__", cpu));
-	cpu->getMapper().registerLibraryImplementation(
+	mapper->registerLibraryImplementation(
 		"abort",
 		std::make_unique<Emulation::Libraries::DummyNamePrinter>("abort", cpu));
-	cpu->getMapper().registerLibraryImplementation(
+	mapper->registerLibraryImplementation(
 		"puts",
 		std::make_unique<Emulation::Libraries::DummyNamePrinter>("puts", cpu));
 
 	// Dynamic link
-	cpu->getMapper().allocateLinkingSegment(cpu->getMemory());
-	loader.linkSymbols(cpu->getMapper(), cpu->getMemory());
+	mapper->allocateLinkingSegment(cpu->getMemory());
+	loader.linkSymbols(*mapper, cpu->getMemory());
 
 	// Normally we would start executing at "entry" - this offset is in the ELF header
 	// but we are going to cheat for now
 	constexpr virtual_address_t intMainOffset = 0x640;
 	cpu->setProgramCounter(intMainOffset);
 
-	auto executors = map_all_executors(cpu);
+	auto executors = map_all_executors(cpu, mapper);
 	A64Decoder dec{};
 	InstructionType type;
 
