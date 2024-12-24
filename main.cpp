@@ -100,7 +100,7 @@ int prototype_main() {
 	// TODO: Refactor this into a single function
 	mapper->registerLibraryImplementation(
 			"test_symbol",
-			std::make_unique<Emulation::Libraries::DummyNamePrinter>("test_symbol", shared_cpu));
+			std::make_unique<Emulation::Libraries::DummyNamePrinter>("test_symbol"));
 	mapper->mapLibraryImplementation("test_symbol", shared_cpu->getMemory());
 
 	A64Decoder dec{};
@@ -129,19 +129,19 @@ int read_elf_main(const char* path) {
 	// Register stub implementations for some basic symbols
 	mapper->registerLibraryImplementation(
 		"__libc_start_main",
-		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__libc_start_main", cpu));
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__libc_start_main"));
 	mapper->registerLibraryImplementation(
 		"__cxa_finalize",
-		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__cxa_finalize", cpu));
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__cxa_finalize"));
 	mapper->registerLibraryImplementation(
 		"__gmon_start__",
-		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__gmon_start__", cpu));
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__gmon_start__"));
 	mapper->registerLibraryImplementation(
 		"abort",
-		std::make_unique<Emulation::Libraries::DummyNamePrinter>("abort", cpu));
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("abort")) ;
 	mapper->registerLibraryImplementation(
 		"puts",
-		std::make_unique<Emulation::Libraries::DummyNamePrinter>("puts", cpu));
+		std::make_unique<Emulation::Libraries::DummyNamePrinter>("puts"));
 
 	// Dynamic link
 	mapper->allocateLinkingSegment(cpu->getMemory());

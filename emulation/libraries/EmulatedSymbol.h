@@ -1,7 +1,8 @@
 #pragma once
+#include "../AArch64Cpu.h"
 
 class EmulatedSymbol {
 public:
-	virtual void execute() {}
+	virtual void execute(AArch64Cpu& cpu) {}
 	virtual ~EmulatedSymbol() = default;
 };

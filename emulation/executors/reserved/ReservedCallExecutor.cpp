@@ -19,7 +19,7 @@ void Executors::Reserved::ReservedCallExecutor::execute(const InstructionDefs::R
 			}
 			else {
 				auto& impl = _mapper->getLibraryImplementation(instruction.immediate);
-				impl.execute();
+				impl.execute(*this->get_cpu());
 			}
 
 			break;
