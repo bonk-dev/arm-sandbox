@@ -5,8 +5,7 @@
 AArch64Cpu::AArch64Cpu() : _memory(std::make_unique<CpuVirtualMemory>()),
 													 _programCounter(0),
 													 _threads(),
-													 _generalRegisters(AARCH64_EMUL_REGISTERS),
-													 _emulationMapper(std::make_unique<Emulation::Libraries::Mapper>()) {
+													 _generalRegisters(AARCH64_EMUL_REGISTERS) {
     this->_generalRegisters = std::vector<uint64_t>(
         AARCH64_GENERAL_PURPOSE_REGISTERS);
 	this->createThread(AARCH64_MAIN_THREAD_ID);
@@ -66,8 +65,4 @@ void AArch64Cpu::setProgramCounter(uint64_t pc) {
 
 void AArch64Cpu::createThread(uint64_t id) {
 	this->getMemory().createStack(id, 8 * 1024 * 1024);
-}
-
-Emulation::Libraries::Mapper &AArch64Cpu::getMapper() const {
-	return *this->_emulationMapper;
 }

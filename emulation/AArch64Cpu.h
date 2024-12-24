@@ -5,7 +5,6 @@
 #include "CpuVirtualMemory.h"
 #include "emu_types.h"
 #include "CpuStack.h"
-#include "libraries/Mapper.h"
 
 constexpr size_t AARCH64_GENERAL_PURPOSE_REGISTERS = 31;
 constexpr size_t AARCH64_EMUL_REGISTERS = 8;
@@ -18,7 +17,6 @@ private:
 
 	std::vector<uint64_t> _threads;
 	std::unique_ptr<CpuVirtualMemory> _memory;
-	std::unique_ptr<Emulation::Libraries::Mapper> _emulationMapper;
 public:
     AArch64Cpu();
 
@@ -38,5 +36,4 @@ public:
 	void createThread(uint64_t id);
 
 	[[nodiscard]] CpuVirtualMemory & getMemory() const;
-	[[nodiscard]] Emulation::Libraries::Mapper & getMapper() const;
 };
