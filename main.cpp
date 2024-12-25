@@ -81,12 +81,8 @@ int read_elf_main(const char* path) {
 	mapper->allocateLinkingSegment(cpu->getMemory());
 	loader.linkSymbols(*mapper, cpu->getMemory());
 
-	// Normally we would start executing at "entry" - this offset is in the ELF header
-	// but we are going to cheat for now
-	constexpr virtual_address_t intMainOffset = 0x640;
-	cpu->setProgramCounter(intMainOffset);
-
 	std::cout << "[ElfMain] Entry point: " << std::hex << std::showbase << loader.getEntryPoint() << std::endl;
+	cpu->setProgramCounter(loader.getEntryPoint());
 
 	auto executors = map_all_executors(cpu, mapper);
 	A64Decoder dec{};
