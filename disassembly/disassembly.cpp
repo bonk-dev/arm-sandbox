@@ -35,6 +35,34 @@ std::string gp_reg_name(regindex_t index, bool is_64bit) {
 	return gp_reg_name(index, static_cast<unsigned int>(is_64bit ? 64 : 32));
 }
 
+/**
+ * Returns the stringified name of the register, but interprets index 31 as the zero registers
+ * @param index Register name
+ * @param bitness Register bitness
+ * @return Actual name of the register
+ */
+std::string gp_reg_name_zero(regindex_t index, unsigned int bitness = 64) {
+	if (bitness != 64 && bitness != 32) {
+		throw std::runtime_error("reg_name only supports bitness of 64 and 32");
+	}
+
+	if (index == 31) {
+		return bitness == 64 ? "XZR" : "WZR";
+	}
+
+	return gp_reg_name(index, bitness);
+}
+
+/**
+ * Returns the stringified name of the register, but interprets index 31 as the zero registers
+ * @param index Register name
+ * @param is_64bit True if operating on 64-bit registers, false if operating on 32-bit registers
+ * @return Actual name of the register
+ */
+std::string gp_reg_name_zero(regindex_t index, bool is_64bit) {
+	return gp_reg_name_zero(index, static_cast<unsigned int>(is_64bit ? 64 : 32));
+}
+
 std::string disassembly::to_pretty_string(const InstructionDefs::DataProcImm::AddImmediate &i) {
 	std::stringstream ss;
 	if (i.set_flags) {
@@ -227,7 +255,48 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::Uncondit
 }
 
 std::string disassembly::to_pretty_string(const InstructionDefs::DataProcReg::LogicalShiftedRegister &i) {
-	throw std::runtime_error("Not implemented");
+	std::stringstream ss;
+	switch (i.operation) {
+		case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::And:
+			ss << (i.negate ? "BIC" : "AND");
+			break;
+		case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::Or:
+			ss << "ORR";
+			break;
+		case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::Xor:
+			ss << "EOR";
+			break;
+		case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::AndSetFlags:
+			ss << (i.negate ? "BICS" : "ANDS");
+			break;
+		default:
+			throw std::runtime_error("Invalid operation");
+	}
+
+	ss << ' ' << gp_reg_name(i.destinationReg, i.is64Bit) << ", "
+	   << gp_reg_name_zero(i.operand1Reg, i.is64Bit) << ", " << gp_reg_name_zero(i.operand2Reg, i.is64Bit);
+
+	if (i.shiftAmount > 0) {
+		switch (i.shiftType) {
+			case InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::LogicalShiftLeft:
+				ss << "LSL";
+				break;
+			case InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::LogicalShiftRight:
+				ss << "LSR";
+				break;
+			case InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::ArythmeticShiftRight:
+				ss << "ASR";
+				break;
+			case InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::RotateRight:
+				ss << "ROR";
+				break;
+			default:
+				throw std::runtime_error("Invalid shift type");
+		}
+		ss << ", #" << i.shiftAmount;
+	}
+
+	return ss.str();
 }
 
 std::string disassembly::to_pretty_string(const InstructionDefs::Reserved::ReservedCall &i) {
