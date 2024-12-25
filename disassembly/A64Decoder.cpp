@@ -31,19 +31,19 @@ void find_instruction_type(std::map<mask_values_t, EnumType>& mask_type_map, uin
 	}
 }
 
-// Top-level -> Data processing -> (op1 field)
-static std::map<mask_values_t, InstructionType> data_proc_op1 {
+// Top-level -> Data processing (immediate) -> (op1 field)
+static std::map<mask_values_t, InstructionType> data_proc_imm_op1 {
 		{ mask_values_t(0b1110, 0b0100), InstructionType::AddOrSubImmediate },
 		{ mask_values_t(0b1100, 0b0000), InstructionType::PcRelativeAddressing },
 		{ mask_values_t(0b1110, 0b1010), InstructionType::MoveWideImmediate }
 };
-InstructionType decode_data_processing_type(uint32_t raw_instruction) {
+InstructionType decode_data_processing_imm_type(uint32_t raw_instruction) {
 	// op0 unused for now
 	const uint32_t op0 = raw_instruction >> 29 & 0b11;
 	const uint32_t op1 = raw_instruction >> 22 & 0b1111;
 
 	InstructionType result = InstructionType::Undefined;
-	find_instruction_type(data_proc_op1, op1, result);
+	find_instruction_type(data_proc_imm_op1, op1, result);
 	return result;
 }
 
@@ -132,7 +132,7 @@ InstructionType decode_reserved(uint32_t raw_instruction) {
 
 typedef InstructionType (*decode_sublevel_instruction_t)(uint32_t);
 static std::map<mask_values_t, decode_sublevel_instruction_t> top_level_op1 {
-		{ mask_values_t(0b1110, 0b1000), &decode_data_processing_type },
+		{ mask_values_t(0b1110, 0b1000), &decode_data_processing_imm_type },
 		{ mask_values_t(0b1110, 0b1010), &decode_branches_exc_sys },
 		{ mask_values_t(0b0101, 0b0100), &decode_load_and_store_type }
 };
