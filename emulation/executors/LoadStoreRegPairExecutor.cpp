@@ -11,15 +11,15 @@ void LoadStoreRegPairExecutor::execute(const InstructionDefs::LoadsAndStores::Lo
 
 	const auto cpu = this->get_cpu().get();
 
-	const uint8_t reg_indexes[2] = {instruction.first_reg_index, instruction.second_reg_index};
-	for (uint8_t reg_index : reg_indexes) {
-		const auto virtual_address = InstructionDefs::IndexingHelpers::calc_next_address(
+	auto virtual_address = InstructionDefs::IndexingHelpers::calc_next_address(
 				instruction.encoding,
 				this->get_cpu(),
 				instruction.immediate_value,
 				instruction.base_reg,
 				instruction.is_wide);
 
+	const uint8_t reg_indexes[2] = {instruction.first_reg_index, instruction.second_reg_index};
+	for (uint8_t reg_index : reg_indexes) {
 		if (instruction.is_load) {
 			if (instruction.is_wide) {
 				cpu->writeGpRegister64(reg_index, cpu->getMemory().read<uint64_t>(virtual_address));
@@ -36,5 +36,7 @@ void LoadStoreRegPairExecutor::execute(const InstructionDefs::LoadsAndStores::Lo
 				cpu->getMemory().write(virtual_address, cpu->readGpRegister32(reg_index));
 			}
 		}
+
+		virtual_address += instruction.is_wide ? sizeof(uint64_t) : sizeof(uint32_t);
 	}
 }
