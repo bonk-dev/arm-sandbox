@@ -77,4 +77,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/data_proc_register/LogicalShiftedRegister.cpp
         disassembly/instructions/data_proc_register/LogicalShiftedRegister.h
         disassembly/instructions/init_helpers.h
+        emulation/executors/data_proc_reg/LogicalShiftedRegisterExecutor.cpp
+        emulation/executors/data_proc_reg/LogicalShiftedRegisterExecutor.h
 )

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <format>
 #include "disassembly/A64Decoder.h"
 #include "disassembly/disassembly.h"
@@ -13,6 +12,7 @@
 #include "loaders/elf/ElfLoader.h"
 #include "emulation/executors/UnconditionalBranchRegisterExecutor.h"
 #include "emulation/executors/begsi/HintExecutor.h"
+#include "emulation/executors/data_proc_reg/LogicalShiftedRegisterExecutor.h"
 #include "emulation/executors/reserved/ReservedCallExecutor.h"
 #include "emulation/libraries/DummyNamePrinter.h"
 #include "emulation/libraries/libc/Puts.h"
@@ -48,6 +48,7 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm, sharedCpu);
 	map_ep<Executors::Reserved::ReservedCallExecutor>(executors, InstructionType::ReservedCall, sharedCpu, mapper);
 	map_e<Executors::Begsi::HintExecutor>(executors, InstructionType::Hint, sharedCpu);
+	map_e<Executors::DataProcReg::LogicalShiftedRegisterExecutor>(executors, InstructionType::LogicalShiftedRegister, sharedCpu);
 
 	return executors;
 }

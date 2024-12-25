@@ -226,6 +226,10 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::Uncondit
 	return ss.str();
 }
 
+std::string disassembly::to_pretty_string(const InstructionDefs::DataProcReg::LogicalShiftedRegister &i) {
+	throw std::runtime_error("Not implemented");
+}
+
 std::string disassembly::to_pretty_string(const InstructionDefs::Reserved::ReservedCall &i) {
 	std::stringstream ss;
 	ss << "UDF type: " << std::hex << std::showbase << static_cast<uint32_t>(i.call_type) << ", symbol: #" << i.immediate;
