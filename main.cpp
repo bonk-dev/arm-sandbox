@@ -69,15 +69,6 @@ int read_elf_main(const char* path) {
 		"__libc_start_main",
 		std::make_unique<Emulation::Libraries::LibC::LibCStartMain>());
 	mapper->registerLibraryImplementation(
-		"__cxa_finalize",
-		std::make_unique<Emulation::Libraries::SymbolNotImplemented>("__cxa_finalize"));
-	mapper->registerLibraryImplementation(
-		"__gmon_start__",
-		std::make_unique<Emulation::Libraries::SymbolNotImplemented>("__gmon_start__"));
-	mapper->registerLibraryImplementation(
-		"abort",
-		std::make_unique<Emulation::Libraries::SymbolNotImplemented>("abort")) ;
-	mapper->registerLibraryImplementation(
 		"puts",
 		std::make_unique<Emulation::Libraries::LibC::Puts>());
 

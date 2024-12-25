@@ -2,6 +2,7 @@
 #include "../../disassembly/instructions/reserved/ReservedCall.h"
 #include <stdexcept>
 
+#include "SymbolNotImplemented.h"
 #include "../../disassembly/instructions/begsi/UnconditionalBranchImmediate.h"
 #include "../../disassembly/instructions/begsi/UnconditionalBranchRegister.h"
 
@@ -29,6 +30,14 @@ virtual_address_t Emulation::Libraries::Mapper::mapLibraryImplementation(const c
 
 	if (!this->_linkingTableAddress.has_value()) {
 		throw std::runtime_error("Linking table has not been allocated yet");
+	}
+
+	auto symIter = this->_implementations->find(symbolName);
+	if (symIter == this->_implementations->end()) {
+		std::cout << "[Mapper] Symbol \"" << symbolName << "\" doesn't have an implementation. Replacing with SymbolNotImplemented" << std::endl;
+		this->registerLibraryImplementation(
+			symbolName,
+			std::make_unique<SymbolNotImplemented>(symbolName));
 	}
 
     auto sym = this->_implementations->at(symbolName);
