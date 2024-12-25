@@ -34,7 +34,7 @@ virtual_address_t Emulation::Libraries::Mapper::mapLibraryImplementation(const c
     auto sym = this->_implementations->at(symbolName);
 
 	// * 2, because each symbol has two instructions: UDF and RET
-	virtual_address_t jumpAddress = this->_linkingTableAddress.value() + (sym->index * 2);
+	virtual_address_t jumpAddress = this->_linkingTableAddress.value() + (sym->index * sizeof(uint32_t) * 2);
 
 	const InstructionDefs::Reserved::ReservedCall reservedCall(
 			InstructionDefs::Reserved::ReservedCalls::LibraryCall, sym->index);
