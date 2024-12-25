@@ -30,6 +30,10 @@ void AArch64Cpu::writeGpRegister64(regindex_t index, uint64_t val) {
 	}
 }
 
+void AArch64Cpu::writeGpRegister64(Emulation::Registers registerName, const uint64_t val) {
+	writeGpRegister64(static_cast<regindex_t>(registerName), val);
+}
+
 uint32_t AArch64Cpu::readGpRegister32(regindex_t index) const {
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:

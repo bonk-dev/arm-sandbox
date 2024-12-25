@@ -19,6 +19,7 @@ public:
 
     void writeGpRegister32(regindex_t index, uint32_t val);
     void writeGpRegister64(regindex_t index, uint64_t val);
+	void writeGpRegister64(Emulation::Registers registerName, uint64_t val);
 
 	[[nodiscard]] uint64_t getProgramCounter() const;
 	void setProgramCounter(uint64_t pc);
