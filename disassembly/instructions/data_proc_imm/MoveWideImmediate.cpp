@@ -10,8 +10,8 @@ uint8_t decode_left_shift(uint32_t encoded) {
 	uint8_t divided_by_16 = encoded >> 21 & 0b11;
 	const bool is_64bit = encoded >> 31 & 1;
 
-	if (divided_by_16 != 1 && !is_64bit) {
-		throw std::runtime_error("32-bit MOV (wide immediate) cannot have a left shift value different than 16");
+	if (divided_by_16 != 1 && divided_by_16 != 0 && !is_64bit) {
+		throw std::runtime_error("32-bit MOV (wide immediate) cannot have a left shift value different than 16 or 0");
 	}
 
 	// shifting to the left by 4 bits multiplies by 16 (2^4)
