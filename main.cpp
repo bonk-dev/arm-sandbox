@@ -14,7 +14,6 @@
 #include "emulation/executors/begsi/HintExecutor.h"
 #include "emulation/executors/data_proc_reg/LogicalShiftedRegisterExecutor.h"
 #include "emulation/executors/reserved/ReservedCallExecutor.h"
-#include "emulation/libraries/SymbolNotImplemented.h"
 #include "emulation/libraries/libc/LibCStartMain.h"
 #include "emulation/libraries/libc/Puts.h"
 
@@ -64,7 +63,7 @@ int read_elf_main(const char* path) {
 
 	const auto mapper = std::make_shared<Emulation::Libraries::Mapper>();
 
-	// Register stub implementations for some basic symbols
+	// Register emulated functions
 	mapper->registerLibraryImplementation(
 		"__libc_start_main",
 		std::make_unique<Emulation::Libraries::LibC::LibCStartMain>());
