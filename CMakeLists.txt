@@ -72,4 +72,6 @@ add_executable(arm_sandbox main.cpp
         emulation/exceptions/EmulSegFault.h
         disassembly/instructions/begsi/Hint.h
         disassembly/instructions/begsi/Hint.cpp
+        emulation/executors/begsi/HintExecutor.cpp
+        emulation/executors/begsi/HintExecutor.h
 )
