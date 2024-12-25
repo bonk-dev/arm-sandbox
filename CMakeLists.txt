@@ -74,4 +74,7 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/begsi/Hint.cpp
         emulation/executors/begsi/HintExecutor.cpp
         emulation/executors/begsi/HintExecutor.h
+        disassembly/instructions/data_proc_register/LogicalShiftedRegister.cpp
+        disassembly/instructions/data_proc_register/LogicalShiftedRegister.h
+        disassembly/instructions/init_helpers.h
 )
