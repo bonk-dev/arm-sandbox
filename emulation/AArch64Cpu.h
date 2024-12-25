@@ -4,6 +4,7 @@
 #include <vector>
 #include "CpuVirtualMemory.h"
 #include "emu_types.h"
+#include "registers.h"
 
 constexpr size_t AARCH64_GENERAL_PURPOSE_REGISTERS = 31;
 
@@ -14,6 +15,10 @@ private:
 
 	std::vector<uint64_t> _threads;
 	std::unique_ptr<CpuVirtualMemory> _memory;
+
+	virtual_address_t _cleanExitAddress;
+	int _exitCode;
+	bool _halt;
 public:
     AArch64Cpu();
 
@@ -34,4 +39,25 @@ public:
 	void createThread(uint64_t id) const;
 
 	[[nodiscard]] CpuVirtualMemory & getMemory() const;
+
+	[[nodiscard]] virtual_address_t getCleanExitAddress() const;
+	void setCleanExitAddress(virtual_address_t address);
+
+    /**
+     * Checks whether the execution shall not continue
+     * @return True if the execution should be stopped
+     */
+    [[nodiscard]] bool isHalted() const;
+
+    /**
+     * Gets status code returned by the emulated app
+     * @return The status code returned by the emulated app
+     */
+    [[nodiscard]] int getExitCode() const;
+
+    /**
+     * Halts further execution of the binary
+     * @param statusCode The status code returned by main()
+     */
+    void haltExecution(int statusCode);
 };

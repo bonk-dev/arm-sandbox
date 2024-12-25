@@ -4,7 +4,10 @@
 AArch64Cpu::AArch64Cpu() : _memory(std::make_unique<CpuVirtualMemory>()),
 													 _programCounter(0),
 													 _threads(),
-													 _generalRegisters(AARCH64_GENERAL_PURPOSE_REGISTERS) {
+													 _generalRegisters(AARCH64_GENERAL_PURPOSE_REGISTERS),
+													 _cleanExitAddress(),
+													 _halt(),
+													 _exitCode() {
 	this->createThread(AARCH64_MAIN_THREAD_ID);
 }
 
@@ -54,6 +57,27 @@ uint64_t AArch64Cpu::readGpRegister64(regindex_t index) const {
 
 CpuVirtualMemory & AArch64Cpu::getMemory() const {
 	return *this->_memory;
+}
+
+virtual_address_t AArch64Cpu::getCleanExitAddress() const {
+	return this->_cleanExitAddress;
+}
+
+void AArch64Cpu::setCleanExitAddress(virtual_address_t address) {
+	this->_cleanExitAddress = address;
+}
+
+bool AArch64Cpu::isHalted() const {
+	return this->_halt;
+}
+
+int AArch64Cpu::getExitCode() const {
+	return this->_exitCode;
+}
+
+void AArch64Cpu::haltExecution(const int statusCode) {
+	this->_halt = true;
+	this->_exitCode = statusCode;
 }
 
 uint64_t AArch64Cpu::getProgramCounter() const {
