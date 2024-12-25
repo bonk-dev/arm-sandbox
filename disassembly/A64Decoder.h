@@ -6,6 +6,7 @@
 
 enum class InstructionType {
 	AddOrSubImmediate,
+	Hint,
 	UnconditionalBranchImmediate,
 	UnconditionalBranchRegister,
 	PcRelativeAddressing,

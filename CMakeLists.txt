@@ -70,4 +70,6 @@ add_executable(arm_sandbox main.cpp
         emulation/libraries/libc/Puts.h
         emulation/exceptions/EmulSegFault.cpp
         emulation/exceptions/EmulSegFault.h
+        disassembly/instructions/begsi/Hint.h
+        disassembly/instructions/begsi/Hint.cpp
 )
