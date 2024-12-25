@@ -85,6 +85,14 @@ int read_elf_main(const char* path) {
 	mapper->allocateLinkingSegment(cpu->getMemory());
 	loader.linkSymbols(*mapper, cpu->getMemory());
 
+	// Allocate clean exit instruction
+	const virtual_address_t cleanExitAddr = cpu->getMemory().allocateSegment(sizeof(uint32_t));
+	const InstructionDefs::Reserved::ReservedCall reservedCall(
+		InstructionDefs::Reserved::ReservedCalls::Exit,
+		InstructionDefs::Reserved::IMM_EXIT_CLEAN_EXIT);
+	cpu->getMemory().write(cleanExitAddr, reservedCall.encode());
+	cpu->setCleanExitAddress(cleanExitAddr);
+
 	std::cout << "[ElfMain] Entry point: " << std::hex << std::showbase << loader.getEntryPoint() << std::endl;
 	cpu->setProgramCounter(loader.getEntryPoint());
 
@@ -108,6 +116,9 @@ int read_elf_main(const char* path) {
 				static_cast<int>(type)));
 		}
 		executor->second->decodeAndExecute(dec.getRawInstruction());
+		if (cpu->isHalted()) {
+			break;
+		}
 
 		virtual_address_t newPc = cpu->getProgramCounter();
 		if (newPc == pc) {
@@ -123,7 +134,12 @@ int read_elf_main(const char* path) {
 	 	type = dec.decodeNextType(encodedInstruction);
 	}
 
-	std::cerr << "[ElfMain] Undefined instruction: " << std::hex << std::showbase << encodedInstruction << std::endl;
+	if (!cpu->isHalted()) {
+		std::cerr << "[ElfMain] Undefined instruction: " << std::hex << std::showbase << encodedInstruction << std::endl;
+	}
+	else {
+		std::cout << "[ElfMain] CPU halted. Exit code: " << cpu->getExitCode() << std::endl;
+	}
 
 	return 0;
 }
