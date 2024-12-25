@@ -79,6 +79,21 @@ InstructionType decode_branches_exc_sys(uint32_t raw_instruction) {
 	return result;
 }
 
+// Top-level -> Data processing (register) -> (op1 field)
+static std::map<mask_values_t, InstructionType> data_proc_imm_op1zero_op2 {
+			{ mask_values_t(0b1000, 0b0000), InstructionType::LogicalShiftedRegister }
+};
+InstructionType decode_data_processing_register_type(uint32_t raw_instruction) {
+	const uint32_t op1 = raw_instruction >> 28 & 0b1;
+	const uint32_t op2 = raw_instruction >> 21 & 0b1111;
+
+	auto result = InstructionType::Undefined;
+	if (op1 == 0) {
+		find_instruction_type(data_proc_imm_op1zero_op2, op2, result);
+	}
+	return result;
+}
+
 // Top-level -> Load and store -> (op0 field) -> (op2 field)
 static std::map<mask_values_t , std::map<mask_values_t, InstructionType>> load_and_store_op0_op2 {
 		{
@@ -134,6 +149,7 @@ typedef InstructionType (*decode_sublevel_instruction_t)(uint32_t);
 static std::map<mask_values_t, decode_sublevel_instruction_t> top_level_op1 {
 		{ mask_values_t(0b1110, 0b1000), &decode_data_processing_imm_type },
 		{ mask_values_t(0b1110, 0b1010), &decode_branches_exc_sys },
+		{ mask_values_t(0b0111, 0b0101), &decode_data_processing_register_type },
 		{ mask_values_t(0b0101, 0b0100), &decode_load_and_store_type }
 };
 InstructionType A64Decoder::decodeNextType(const uint32_t encodedInstruction) {
