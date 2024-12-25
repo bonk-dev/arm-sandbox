@@ -98,7 +98,12 @@ int read_elf_main(const char* path) {
 		std::cout << "[ElfMain] Program counter: " << std::hex << std::showbase << pc << std::endl;
 		std::cout << "[ElfMain] Instruction: " << std::hex << std::showbase << encodedInstruction << std::endl;
 
-		executors[type]->decodeAndExecute(encodedInstruction);
+		const auto& executor = executors.find(type);
+		if (executor == executors.end()) {
+			throw std::runtime_error(std::format("Instruction type \"{}\" does not have a valid executor!",
+				static_cast<int>(type)));
+		}
+		executor->second->decodeAndExecute(dec.getRawInstruction());
 
 		virtual_address_t newPc = cpu->getProgramCounter();
 		if (newPc == pc) {
