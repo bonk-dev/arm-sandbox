@@ -15,6 +15,7 @@
 #include "emulation/executors/data_proc_reg/LogicalShiftedRegisterExecutor.h"
 #include "emulation/executors/reserved/ReservedCallExecutor.h"
 #include "emulation/libraries/SymbolNotImplemented.h"
+#include "emulation/libraries/libc/LibCStartMain.h"
 #include "emulation/libraries/libc/Puts.h"
 
 template<class InstDetails>
@@ -66,7 +67,7 @@ int read_elf_main(const char* path) {
 	// Register stub implementations for some basic symbols
 	mapper->registerLibraryImplementation(
 		"__libc_start_main",
-		std::make_unique<Emulation::Libraries::SymbolNotImplemented>("__libc_start_main"));
+		std::make_unique<Emulation::Libraries::LibC::LibCStartMain>());
 	mapper->registerLibraryImplementation(
 		"__cxa_finalize",
 		std::make_unique<Emulation::Libraries::SymbolNotImplemented>("__cxa_finalize"));
