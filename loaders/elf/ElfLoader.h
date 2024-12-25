@@ -28,6 +28,11 @@ namespace Loaders {
 		 */
 		std::unique_ptr<std::vector<Elf64_Shdr*>> _elfSectionHeaders;
 
+		/**
+		 * @brief Address of the first instruction which should be executed
+		 */
+		virtual_address_t _entryPoint;
+
 		size_t _relaPltOffset;
 		size_t _dynStrOffset;
 		size_t _dynSymOffset;
@@ -67,6 +72,12 @@ namespace Loaders {
 		 * @brief This method will parse the ELF file and return abstracted info about the executable
 		 */
 		void parse();
+
+		/**
+		 * Get the ELF entry point
+		 * @return The entry point found in the ELF header
+		 */
+		[[nodiscard]] virtual_address_t getEntryPoint() const;
 
 		/**
 		 * @brief Allocates appropriate sections in the virtual memory

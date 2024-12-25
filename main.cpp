@@ -86,6 +86,8 @@ int read_elf_main(const char* path) {
 	constexpr virtual_address_t intMainOffset = 0x640;
 	cpu->setProgramCounter(intMainOffset);
 
+	std::cout << "[ElfMain] Entry point: " << std::hex << std::showbase << loader.getEntryPoint() << std::endl;
+
 	auto executors = map_all_executors(cpu, mapper);
 	A64Decoder dec{};
 	InstructionType type;

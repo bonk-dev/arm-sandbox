@@ -35,6 +35,7 @@ namespace Loaders {
 
 	void ElfLoader::parse() {
 		auto elfHeader = this->_parseElf64Header();
+		this->_entryPoint = elfHeader->e_entry;
 
 		if (strncmp(reinterpret_cast<const char *>(&elfHeader->e_ident[EI_MAG0]), ELFMAG, sizeof(ELFMAG) - 1) != 0) {
 			throw std::runtime_error("Not an ELF file");
@@ -119,6 +120,10 @@ namespace Loaders {
 				_dynSymOffset = header->sh_offset;
 			}
 		}
+	}
+
+	virtual_address_t ElfLoader::getEntryPoint() const {
+		return this->_entryPoint;
 	}
 
 	void ElfLoader::allocateSections(CpuVirtualMemory& memory) {
