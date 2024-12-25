@@ -185,6 +185,15 @@ std::string disassembly::to_pretty_string(const InstructionDefs::LoadsAndStores:
 	return ss.str();
 }
 
+std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::Hint &i) {
+	switch (i.hintType) {
+		case InstructionDefs::Begsi::Hint::Type::Nop:
+			return "NOP";
+		default:
+			throw std::runtime_error("Unknown hint type");
+	}
+}
+
 std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::UnconditionalBranchImmediate &i) {
 	std::stringstream ss;
 
