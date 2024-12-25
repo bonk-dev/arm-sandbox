@@ -1,4 +1,5 @@
 #include "LibCStartMain.h"
+#include "../../registers.h"
 
 void Emulation::Libraries::LibC::LibCStartMain::execute(AArch64Cpu &cpu) {
     const virtual_address_t userEntryPointAddress = cpu.readGpRegister64(0);
@@ -19,4 +20,8 @@ void Emulation::Libraries::LibC::LibCStartMain::execute(AArch64Cpu &cpu) {
     cpu.writeGpRegister64(1, argvPtr);
 
     cpu.setProgramCounter(userEntryPointAddress);
+
+    // this is a hack to jump to the clean address, because at this point LR is set to the instruction after __libc_start_main
+    // which is abort().
+    cpu.writeGpRegister64(Registers::Lr, cpu.getCleanExitAddress());
 }
