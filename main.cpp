@@ -14,7 +14,7 @@
 #include "emulation/executors/begsi/HintExecutor.h"
 #include "emulation/executors/data_proc_reg/LogicalShiftedRegisterExecutor.h"
 #include "emulation/executors/reserved/ReservedCallExecutor.h"
-#include "emulation/libraries/DummyNamePrinter.h"
+#include "emulation/libraries/SymbolNotImplemented.h"
 #include "emulation/libraries/libc/Puts.h"
 
 template<class InstDetails>
@@ -66,16 +66,16 @@ int read_elf_main(const char* path) {
 	// Register stub implementations for some basic symbols
 	mapper->registerLibraryImplementation(
 		"__libc_start_main",
-		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__libc_start_main"));
+		std::make_unique<Emulation::Libraries::SymbolNotImplemented>("__libc_start_main"));
 	mapper->registerLibraryImplementation(
 		"__cxa_finalize",
-		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__cxa_finalize"));
+		std::make_unique<Emulation::Libraries::SymbolNotImplemented>("__cxa_finalize"));
 	mapper->registerLibraryImplementation(
 		"__gmon_start__",
-		std::make_unique<Emulation::Libraries::DummyNamePrinter>("__gmon_start__"));
+		std::make_unique<Emulation::Libraries::SymbolNotImplemented>("__gmon_start__"));
 	mapper->registerLibraryImplementation(
 		"abort",
-		std::make_unique<Emulation::Libraries::DummyNamePrinter>("abort")) ;
+		std::make_unique<Emulation::Libraries::SymbolNotImplemented>("abort")) ;
 	mapper->registerLibraryImplementation(
 		"puts",
 		std::make_unique<Emulation::Libraries::LibC::Puts>());

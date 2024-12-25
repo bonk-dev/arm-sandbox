@@ -4,11 +4,11 @@
 #include "EmulatedSymbol.h"
 
 namespace Emulation::Libraries {
-    class DummyNamePrinter : public EmulatedSymbol {
+    class SymbolNotImplemented : public EmulatedSymbol {
 	private:
 		std::string _symbolName;
 	public:
-        DummyNamePrinter(const char* symbolName);
+        SymbolNotImplemented(const char* symbolName);
         void execute(AArch64Cpu& cpu) override;
     };
 }
