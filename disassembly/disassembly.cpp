@@ -256,44 +256,53 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::Uncondit
 
 std::string disassembly::to_pretty_string(const InstructionDefs::DataProcReg::LogicalShiftedRegister &i) {
 	std::stringstream ss;
-	switch (i.operation) {
-		case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::And:
-			ss << (i.negate ? "BIC" : "AND");
-			break;
-		case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::Or:
-			ss << "ORR";
-			break;
-		case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::Xor:
-			ss << "EOR";
-			break;
-		case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::AndSetFlags:
-			ss << (i.negate ? "BICS" : "ANDS");
-			break;
-		default:
-			throw std::runtime_error("Invalid operation");
+	// MOV Xd, Xn alias
+	if (i.operation == InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::Or
+		&& i.operand1Reg == 31
+		&& i.shiftAmount == 0
+		&& i.shiftType == InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::LogicalShiftLeft) {
+		ss << "MOV " << gp_reg_name(i.destinationReg) << ", " << gp_reg_name_zero(i.operand2Reg);
 	}
-
-	ss << ' ' << gp_reg_name(i.destinationReg, i.is64Bit) << ", "
-	   << gp_reg_name_zero(i.operand1Reg, i.is64Bit) << ", " << gp_reg_name_zero(i.operand2Reg, i.is64Bit);
-
-	if (i.shiftAmount > 0) {
-		switch (i.shiftType) {
-			case InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::LogicalShiftLeft:
-				ss << "LSL";
+	else {
+		switch (i.operation) {
+			case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::And:
+				ss << (i.negate ? "BIC" : "AND");
 				break;
-			case InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::LogicalShiftRight:
-				ss << "LSR";
+			case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::Or:
+				ss << "ORR";
 				break;
-			case InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::ArythmeticShiftRight:
-				ss << "ASR";
+			case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::Xor:
+				ss << "EOR";
 				break;
-			case InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::RotateRight:
-				ss << "ROR";
+			case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::AndSetFlags:
+				ss << (i.negate ? "BICS" : "ANDS");
 				break;
 			default:
-				throw std::runtime_error("Invalid shift type");
+				throw std::runtime_error("Invalid operation");
 		}
-		ss << ", #" << i.shiftAmount;
+
+		ss << ' ' << gp_reg_name(i.destinationReg, i.is64Bit) << ", "
+		   << gp_reg_name_zero(i.operand1Reg, i.is64Bit) << ", " << gp_reg_name_zero(i.operand2Reg, i.is64Bit);
+
+		if (i.shiftAmount > 0) {
+			switch (i.shiftType) {
+				case InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::LogicalShiftLeft:
+					ss << "LSL";
+					break;
+				case InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::LogicalShiftRight:
+					ss << "LSR";
+					break;
+				case InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::ArythmeticShiftRight:
+					ss << "ASR";
+					break;
+				case InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::RotateRight:
+					ss << "ROR";
+					break;
+				default:
+					throw std::runtime_error("Invalid shift type");
+			}
+			ss << ", #" << i.shiftAmount;
+		}
 	}
 
 	return ss.str();
