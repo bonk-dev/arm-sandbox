@@ -82,4 +82,12 @@ add_executable(arm_sandbox main.cpp
         emulation/executors/data_proc_reg/LogicalShiftedRegisterExecutor.h
         emulation/libraries/libc/LibCStartMain.cpp
         emulation/libraries/libc/LibCStartMain.h
+        emulation/filesystem/VirtualFileSystem.cpp
+        emulation/filesystem/VirtualFileSystem.h
+        emulation/filesystem/File.h
+        emulation/filesystem/EmulatedFile.cpp
+        emulation/filesystem/EmulatedFile.h
+        emulation/libraries/libc/FOpen.cpp
+        emulation/libraries/libc/FOpen.h
+        emulation/filesystem/VirtualFileStruct.h
 )
