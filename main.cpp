@@ -4,7 +4,7 @@
 #include "disassembly/disassembly.h"
 #include "emulation/AArch64Cpu.h"
 #include "emulation/executors/data_proc_imm/AddSubImmediateExecutor.h"
-#include "emulation/executors/LoadStoreRegPairExecutor.h"
+#include "emulation/executors/loads_and_stores/LoadStoreRegPairExecutor.h"
 #include "emulation/executors/data_proc_imm/FormPcRelAddressExecutor.h"
 #include "emulation/executors/begsi/UnconditionalBranchImmediateExecutor.h"
 #include "emulation/executors/data_proc_imm/MoveWideImmediateExecutor.h"
@@ -44,7 +44,7 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 	map_e<Executors::DataProcImm::MoveWideImmediateExecutor>(executors, InstructionType::MoveWideImmediate, sharedCpu);
 	map_e<Executors::Begsi::UnconditionalBranchImmediateExecutor>(executors, InstructionType::UnconditionalBranchImmediate, sharedCpu);
 	map_e<Executors::Begsi::UnconditionalBranchRegisterExecutor>(executors, InstructionType::UnconditionalBranchRegister, sharedCpu);
-	map_e<LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair, sharedCpu);
+	map_e<Executors::LoadsAndStores::LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair, sharedCpu);
 	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm, sharedCpu);
 	map_ep<Executors::Reserved::ReservedCallExecutor>(executors, InstructionType::ReservedCall, sharedCpu, mapper);
 	map_e<Executors::Begsi::HintExecutor>(executors, InstructionType::Hint, sharedCpu);
