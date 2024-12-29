@@ -1,9 +1,9 @@
 #include "UnconditionalBranchImmediateExecutor.h"
 
-UnconditionalBranchImmediateExecutor::UnconditionalBranchImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
+Executors::Begsi::UnconditionalBranchImmediateExecutor::UnconditionalBranchImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
 	: BranchingExecutor<InstructionDefs::Begsi::UnconditionalBranchImmediate>(cpu) {}
 
-void UnconditionalBranchImmediateExecutor::execute(const InstructionDefs::Begsi::UnconditionalBranchImmediate &instruction) {
+void Executors::Begsi::UnconditionalBranchImmediateExecutor::execute(const InstructionDefs::Begsi::UnconditionalBranchImmediate &instruction) {
 	uint64_t pc = this->get_cpu()->getProgramCounter();
 	this->branchTo(
 			pc + instruction.immediate,
