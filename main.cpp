@@ -16,6 +16,7 @@
 #include "emulation/executors/reserved/ReservedCallExecutor.h"
 #include "emulation/libraries/libc/LibCStartMain.h"
 #include "emulation/libraries/libc/Puts.h"
+#include "emulation/libraries/libc/FOpen.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -70,6 +71,9 @@ int read_elf_main(const char* path) {
 	mapper->registerLibraryImplementation(
 		"puts",
 		std::make_unique<Emulation::Libraries::LibC::Puts>());
+	mapper->registerLibraryImplementation(
+		"fopen",
+		std::make_unique<Emulation::Libraries::LibC::FOpen>());
 
 	// Dynamic link
 	mapper->allocateLinkingSegment(cpu->getMemory());
