@@ -1,9 +1,9 @@
 #include "MoveWideImmediateExecutor.h"
 
-MoveWideImmediateExecutor::MoveWideImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
+Executors::DataProcImm::MoveWideImmediateExecutor::MoveWideImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
 	: ExecutorBaseT<InstructionDefs::DataProcImm::MoveWideImmediate>(cpu) {}
 
-void MoveWideImmediateExecutor::execute(const InstructionDefs::DataProcImm::MoveWideImmediate &instruction) {
+void Executors::DataProcImm::MoveWideImmediateExecutor::execute(const InstructionDefs::DataProcImm::MoveWideImmediate &instruction) {
 	uint64_t result;
 	switch (instruction.op_type) {
 		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::Unallocated:
