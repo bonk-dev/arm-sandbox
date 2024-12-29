@@ -5,7 +5,7 @@
 #include "emulation/AArch64Cpu.h"
 #include "emulation/executors/data_proc_imm/AddSubImmediateExecutor.h"
 #include "emulation/executors/LoadStoreRegPairExecutor.h"
-#include "emulation/executors/FormPcRelAddressExecutor.h"
+#include "emulation/executors/data_proc_imm/FormPcRelAddressExecutor.h"
 #include "emulation/executors/UnconditionalBranchImmediateExecutor.h"
 #include "emulation/executors/MoveWideImmediateExecutor.h"
 #include "emulation/executors/loads_and_stores/LoadStoreRegUnsignedImm.h"
@@ -40,7 +40,7 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 	std::map<InstructionType, std::unique_ptr<ExecutorBase>> executors;
 
 	map_e<Executors::DataProcImm::AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate, sharedCpu);
-	map_e<FormPcRelAddressExecutor>(executors, InstructionType::PcRelativeAddressing, sharedCpu);
+	map_e<Executors::DataProcImm::FormPcRelAddressExecutor>(executors, InstructionType::PcRelativeAddressing, sharedCpu);
 	map_e<MoveWideImmediateExecutor>(executors, InstructionType::MoveWideImmediate, sharedCpu);
 	map_e<UnconditionalBranchImmediateExecutor>(executors, InstructionType::UnconditionalBranchImmediate, sharedCpu);
 	map_e<UnconditionalBranchRegisterExecutor>(executors, InstructionType::UnconditionalBranchRegister, sharedCpu);
