@@ -18,6 +18,9 @@ constexpr uint64_t AARCH64_MAIN_THREAD_ID = 1;
  */
 class CpuVirtualMemory {
 private:
+	/**
+	 * @brief Key: virtual segment start; Value: segment data
+	 */
 	std::map<std::uint64_t, std::vector<std::byte>> _segments;
 
 	/**
