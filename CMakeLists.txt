@@ -53,7 +53,7 @@ add_executable(arm_sandbox main.cpp
         emulation/executors/ExecutorBaseTemplated.h
         disassembly/instructions/begsi/UnconditionalBranchRegister.h
         disassembly/instructions/begsi/UnconditionalBranchRegister.cpp
-        emulation/executors/BranchingExecutor.h
+        emulation/executors/begsi/BranchingExecutor.h
         emulation/executors/begsi/UnconditionalBranchRegisterExecutor.h
         emulation/executors/begsi/UnconditionalBranchRegisterExecutor.cpp
         emulation/libraries/SymbolNotImplemented.cpp

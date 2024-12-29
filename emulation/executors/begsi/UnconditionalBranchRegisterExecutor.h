@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../BranchingExecutor.h"
+#include "BranchingExecutor.h"
 #include "../../../disassembly/instructions/begsi/UnconditionalBranchRegister.h"
 
 namespace Executors::Begsi {
