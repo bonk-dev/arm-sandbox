@@ -68,7 +68,7 @@ void CpuVirtualMemory::write(uintptr_t addr, uint32_t value) {
 			throw Emulation::Exceptions::EmulSegFault();
 		}
 
-		auto* ptr = reinterpret_cast<uint64_t*>(segment.data() + offset);
+		auto* ptr = reinterpret_cast<uint32_t*>(segment.data() + offset);
 		*ptr = value;
 	}
 	std::cout << ss.str().c_str() << std::endl;
