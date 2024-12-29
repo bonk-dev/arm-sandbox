@@ -7,7 +7,8 @@ AArch64Cpu::AArch64Cpu() : _memory(std::make_unique<CpuVirtualMemory>()),
 													 _generalRegisters(AARCH64_GENERAL_PURPOSE_REGISTERS),
 													 _cleanExitAddress(),
 													 _halt(),
-													 _exitCode() {
+													 _exitCode(),
+													 _fileSystem() {
 	this->createThread(AARCH64_MAIN_THREAD_ID);
 }
 
@@ -90,4 +91,8 @@ void AArch64Cpu::setProgramCounter(uint64_t pc) {
 
 void AArch64Cpu::createThread(const uint64_t id) const {
 	this->getMemory().createStack(id, 8 * 1024 * 1024);
+}
+
+Filesystem::VirtualFileSystem &AArch64Cpu::getFs() {
+	return this->_fileSystem;
 }

@@ -5,6 +5,7 @@
 #include "CpuVirtualMemory.h"
 #include "emu_types.h"
 #include "registers.h"
+#include "filesystem/VirtualFileSystem.h"
 
 constexpr size_t AARCH64_GENERAL_PURPOSE_REGISTERS = 31;
 
@@ -19,6 +20,8 @@ private:
 	virtual_address_t _cleanExitAddress;
 	int _exitCode;
 	bool _halt;
+
+	Filesystem::VirtualFileSystem _fileSystem;
 public:
     AArch64Cpu();
 
@@ -60,4 +63,6 @@ public:
      * @param statusCode The status code returned by main()
      */
     void haltExecution(int statusCode);
+
+	Filesystem::VirtualFileSystem& getFs();
 };
