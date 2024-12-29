@@ -53,6 +53,25 @@ public:
 			   std::vector<std::byte>::const_iterator begin,
 			   std::vector<std::byte>::difference_type size);
 
+	template<typename StructT>
+	void write(virtual_address_t address, const StructT& structT) {
+		if (_isStackArea(address)) {
+			throw std::runtime_error("Stack write not implemented");
+		}
+		else {
+			virtual_address_t base = 0;
+			auto& segment = this->_getSegment(address, base);
+			const size_t index = address - base;
+			const size_t end = sizeof(structT) + index - 1;
+			if (index >= segment.size() || end >= segment.size()) {
+				throw std::runtime_error("Emulation segmenation fault");
+			}
+
+			auto* ptr = reinterpret_cast<StructT*>(segment.data() + index);
+			*ptr = structT;
+		}
+	}
+
 	template<typename T>
 	T read(virtual_address_t virtualAddress) {
 		if (_isStackArea(virtualAddress)) {
