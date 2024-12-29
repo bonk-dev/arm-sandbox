@@ -3,7 +3,7 @@
 #include "disassembly/A64Decoder.h"
 #include "disassembly/disassembly.h"
 #include "emulation/AArch64Cpu.h"
-#include "emulation/executors/AddSubImmediateExecutor.h"
+#include "emulation/executors/data_proc_imm/AddSubImmediateExecutor.h"
 #include "emulation/executors/LoadStoreRegPairExecutor.h"
 #include "emulation/executors/FormPcRelAddressExecutor.h"
 #include "emulation/executors/UnconditionalBranchImmediateExecutor.h"
@@ -39,7 +39,7 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 																		   const std::shared_ptr<Emulation::Libraries::Mapper>& mapper) {
 	std::map<InstructionType, std::unique_ptr<ExecutorBase>> executors;
 
-	map_e<AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate, sharedCpu);
+	map_e<Executors::DataProcImm::AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate, sharedCpu);
 	map_e<FormPcRelAddressExecutor>(executors, InstructionType::PcRelativeAddressing, sharedCpu);
 	map_e<MoveWideImmediateExecutor>(executors, InstructionType::MoveWideImmediate, sharedCpu);
 	map_e<UnconditionalBranchImmediateExecutor>(executors, InstructionType::UnconditionalBranchImmediate, sharedCpu);

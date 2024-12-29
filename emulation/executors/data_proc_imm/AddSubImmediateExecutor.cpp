@@ -1,9 +1,9 @@
 #include "AddSubImmediateExecutor.h"
 
-AddSubImmediateExecutor::AddSubImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
+Executors::DataProcImm::AddSubImmediateExecutor::AddSubImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
 	: ExecutorBaseT<InstructionDefs::DataProcImm::AddImmediate>(cpu) {}
 
-void AddSubImmediateExecutor::execute(const InstructionDefs::DataProcImm::AddImmediate& instruction) {
+void Executors::DataProcImm::AddSubImmediateExecutor::execute(const InstructionDefs::DataProcImm::AddImmediate& instruction) {
     const auto cpu = this->get_cpu().get();
 
     uint64_t val = instruction.is_64bit
