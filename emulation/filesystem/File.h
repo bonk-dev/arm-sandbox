@@ -13,6 +13,9 @@ namespace Filesystem {
 		[[nodiscard]] uint64_t getFileId() const {
 			return this->_fileId;
 		}
+		void setFileId(uint64_t fileId) {
+			this->_fileId = fileId;
+		}
 
 		[[nodiscard]] virtual std::string readString() = 0;
 	};
