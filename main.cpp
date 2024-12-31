@@ -1,5 +1,6 @@
 #include <iostream>
 #include <format>
+#include <iomanip>
 #include "disassembly/A64Decoder.h"
 #include "disassembly/disassembly.h"
 #include "emulation/AArch64Cpu.h"
@@ -112,8 +113,7 @@ int read_elf_main(const char* path) {
 	type = dec.decodeNextType(encodedInstruction);
 
 	while (type != InstructionType::Undefined) {
-		std::cout << "[ElfMain] Program counter: " << std::hex << std::showbase << pc << std::endl;
-		std::cout << "[ElfMain] Instruction: " << std::hex << std::showbase << encodedInstruction << std::endl;
+		std::cout << std::hex << std::noshowbase << "0x" << std::setfill('0') << std::setw(16) << pc << ": ";
 
 		const auto& executor = executors.find(type);
 		if (executor == executors.end()) {
