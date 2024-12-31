@@ -313,3 +313,69 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Reserved::Reser
 	ss << "UDF type: " << std::hex << std::showbase << static_cast<uint32_t>(i.call_type) << ", symbol: #" << i.immediate;
 	return ss.str();
 }
+
+std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::ConditionalBranchImmediate &i) {
+	std::stringstream ss;
+
+	ss << 'B';
+	if (i.isConsistent) {
+		ss << 'C';
+	}
+	ss << '.';
+
+	switch (i.condition) {
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::Equal:
+			ss << "EQ";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::NotEqual:
+			ss << "NE";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::CarrySet:
+			ss << "CS";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::CarryClear:
+			ss << "CC";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::Negative:
+			ss << "MI";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::NotNegative:
+			ss << "PL";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::OverflowSet:
+			ss << "VS";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::OverflowClear:
+			ss << "VC";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::Higher:
+			ss << "HI";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::LowerOrSame:
+			ss << "LS";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::GreaterOrEqual:
+			ss << "GE";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::LessThan:
+			ss << "LT";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::GreaterThan:
+			ss << "GT";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::LessOrEqual:
+			ss << "LE";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::Always:
+			ss << "AL";
+			break;
+		case InstructionDefs::Begsi::ConditionalBranchImmediate::Condition::Never:
+			ss << "NV";
+			break;
+	}
+
+	ss << " #";
+	insert_signed_hex(ss, i.immediate);
+
+	return ss.str();
+}
