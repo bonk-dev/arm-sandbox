@@ -17,6 +17,8 @@
 #include "emulation/libraries/libc/LibCStartMain.h"
 #include "emulation/libraries/libc/Puts.h"
 #include "emulation/libraries/libc/FOpen.h"
+#include "emulation/executors/begsi/ConditionalBranchImmediateExecutor.h"
+#include "emulation/filesystem/EmulatedFile.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -43,6 +45,7 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 	map_e<Executors::DataProcImm::AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate, sharedCpu);
 	map_e<Executors::DataProcImm::FormPcRelAddressExecutor>(executors, InstructionType::PcRelativeAddressing, sharedCpu);
 	map_e<Executors::DataProcImm::MoveWideImmediateExecutor>(executors, InstructionType::MoveWideImmediate, sharedCpu);
+	map_e<Executors::Begsi::ConditionalBranchImmediateExecutor>(executors, InstructionType::ConditionalBranchImmediate, sharedCpu);
 	map_e<Executors::Begsi::UnconditionalBranchImmediateExecutor>(executors, InstructionType::UnconditionalBranchImmediate, sharedCpu);
 	map_e<Executors::Begsi::UnconditionalBranchRegisterExecutor>(executors, InstructionType::UnconditionalBranchRegister, sharedCpu);
 	map_e<Executors::LoadsAndStores::LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair, sharedCpu);
