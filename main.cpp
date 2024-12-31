@@ -22,11 +22,6 @@
 #include "emulation/filesystem/EmulatedFile.h"
 #include "emulation/libraries/libc/FScanF.h"
 
-template<class InstDetails>
-void print_disassembly(InstDetails& i) {
-	std::cout << "Disassembly: " << disassembly::to_pretty_string(i) << std::endl;
-}
-
 template<typename ExecutorType>
 void map_e(std::map<InstructionType, std::unique_ptr<ExecutorBase>>& map, InstructionType instructionType, const std::shared_ptr<AArch64Cpu>& c) {
 	map[instructionType] = std::make_unique<ExecutorType>(c);
