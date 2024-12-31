@@ -90,4 +90,5 @@ add_executable(arm_sandbox main.cpp
         emulation/libraries/libc/FOpen.cpp
         emulation/libraries/libc/FOpen.h
         emulation/filesystem/VirtualFileStruct.h
+        emulation/nzcv.h
 )
