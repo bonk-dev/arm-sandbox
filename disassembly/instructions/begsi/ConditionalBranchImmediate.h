@@ -104,5 +104,5 @@ namespace InstructionDefs::Begsi {
 		Condition condition;
 
 		explicit ConditionalBranchImmediate(uint32_t encoded);
-	} UnconditionalBranchImmediateInstruction;
+	} ConditionalBranchImmediateInstruction;
 }
