@@ -95,4 +95,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/begsi/ConditionalBranchImmediate.cpp
         emulation/executors/begsi/ConditionalBranchImmediateExecutor.h
         emulation/executors/begsi/ConditionalBranchImmediateExecutor.cpp
+        emulation/libraries/libc/FScanF.cpp
+        emulation/libraries/libc/FScanF.h
 )

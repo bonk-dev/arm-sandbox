@@ -19,6 +19,7 @@
 #include "emulation/libraries/libc/FOpen.h"
 #include "emulation/executors/begsi/ConditionalBranchImmediateExecutor.h"
 #include "emulation/filesystem/EmulatedFile.h"
+#include "emulation/libraries/libc/FScanF.h"
 
 template<class InstDetails>
 void print_disassembly(InstDetails& i) {
@@ -77,6 +78,9 @@ int read_elf_main(const char* path) {
 	mapper->registerLibraryImplementation(
 		"fopen",
 		std::make_unique<Emulation::Libraries::LibC::FOpen>());
+	mapper->registerLibraryImplementation(
+			"__isoc23_fscanf",
+			std::make_unique<Emulation::Libraries::LibC::FScanF>());
 
 	// Dynamic link
 	mapper->allocateLinkingSegment(cpu->getMemory());
