@@ -91,6 +91,8 @@ public:
 		}
 	}
 
+	void* getUnsafePointer(virtual_address_t virtualAddress);
+
 	/**
 	 * Reads an std::string from a virtual char* (with boundary checks)
 	 * @param virtual_address The char* start

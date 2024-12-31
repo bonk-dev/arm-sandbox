@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <sstream>
 #include <iostream>
 #include <algorithm>
@@ -135,6 +134,10 @@ void CpuVirtualMemory::deleteStack(uint64_t threadId) {
 }
 
 std::string CpuVirtualMemory::readCString(virtual_address_t virtual_address) {
+	if (this->_isStackArea(virtual_address)) {
+		return this->getStack(AARCH64_MAIN_THREAD_ID)->readCString(virtual_address);
+	}
+
 	virtual_address_t base = 0;
 	const auto& segment = this->_getSegment(virtual_address, base);
 	const size_t index = virtual_address - base;
@@ -192,4 +195,16 @@ void CpuVirtualMemory::allocateSegment(virtual_address_t virtualAddress, size_t 
 
 void CpuVirtualMemory::freeSegment(virtual_address_t virtualAddress) {
 	this->_segments.erase(virtualAddress);
+}
+
+void *CpuVirtualMemory::getUnsafePointer(virtual_address_t virtualAddress) {
+	if (_isStackArea(virtualAddress)) {
+		return this->getStack(AARCH64_MAIN_THREAD_ID)->getUnsafePointer(virtualAddress);
+	}
+	else {
+		virtual_address_t base = 0;
+		auto &segment = this->_getSegment(virtualAddress, base);
+		const size_t index = virtualAddress - base;
+		return reinterpret_cast<void *>(segment.data() + index);
+	}
 }

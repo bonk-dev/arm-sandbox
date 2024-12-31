@@ -14,7 +14,8 @@ private:
 	std::unique_ptr<std::vector<std::byte>> _stackMemory;
 	size_t _stackPointer;
 
-	[[nodiscard]] size_t _getVectorOffset(virtual_address_t address) ;
+	[[nodiscard]] size_t _getVectorOffset(virtual_address_t address) const;
+	void* _getUnsafePointer(virtual_address_t address) const;
 public:
 	explicit CpuStack(size_t stackSize);
 
@@ -55,4 +56,7 @@ public:
 		const size_t vecOffset = this->_getVectorOffset(address);
 		*reinterpret_cast<T*>(this->_stackMemory->data() + vecOffset) = value;
 	}
+
+	[[nodiscard]] std::string readCString(virtual_address_t address) const;
+	[[nodiscard]] void* getUnsafePointer(virtual_address_t address) const;
 };

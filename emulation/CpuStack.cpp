@@ -1,5 +1,6 @@
 #include "CpuStack.h"
 #include <numeric>
+#include <iostream>
 
 CpuStack::CpuStack(size_t stackSize):
 	_stackMemory(std::make_unique<std::vector<std::byte>>(stackSize)),
@@ -11,11 +12,26 @@ void CpuStack::pop(size_t size) {
 	}
 }
 
-size_t CpuStack::_getVectorOffset(virtual_address_t address) {
+size_t CpuStack::_getVectorOffset(virtual_address_t address) const {
 	const size_t vectorOffset = Emulation::STACK_START - address;
 	if (vectorOffset >= this->_stackMemory->size()) {
 		throw std::runtime_error("Stack overflow");
 	}
 
 	return vectorOffset;
+}
+
+void *CpuStack::_getUnsafePointer(virtual_address_t address) const {
+	const size_t vecOffset = this->_getVectorOffset(address);
+	return this->_stackMemory->data() + vecOffset;
+}
+
+void *CpuStack::getUnsafePointer(virtual_address_t address) const {
+	std::cout << "[CpuStack] Unsafe access to " << std::showbase << std::hex << address << std::endl;
+	return this->_getUnsafePointer(address);
+}
+
+std::string CpuStack::readCString(virtual_address_t address) const {
+	char* ptr = reinterpret_cast<char*>(this->_getUnsafePointer(address));
+	return {ptr};
 }
