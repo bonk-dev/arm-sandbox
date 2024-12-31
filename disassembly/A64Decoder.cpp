@@ -50,6 +50,12 @@ InstructionType decode_data_processing_imm_type(uint32_t raw_instruction) {
 // Top-level -> Branches, Exception Generating and System instructions -> (op0 field) -> (op1 field)
 static std::map<mask_values_t, std::map<mask_values_t, InstructionType>> br_exc_sys_op0_op1 {
 		{
+			mask_values_t(0b111, 0b010),
+			{
+				{ mask_values_t(0b11000000000000, 0), InstructionType::ConditionalBranchImmediate }
+			}
+		},
+		{
 			mask_values_t(0b011, 0b000),
 			{
 					// 0,0 just means that there no other instructions with the same op0 field
