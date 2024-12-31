@@ -93,4 +93,6 @@ add_executable(arm_sandbox main.cpp
         emulation/nzcv.h
         disassembly/instructions/begsi/ConditionalBranchImmediate.h
         disassembly/instructions/begsi/ConditionalBranchImmediate.cpp
+        emulation/executors/begsi/ConditionalBranchImmediateExecutor.h
+        emulation/executors/begsi/ConditionalBranchImmediateExecutor.cpp
 )
