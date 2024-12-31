@@ -99,7 +99,7 @@ int read_elf_main(const char* path) {
 
 	// TODO: this feels awkward
 	// Add test file
-	cpu->getFs().addFile("/tmp/test2.txt", std::make_unique<Filesystem::EmulatedFile>("asd", 0));
+	cpu->getFs().addFile("/tmp/test2.txt", std::make_shared<Filesystem::EmulatedFile>("asd", 0));
 
 	std::cout << std::endl <<  "============ [main] Setup done. Starting the execution ============" << std::endl << std::endl;
 
