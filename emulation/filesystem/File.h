@@ -18,5 +18,6 @@ namespace Filesystem {
 		}
 
 		[[nodiscard]] virtual std::string readString() = 0;
+		[[nodiscard]] virtual void* getUnsafeDataPointer() = 0;
 	};
 }

@@ -10,3 +10,7 @@ std::string Filesystem::EmulatedFile::readString() {
 	_position += s.length();
 	return s;
 }
+
+void *Filesystem::EmulatedFile::getUnsafeDataPointer() {
+	return reinterpret_cast<void*>(_data.data());
+}

@@ -21,5 +21,6 @@ namespace Filesystem {
 		explicit EmulatedFile(const std::string& str, uint64_t fileId);
 
 		std::string readString() override;
+		void* getUnsafeDataPointer() override;
 	};
 }
