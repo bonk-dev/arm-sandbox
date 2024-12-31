@@ -11,6 +11,7 @@ constexpr size_t AARCH64_GENERAL_PURPOSE_REGISTERS = 31;
 
 class AArch64Cpu {
 private:
+	uint64_t _nzcvConditionRegister;
     std::vector<uint64_t> _generalRegisters;
 	uint64_t _programCounter;
 
@@ -34,6 +35,18 @@ public:
 
     [[nodiscard]] uint32_t readGpRegister32(regindex_t index) const;
     [[nodiscard]] uint64_t readGpRegister64(regindex_t index) const;
+
+	/**
+	 * Reads the NZCV register (condition flags)
+	 * @return NZCV register value
+	 */
+	[[nodiscard]] uint64_t readNzcvRegister() const;
+
+	/**
+	 * Writes a new value to the NZCV register, zeroing out bits 27:0 and 63:32 (these are reserved)
+	 * @param newValue The new NZCV reg. value
+	 */
+	void writeNzcvRegsiter(const uint64_t newValue);
 
 	/**
 	 * Creates a new thread with a specified id

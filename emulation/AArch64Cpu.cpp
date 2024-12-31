@@ -96,3 +96,11 @@ void AArch64Cpu::createThread(const uint64_t id) const {
 Filesystem::VirtualFileSystem &AArch64Cpu::getFs() {
 	return this->_fileSystem;
 }
+
+uint64_t AArch64Cpu::readNzcvRegister() const {
+	return this->_nzcvConditionRegister;
+}
+
+void AArch64Cpu::writeNzcvRegsiter(const uint64_t newValue) {
+	this->_nzcvConditionRegister = newValue & (0b1111 << 28);
+}
