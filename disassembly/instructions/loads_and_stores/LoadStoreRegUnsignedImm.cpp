@@ -103,5 +103,5 @@ InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm::LoadStoreRegUnsignedIm
 }
 
 bool InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm::get_is_prefetch() const {
-	return this->size == 64 && !this->is_simd && !this->is_load;
+	return this->size == 64 && !this->is_simd && !this->is_load && this->is_signed;
 }
