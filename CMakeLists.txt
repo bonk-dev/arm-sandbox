@@ -91,4 +91,6 @@ add_executable(arm_sandbox main.cpp
         emulation/libraries/libc/FOpen.h
         emulation/filesystem/VirtualFileStruct.h
         emulation/nzcv.h
+        disassembly/instructions/begsi/ConditionalBranchImmediate.h
+        disassembly/instructions/begsi/ConditionalBranchImmediate.cpp
 )
