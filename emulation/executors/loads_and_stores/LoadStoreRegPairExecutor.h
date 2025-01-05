@@ -7,8 +7,6 @@
 namespace Executors::LoadsAndStores {
 	class LoadStoreRegPairExecutor
 			: public ExecutorBaseT<InstructionDefs::LoadsAndStores::LoadStoreRegisterPair> {
-	private:
-		uintptr_t calc_next_address(InstructionDefs::LoadsAndStores::LoadStoreRegisterPair &instruction);
 	public:
 		void execute(
 				const InstructionDefs::LoadsAndStores::LoadStoreRegisterPair &instruction,
