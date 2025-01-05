@@ -6,23 +6,22 @@ namespace Executors::Begsi {
 	template<class InstructionDetailsT>
 	class BranchingExecutor : public ExecutorBaseT<InstructionDetailsT> {
 	protected:
-		explicit BranchingExecutor(const std::shared_ptr<AArch64Cpu> &cpu) : ExecutorBaseT<InstructionDetailsT>(cpu) {}
-
 		void branchTo(virtual_address_t destination, [[maybe_unused]] Emulation::BranchType branchType,
-					  [[maybe_unused]] bool isCondtitional, bool isLink);
+					  [[maybe_unused]] bool isCondtitional, bool isLink, AArch64Cpu& cpu);
 	};
 
 	template<class InstructionDetailsT>
 	void BranchingExecutor<InstructionDetailsT>::branchTo(virtual_address_t destination,
 														  [[maybe_unused]] Emulation::BranchType branchType,
-														  [[maybe_unused]] bool isCondtitional, bool isLink) {
-		uint64_t pc = this->get_cpu()->getProgramCounter();
+														  [[maybe_unused]] bool isCondtitional, bool isLink,
+														  AArch64Cpu& cpu) {
+		uint64_t pc = cpu.getProgramCounter();
 
 		if (isLink) {
-			this->get_cpu()->writeGpRegister64(30, pc + 4);
+			cpu.writeGpRegister64(30, pc + 4);
 		}
 
 		pc = destination;
-		this->get_cpu()->setProgramCounter(pc);
+		cpu.setProgramCounter(pc);
 	}
 }

@@ -13,8 +13,8 @@
 #include "emulation/libraries/libc/FScanF.h"
 
 template<typename ExecutorType>
-void map_e(std::map<InstructionType, std::unique_ptr<ExecutorBase>>& map, InstructionType instructionType, const std::shared_ptr<AArch64Cpu>& c) {
-	map[instructionType] = std::make_unique<ExecutorType>(c);
+void map_e(std::map<InstructionType, std::unique_ptr<ExecutorBase>>& map, InstructionType instructionType) {
+	map[instructionType] = std::make_unique<ExecutorType>();
 }
 
 template<typename ExecutorType, typename... Args>
@@ -25,21 +25,20 @@ void map_ep(
 	map[instructionType] = std::make_unique<ExecutorType>(std::forward<Args>(args)...);
 }
 
-std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const std::shared_ptr<AArch64Cpu>& sharedCpu,
-																		   const std::shared_ptr<Emulation::Libraries::Mapper>& mapper) {
+std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const std::shared_ptr<Emulation::Libraries::Mapper>& mapper) {
 	std::map<InstructionType, std::unique_ptr<ExecutorBase>> executors;
 
-	map_e<Executors::DataProcImm::AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate, sharedCpu);
-	map_e<Executors::DataProcImm::FormPcRelAddressExecutor>(executors, InstructionType::PcRelativeAddressing, sharedCpu);
-	map_e<Executors::DataProcImm::MoveWideImmediateExecutor>(executors, InstructionType::MoveWideImmediate, sharedCpu);
-	map_e<Executors::Begsi::ConditionalBranchImmediateExecutor>(executors, InstructionType::ConditionalBranchImmediate, sharedCpu);
-	map_e<Executors::Begsi::UnconditionalBranchImmediateExecutor>(executors, InstructionType::UnconditionalBranchImmediate, sharedCpu);
-	map_e<Executors::Begsi::UnconditionalBranchRegisterExecutor>(executors, InstructionType::UnconditionalBranchRegister, sharedCpu);
-	map_e<Executors::LoadsAndStores::LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair, sharedCpu);
-	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm, sharedCpu);
-	map_ep<Executors::Reserved::ReservedCallExecutor>(executors, InstructionType::ReservedCall, sharedCpu, mapper);
-	map_e<Executors::Begsi::HintExecutor>(executors, InstructionType::Hint, sharedCpu);
-	map_e<Executors::DataProcReg::LogicalShiftedRegisterExecutor>(executors, InstructionType::LogicalShiftedRegister, sharedCpu);
+	map_e<Executors::DataProcImm::AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate);
+	map_e<Executors::DataProcImm::FormPcRelAddressExecutor>(executors, InstructionType::PcRelativeAddressing);
+	map_e<Executors::DataProcImm::MoveWideImmediateExecutor>(executors, InstructionType::MoveWideImmediate);
+	map_e<Executors::Begsi::ConditionalBranchImmediateExecutor>(executors, InstructionType::ConditionalBranchImmediate);
+	map_e<Executors::Begsi::UnconditionalBranchImmediateExecutor>(executors, InstructionType::UnconditionalBranchImmediate);
+	map_e<Executors::Begsi::UnconditionalBranchRegisterExecutor>(executors, InstructionType::UnconditionalBranchRegister);
+	map_e<Executors::LoadsAndStores::LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair);
+	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm);
+	map_ep<Executors::Reserved::ReservedCallExecutor>(executors, InstructionType::ReservedCall, mapper);
+	map_e<Executors::Begsi::HintExecutor>(executors, InstructionType::Hint);
+	map_e<Executors::DataProcReg::LogicalShiftedRegisterExecutor>(executors, InstructionType::LogicalShiftedRegister);
 
 	return executors;
 }
@@ -86,7 +85,7 @@ int read_elf_main(const char* path) {
 	std::cout << "[ElfMain] Entry point: " << std::hex << std::showbase << loader.getEntryPoint() << std::endl;
 	cpu->setProgramCounter(loader.getEntryPoint());
 
-	auto executors = map_all_executors(cpu, mapper);
+	auto executors = map_all_executors(mapper);
 	A64Decoder dec{};
 	InstructionType type;
 
@@ -107,7 +106,7 @@ int read_elf_main(const char* path) {
 			throw std::runtime_error(std::format("Instruction type \"{}\" does not have a valid executor!",
 				static_cast<int>(type)));
 		}
-		executor->second->decodeAndExecute(dec.getRawInstruction());
+		executor->second->decodeAndExecute(dec.getRawInstruction(), *cpu);
 		if (cpu->isHalted()) {
 			break;
 		}
