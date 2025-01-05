@@ -5,7 +5,7 @@
 #include "../IndexingMode.h"
 
 namespace InstructionDefs::LoadsAndStores {
-	typedef struct LoadStoreRegUnsignedImm {
+	struct LoadStoreRegUnsignedImm {
 		/**
 		 * @var indexing_mode
 		 * @brief Defines how the address is calculated and wrote back (to the base register)
@@ -73,5 +73,5 @@ namespace InstructionDefs::LoadsAndStores {
 		explicit LoadStoreRegUnsignedImm(uint32_t encoded);
 		[[nodiscard]] bool get_is_prefetch() const;
 
-	} LoadStoreRegUnsignedImm;
+	};
 }

@@ -6,12 +6,12 @@
 
 namespace Executors::LoadsAndStores {
 	class LoadStoreRegPairExecutor
-			: public ExecutorBaseT<InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction> {
+			: public ExecutorBaseT<InstructionDefs::LoadsAndStores::LoadRegisterPair> {
 	private:
-		uintptr_t calc_next_address(InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction &instruction);
+		uintptr_t calc_next_address(InstructionDefs::LoadsAndStores::LoadRegisterPair &instruction);
 	public:
 		void execute(
-				const InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction &instruction,
+				const InstructionDefs::LoadsAndStores::LoadRegisterPair &instruction,
 				AArch64Cpu& cpu) override;
 	};
 }

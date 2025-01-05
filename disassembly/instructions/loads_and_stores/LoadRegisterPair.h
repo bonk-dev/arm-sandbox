@@ -4,7 +4,7 @@
 #include "../IndexingMode.h"
 
 namespace InstructionDefs::LoadsAndStores {
-	typedef struct LoadRegisterPair {
+	struct LoadRegisterPair {
 	private:
 		static int16_t decode_immediate(bool is_wide, uint32_t encoded);
 
@@ -24,5 +24,5 @@ namespace InstructionDefs::LoadsAndStores {
 		int16_t immediate_value;
 
 		explicit LoadRegisterPair(uint32_t encoded);
-	} LoadStoreRegisterPairInstruction;
+	};
 }

@@ -3,7 +3,7 @@
 #include "../../../emulation/emu_types.h"
 
 namespace InstructionDefs::Begsi {
-	typedef struct UnconditionalBranchRegister {
+	struct UnconditionalBranchRegister {
 	public:
 		/**
 		 * @brief Interpretation of the OPC field
@@ -37,5 +37,5 @@ namespace InstructionDefs::Begsi {
 		UnconditionalBranchRegister(OperationOpc opc, regindex_t regindex);
 
 		[[nodiscard]] uint32_t encode() const;
-	} UnconditionalBranchRegister;
+	};
 }

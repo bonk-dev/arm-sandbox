@@ -10,7 +10,7 @@ namespace InstructionDefs::DataProcImm {
 		KeepBits = 0b11
 	};
 
-	typedef struct MoveWideImmediate {
+	struct MoveWideImmediate {
 		bool is_64bit;
 		MoveWideImmediateOpType op_type;
 		uint8_t left_shift;
@@ -18,5 +18,5 @@ namespace InstructionDefs::DataProcImm {
 		regindex_t destination_reg;
 
 		explicit MoveWideImmediate(uint32_t encoded);
-	} MoveWideImmediateInstruction;
+	};
 }

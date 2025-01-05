@@ -2,7 +2,7 @@
 #include "../../../disassembly/instructions/loads_and_stores/indexing_helper.h"
 
 void Executors::LoadsAndStores::LoadStoreRegPairExecutor::execute(
-		const InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction& instruction, AArch64Cpu& cpu) {
+		const InstructionDefs::LoadsAndStores::LoadRegisterPair& instruction, AArch64Cpu& cpu) {
 	if (instruction.is_simd) {
 		throw std::runtime_error("SIMD operations are not implemented");
 	}

@@ -3,7 +3,7 @@
 #include <cstdint>
 
 namespace InstructionDefs::Begsi {
-	typedef struct ConditionalBranchImmediate {
+	struct ConditionalBranchImmediate {
 	public:
 		enum class Condition : uint8_t {
 			/**
@@ -104,5 +104,5 @@ namespace InstructionDefs::Begsi {
 		Condition condition;
 
 		explicit ConditionalBranchImmediate(uint32_t encoded);
-	} ConditionalBranchImmediateInstruction;
+	};
 }

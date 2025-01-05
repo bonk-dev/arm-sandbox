@@ -3,7 +3,7 @@
 #include <cstdint>
 
 namespace InstructionDefs::Begsi {
-	typedef struct UnconditionalBranchImmediate {
+	struct UnconditionalBranchImmediate {
 	public:
 		/**
 		 * @var is_with_link
@@ -18,5 +18,5 @@ namespace InstructionDefs::Begsi {
 		int32_t immediate : 26;
 
 		explicit UnconditionalBranchImmediate(uint32_t encoded);
-	} UnconditionalBranchImmediateInstruction;
+	};
 }

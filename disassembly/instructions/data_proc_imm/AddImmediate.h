@@ -3,7 +3,7 @@
 #include <cstdint>
 
 namespace InstructionDefs::DataProcImm {
-	typedef struct AddImmediate {
+	struct AddImmediate {
 		bool is_64bit;
 		bool is_subtraction;
 		bool set_flags;
@@ -14,5 +14,5 @@ namespace InstructionDefs::DataProcImm {
 		uint8_t source_reg_index;
 
 		explicit AddImmediate(uint32_t encoded);
-	} AddImmediateInstruction;
+	};
 }

@@ -4,7 +4,7 @@
 #include "../../../emulation/emu_types.h"
 
 namespace InstructionDefs::DataProcReg {
-    typedef struct LogicalShiftedRegister {
+    struct LogicalShiftedRegister {
     public:
         enum class Operation : uint8_t {
             // Bitwise AND
@@ -54,5 +54,5 @@ namespace InstructionDefs::DataProcReg {
         regindex_t destinationReg : 5;
 
         explicit LogicalShiftedRegister(uint32_t enc);
-    } LogicalShiftedRegister;
+    };
 }
