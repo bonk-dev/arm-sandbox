@@ -54,9 +54,6 @@ namespace {
 	}
 
 	bool decode_is_using_64bit_reg(uint32_t encoded) {
-		// TODO: SIMD
-		// TODO: test this shit
-
 		const uint8_t size = decode_size(encoded);
 		if (size == 64) {
 			return true;
