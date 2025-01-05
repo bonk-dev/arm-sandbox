@@ -31,6 +31,16 @@ EnumType* find_instruction_type(std::map<mask_values_t, EnumType>& mask_type_map
 	return nullptr;
 }
 
+InstructionType find_instruction_type_fast(std::map<mask_values_t, InstructionType>& mask_type_map, uint32_t val) {
+	for (auto& [mask, type] : mask_type_map) {
+		if (MATCHES_MASK(val, mask)) {
+			return type;
+		}
+	}
+
+	return InstructionType::Undefined;
+}
+
 // Top-level -> Data processing (immediate) -> (op1 field)
 static std::map<mask_values_t, InstructionType> data_proc_imm_op1 {
 		{ mask_values_t(0b1110, 0b0100), InstructionType::AddOrSubImmediate },
@@ -80,10 +90,7 @@ InstructionType decode_branches_exc_sys(uint32_t raw_instruction) {
 
 	auto op1_map = find_instruction_type(br_exc_sys_op0_op1, op0);
 	if (op1_map != nullptr) {
-		InstructionType* ptr = find_instruction_type(*op1_map, op1);
-		if (ptr != nullptr) {
-			return *ptr;
-		}
+		return find_instruction_type_fast(*op1_map, op1);
 	}
 
 	return InstructionType::Undefined;
@@ -97,13 +104,9 @@ InstructionType decode_data_processing_register_type(uint32_t raw_instruction) {
 	const uint32_t op1 = raw_instruction >> 28 & 0b1;
 	const uint32_t op2 = raw_instruction >> 21 & 0b1111;
 
-	if (op1 == 0) {
-		InstructionType* ptr = find_instruction_type(data_proc_imm_op1zero_op2, op2);
-		if (ptr != nullptr) {
-			return *ptr;
-		}
-	}
-	return InstructionType::Undefined;
+	return op1 == 0
+		? find_instruction_type_fast(data_proc_imm_op1zero_op2, op2)
+		: InstructionType::Undefined;
 }
 
 // Top-level -> Load and store -> (op0 field) -> (op2 field)
@@ -135,10 +138,7 @@ InstructionType decode_load_and_store_type(uint32_t raw_instruction) {
 
 	std::map<mask_values_t, InstructionType>* op2_map = find_instruction_type(load_and_store_op0_op2, op0);
 	if (op2_map != nullptr) {
-		InstructionType* ptr = find_instruction_type(*op2_map, op2);
-		if (ptr != nullptr) {
-			return *ptr;
-		}
+		return find_instruction_type_fast(*op2_map, op2);
 	}
 
 	return InstructionType::Undefined;
