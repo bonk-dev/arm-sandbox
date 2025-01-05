@@ -21,13 +21,14 @@ constexpr bool MATCHES_MASK(uint32_t val, mask_values_t mask_and_value) {
 }
 
 template<class EnumType>
-void find_instruction_type(std::map<mask_values_t, EnumType>& mask_type_map, uint32_t val, EnumType& result) {
-	for (const auto& [mask, type] : mask_type_map) {
+EnumType* find_instruction_type(std::map<mask_values_t, EnumType>& mask_type_map, uint32_t val) {
+	for (auto& [mask, type] : mask_type_map) {
 		if (MATCHES_MASK(val, mask)) {
-			result = type;
-			return;
+			return &type;
 		}
 	}
+
+	return nullptr;
 }
 
 // Top-level -> Data processing (immediate) -> (op1 field)
@@ -41,9 +42,13 @@ InstructionType decode_data_processing_imm_type(uint32_t raw_instruction) {
 	const uint32_t op0 = raw_instruction >> 29 & 0b11;
 	const uint32_t op1 = raw_instruction >> 22 & 0b1111;
 
-	InstructionType result = InstructionType::Undefined;
-	find_instruction_type(data_proc_imm_op1, op1, result);
-	return result;
+	InstructionType* ptr = find_instruction_type(data_proc_imm_op1, op1);
+	if (ptr == nullptr) {
+		return InstructionType::Undefined;
+	}
+	else {
+		return *ptr;
+	}
 }
 
 // Top-level -> Branches, Exception Generating and System instructions -> (op0 field) -> (op1 field)
@@ -73,15 +78,15 @@ InstructionType decode_branches_exc_sys(uint32_t raw_instruction) {
 	const uint32_t op0 = raw_instruction >> 29 & 0b111;
 	const uint32_t op1 = raw_instruction >> 12 & 0b11111111111111;
 
-	// TODO: check if a copy occurs here
-	std::map<mask_values_t, InstructionType> op1_map {};
-	find_instruction_type(br_exc_sys_op0_op1, op0, op1_map);
-
-	InstructionType result = InstructionType::Undefined;
-	if (!op1_map.empty()) {
-		find_instruction_type(op1_map, op1, result);
+	auto op1_map = find_instruction_type(br_exc_sys_op0_op1, op0);
+	if (op1_map != nullptr) {
+		InstructionType* ptr = find_instruction_type(*op1_map, op1);
+		if (ptr != nullptr) {
+			return *ptr;
+		}
 	}
-	return result;
+
+	return InstructionType::Undefined;
 }
 
 // Top-level -> Data processing (register) -> (op1 field)
@@ -92,11 +97,13 @@ InstructionType decode_data_processing_register_type(uint32_t raw_instruction) {
 	const uint32_t op1 = raw_instruction >> 28 & 0b1;
 	const uint32_t op2 = raw_instruction >> 21 & 0b1111;
 
-	auto result = InstructionType::Undefined;
 	if (op1 == 0) {
-		find_instruction_type(data_proc_imm_op1zero_op2, op2, result);
+		InstructionType* ptr = find_instruction_type(data_proc_imm_op1zero_op2, op2);
+		if (ptr != nullptr) {
+			return *ptr;
+		}
 	}
-	return result;
+	return InstructionType::Undefined;
 }
 
 // Top-level -> Load and store -> (op0 field) -> (op2 field)
@@ -126,16 +133,15 @@ InstructionType decode_load_and_store_type(uint32_t raw_instruction) {
 	const uint32_t op1 = raw_instruction >> 26 & 1;
 	const uint32_t op2 = raw_instruction >> 10 & 0b111111111111111;
 
-	// TODO: check if a copy occurs here
-	std::map<mask_values_t, InstructionType> op2_map {};
-	find_instruction_type(load_and_store_op0_op2, op0, op2_map);
-
-	InstructionType result = InstructionType::Undefined;
-	if (!op2_map.empty()) {
-		find_instruction_type(op2_map, op2, result);
+	std::map<mask_values_t, InstructionType>* op2_map = find_instruction_type(load_and_store_op0_op2, op0);
+	if (op2_map != nullptr) {
+		InstructionType* ptr = find_instruction_type(*op2_map, op2);
+		if (ptr != nullptr) {
+			return *ptr;
+		}
 	}
 
-	return result;
+	return InstructionType::Undefined;
 }
 
 InstructionType decode_reserved(uint32_t raw_instruction) {
@@ -168,13 +174,12 @@ InstructionType A64Decoder::decodeNextType(const uint32_t encodedInstruction) {
 		return decode_reserved(encodedInstruction);
 	}
 
-	decode_sublevel_instruction_t decode_func = nullptr;
-	find_instruction_type(top_level_op1, op1_field, decode_func);
-	if (decode_func == nullptr) {
+	auto decode_func_ptr = find_instruction_type(top_level_op1, op1_field);
+	if (decode_func_ptr == nullptr) {
 		return InstructionType::Undefined;
 	}
 	else {
-		return decode_func(this->_last_raw_instruction);
+		return (*decode_func_ptr)(this->_last_raw_instruction);
 	}
 }
 
