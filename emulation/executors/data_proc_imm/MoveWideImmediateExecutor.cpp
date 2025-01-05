@@ -1,9 +1,7 @@
 #include "MoveWideImmediateExecutor.h"
 
-Executors::DataProcImm::MoveWideImmediateExecutor::MoveWideImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
-	: ExecutorBaseT<InstructionDefs::DataProcImm::MoveWideImmediate>(cpu) {}
-
-void Executors::DataProcImm::MoveWideImmediateExecutor::execute(const InstructionDefs::DataProcImm::MoveWideImmediate &instruction) {
+void Executors::DataProcImm::MoveWideImmediateExecutor::execute(
+		const InstructionDefs::DataProcImm::MoveWideImmediate &instruction, AArch64Cpu& cpu) {
 	uint64_t result;
 	switch (instruction.op_type) {
 		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::Unallocated:
@@ -16,18 +14,18 @@ void Executors::DataProcImm::MoveWideImmediateExecutor::execute(const Instructio
 			break;
 		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::KeepBits:
 			result = instruction.is_64bit
-					? this->get_cpu()->readGpRegister64(instruction.destination_reg)
-					: this->get_cpu()->readGpRegister32(instruction.destination_reg);
+					? cpu.readGpRegister64(instruction.destination_reg)
+					: cpu.readGpRegister32(instruction.destination_reg);
 			result &= ~(0b1111111111111111 << instruction.left_shift);
 			result |= (instruction.immediate << instruction.left_shift);
 			break;
 	}
 
 	if (instruction.is_64bit) {
-		this->get_cpu()->writeGpRegister64(instruction.destination_reg, result);
+		cpu.writeGpRegister64(instruction.destination_reg, result);
 	}
 	else {
-		this->get_cpu()->writeGpRegister32(instruction.destination_reg, result);
+		cpu.writeGpRegister32(instruction.destination_reg, result);
 	}
 }
 

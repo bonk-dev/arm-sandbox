@@ -6,8 +6,6 @@
 namespace Executors::DataProcImm {
 	class AddSubImmediateExecutor : public ExecutorBaseT<InstructionDefs::DataProcImm::AddImmediate> {
 	public:
-		explicit AddSubImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu);
-
-		void execute(const InstructionDefs::DataProcImm::AddImmediate &instruction) override;
+		void execute(const InstructionDefs::DataProcImm::AddImmediate &instruction, AArch64Cpu& cpu) override;
 	};
 };

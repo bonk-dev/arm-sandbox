@@ -6,8 +6,6 @@
 namespace Executors::DataProcImm {
 	class FormPcRelAddressExecutor : public ExecutorBaseT<InstructionDefs::DataProcImm::FormPcRelAddress> {
 	public:
-		explicit FormPcRelAddressExecutor(const std::shared_ptr<AArch64Cpu> &cpu);
-
-		void execute(const InstructionDefs::DataProcImm::FormPcRelAddress &instruction) override;
+		void execute(const InstructionDefs::DataProcImm::FormPcRelAddress &instruction, AArch64Cpu& cpu) override;
 	};
 }
