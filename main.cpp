@@ -87,9 +87,8 @@ int read_elf_main(const char* path) {
 	A64Decoder dec{};
 	InstructionType type;
 
-	// TODO: this feels awkward
 	// Add test file
-	cpu->getFs().addFile("/tmp/test2.txt", std::make_shared<Filesystem::EmulatedFile>("asd", 0));
+	cpu->getFs().addFile("/tmp/test2.txt", std::make_shared<Filesystem::EmulatedFile>("asd"));
 
 	std::cout << std::endl <<  "============ [main] Setup done. Starting the execution ============" << std::endl << std::endl;
 

@@ -16,9 +16,8 @@ namespace Filesystem {
 		/**
 		 * Construct an emulated file from a std::string
 		 * @param str The string to be put in the file
-		 * @param fileId Unique file id
 		 */
-		explicit EmulatedFile(const std::string& str, uint64_t fileId);
+		explicit EmulatedFile(const std::string& str);
 
 		std::string readString() override;
 		void* getUnsafeDataPointer() override;

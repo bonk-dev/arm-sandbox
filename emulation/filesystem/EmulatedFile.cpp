@@ -1,7 +1,7 @@
 #include "EmulatedFile.h"
 
-Filesystem::EmulatedFile::EmulatedFile(const std::string& str, uint64_t fileId):
-Filesystem::File(fileId), _position(0), _data(str.length()) {
+Filesystem::EmulatedFile::EmulatedFile(const std::string& str):
+	Filesystem::File(0), _position(0), _data(str.length()) {
 	str.copy(reinterpret_cast<char*>(_data.data()), _data.size());
 }
 
