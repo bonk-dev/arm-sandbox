@@ -24,7 +24,7 @@ private:
 	uint32_t _last_raw_instruction;
 public:
 	InstructionType decodeNextType(uint32_t encodedInstruction);
-	uint32_t getRawInstruction();
+	uint32_t getRawInstruction() const;
 
 	template<class InstructionDetailsT>
 	[[nodiscard]] InstructionDetailsT decode_details() const {

@@ -183,6 +183,6 @@ InstructionType A64Decoder::decodeNextType(const uint32_t encodedInstruction) {
 	}
 }
 
-uint32_t A64Decoder::getRawInstruction() {
+uint32_t A64Decoder::getRawInstruction() const {
 	return this->_last_raw_instruction;
 }
