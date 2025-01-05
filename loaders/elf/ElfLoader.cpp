@@ -15,7 +15,12 @@ namespace {
 namespace Loaders {
 	ElfLoader::ElfLoader(std::string executablePath) :
 		_rawFile{},
-		_filePath(std::move(executablePath)) {}
+		_filePath(std::move(executablePath)),
+		_entryPoint(0),
+		_relaPltOffset(0),
+		_dynStrOffset(0),
+		_dynSymOffset(0),
+		_pltRelocs(0) {}
 
 	void ElfLoader::loadEntireFile() {
 		std::ifstream f(this->_filePath, std::ios::in | std::ios::binary);
