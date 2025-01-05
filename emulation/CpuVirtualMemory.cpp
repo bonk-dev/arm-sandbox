@@ -28,7 +28,7 @@ namespace {
 
 		bool resutl = (start <= allocatedStart && end >= allocatedEnd)
 			          || is_in_range(allocatedStart, allocatedEnd, start)
-					  || is_in_range(allocatedStart, allocatedEnd, end);;
+					  || is_in_range(allocatedStart, allocatedEnd, end);
 		return resutl;
 	}
 }

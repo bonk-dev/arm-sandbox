@@ -8,4 +8,4 @@ namespace Executors::DataProcImm {
 	public:
 		void execute(const InstructionDefs::DataProcImm::AddImmediate &instruction, AArch64Cpu& cpu) override;
 	};
-};
+}
