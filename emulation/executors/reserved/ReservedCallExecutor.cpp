@@ -1,20 +1,15 @@
 #include "ReservedCallExecutor.h"
 
-Executors::Reserved::ReservedCallExecutor::ReservedCallExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
-	: ExecutorBaseT<InstructionDefs::Reserved::ReservedCall>(cpu) {}
+Executors::Reserved::ReservedCallExecutor::ReservedCallExecutor(const std::shared_ptr<Emulation::Libraries::Mapper> &mapper)
+	: _mapper(mapper) {}
 
-Executors::Reserved::ReservedCallExecutor::ReservedCallExecutor(const std::shared_ptr<AArch64Cpu> &cpu,
-                                                                const std::shared_ptr<Emulation::Libraries::Mapper> &mapper)
-	: ExecutorBaseT<InstructionDefs::Reserved::ReservedCall>(cpu),
-	_mapper(mapper) {}
-
-void Executors::Reserved::ReservedCallExecutor::execute(const InstructionDefs::Reserved::ReservedCall &instruction) {
+void Executors::Reserved::ReservedCallExecutor::execute(const InstructionDefs::Reserved::ReservedCall &instruction, AArch64Cpu& cpu) {
 	switch (instruction.call_type) {
 		case InstructionDefs::Reserved::ReservedCalls::Exit: {
 			if (instruction.immediate == 0) {
 				std::cout << "[ReservedCallExecutor] Clean exit" << std::endl;
-				const int mainStatusCode = static_cast<int>(this->get_cpu()->readGpRegister32(0));
-				this->get_cpu()->haltExecution(mainStatusCode);
+				const int mainStatusCode = static_cast<int>(cpu.readGpRegister32(0));
+				cpu.haltExecution(mainStatusCode);
 			}
 			break;
 		}
@@ -27,7 +22,7 @@ void Executors::Reserved::ReservedCallExecutor::execute(const InstructionDefs::R
 			}
 			else {
 				auto& impl = _mapper->getLibraryImplementation(instruction.immediate);
-				impl.execute(*this->get_cpu());
+				impl.execute(cpu);
 			}
 
 			break;

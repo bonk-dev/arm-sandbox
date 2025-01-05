@@ -9,8 +9,7 @@ namespace Executors::Reserved {
 	private:
 		std::shared_ptr<Emulation::Libraries::Mapper> _mapper;
 	public:
-		explicit ReservedCallExecutor(const std::shared_ptr<AArch64Cpu> &cpu);
-		ReservedCallExecutor(const std::shared_ptr<AArch64Cpu> &cpu, const std::shared_ptr<Emulation::Libraries::Mapper>& mapper);
-		void execute(const InstructionDefs::Reserved::ReservedCall& instruction) override;
+		ReservedCallExecutor(const std::shared_ptr<Emulation::Libraries::Mapper>& mapper);
+		void execute(const InstructionDefs::Reserved::ReservedCall& instruction, AArch64Cpu& cpu) override;
 	};
 }
