@@ -36,6 +36,6 @@ namespace InstructionDefs::Begsi {
 		explicit UnconditionalBranchRegister(uint32_t encoded);
 		UnconditionalBranchRegister(OperationOpc opc, regindex_t regindex);
 
-		uint32_t encode() const;
+		[[nodiscard]] uint32_t encode() const;
 	} UnconditionalBranchRegister;
 }
