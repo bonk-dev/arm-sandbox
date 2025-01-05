@@ -1,6 +1,5 @@
 #include <stdexcept>
 #include "LoadRegisterPair.h"
-#include "../../../numbers/two_complement.h"
 
 constexpr uint8_t REGISTER_MASK = 0b11111;
 
@@ -20,6 +19,10 @@ namespace {
 				throw std::runtime_error("Invalid indexing mode");
 		}
 	}
+
+	typedef struct signed_7_bit {
+		int val : 7;
+	} signed_7_bit;
 }
 
 InstructionDefs::LoadsAndStores::LoadRegisterPair::LoadRegisterPair(uint32_t encoded) :
