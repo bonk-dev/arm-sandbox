@@ -1,5 +1,4 @@
 #include "FormPcRelAddress.h"
-#include "../../../numbers/two_complement.h"
 
 int32_t InstructionDefs::DataProcImm::FormPcRelAddress::decode_immediate(uint32_t encoded) {
 	const uint32_t imm_lo = encoded >> 29 & 0b11;
