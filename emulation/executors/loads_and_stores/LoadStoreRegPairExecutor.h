@@ -9,10 +9,9 @@ namespace Executors::LoadsAndStores {
 			: public ExecutorBaseT<InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction> {
 	private:
 		uintptr_t calc_next_address(InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction &instruction);
-
 	public:
-		explicit LoadStoreRegPairExecutor(const std::shared_ptr<AArch64Cpu> &cpu);
-
-		void execute(const InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction &instruction) override;
+		void execute(
+				const InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction &instruction,
+				AArch64Cpu& cpu) override;
 	};
 }

@@ -1,19 +1,15 @@
 #include "LoadStoreRegPairExecutor.h"
 #include "../../../disassembly/instructions/loads_and_stores/indexing_helper.h"
 
-Executors::LoadsAndStores::LoadStoreRegPairExecutor::LoadStoreRegPairExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
-	: ExecutorBaseT<InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction>(cpu) {}
-
-void Executors::LoadsAndStores::LoadStoreRegPairExecutor::execute(const InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction& instruction) {
+void Executors::LoadsAndStores::LoadStoreRegPairExecutor::execute(
+		const InstructionDefs::LoadsAndStores::LoadStoreRegisterPairInstruction& instruction, AArch64Cpu& cpu) {
 	if (instruction.is_simd) {
 		throw std::runtime_error("SIMD operations are not implemented");
 	}
 
-	const auto cpu = this->get_cpu().get();
-
 	auto virtual_address = InstructionDefs::IndexingHelpers::calc_next_address(
 				instruction.encoding,
-				this->get_cpu(),
+				cpu,
 				instruction.immediate_value,
 				instruction.base_reg,
 				instruction.is_wide);
@@ -22,18 +18,18 @@ void Executors::LoadsAndStores::LoadStoreRegPairExecutor::execute(const Instruct
 	for (uint8_t reg_index : reg_indexes) {
 		if (instruction.is_load) {
 			if (instruction.is_wide) {
-				cpu->writeGpRegister64(reg_index, cpu->getMemory().read<uint64_t>(virtual_address));
+				cpu.writeGpRegister64(reg_index, cpu.getMemory().read<uint64_t>(virtual_address));
 			}
 			else {
-				cpu->writeGpRegister32(reg_index, cpu->getMemory().read<uint32_t>(virtual_address));
+				cpu.writeGpRegister32(reg_index, cpu.getMemory().read<uint32_t>(virtual_address));
 			}
 		}
 		else {
 			if (instruction.is_wide) {
-				cpu->getMemory().write(virtual_address, cpu->readGpRegister64(reg_index));
+				cpu.getMemory().write(virtual_address, cpu.readGpRegister64(reg_index));
 			}
 			else {
-				cpu->getMemory().write(virtual_address, cpu->readGpRegister32(reg_index));
+				cpu.getMemory().write(virtual_address, cpu.readGpRegister32(reg_index));
 			}
 		}
 
