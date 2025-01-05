@@ -46,7 +46,7 @@ public:
 	 * Writes a new value to the NZCV register, zeroing out bits 27:0 and 63:32 (these are reserved)
 	 * @param newValue The new NZCV reg. value
 	 */
-	void writeNzcvRegsiter(const uint64_t newValue);
+	void writeNzcvRegsiter(uint64_t newValue);
 
 	/**
 	 * Creates a new thread with a specified id
