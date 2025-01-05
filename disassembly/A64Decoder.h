@@ -24,5 +24,5 @@ private:
 	uint32_t _last_raw_instruction;
 public:
 	InstructionType decodeNextType(uint32_t encodedInstruction);
-	uint32_t getRawInstruction() const;
+	[[nodiscard]] uint32_t getRawInstruction() const;
 };
