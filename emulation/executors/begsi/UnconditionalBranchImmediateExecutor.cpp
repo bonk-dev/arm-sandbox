@@ -1,13 +1,12 @@
 #include "UnconditionalBranchImmediateExecutor.h"
 
-Executors::Begsi::UnconditionalBranchImmediateExecutor::UnconditionalBranchImmediateExecutor(const std::shared_ptr<AArch64Cpu> &cpu)
-	: BranchingExecutor<InstructionDefs::Begsi::UnconditionalBranchImmediate>(cpu) {}
-
-void Executors::Begsi::UnconditionalBranchImmediateExecutor::execute(const InstructionDefs::Begsi::UnconditionalBranchImmediate &instruction) {
-	uint64_t pc = this->get_cpu()->getProgramCounter();
+void Executors::Begsi::UnconditionalBranchImmediateExecutor::execute(
+		const InstructionDefs::Begsi::UnconditionalBranchImmediate &instruction, AArch64Cpu& cpu) {
+	uint64_t pc = cpu.getProgramCounter();
 	this->branchTo(
 			pc + instruction.immediate,
 			Emulation::BranchType::IndirectCall,
 			false,
-			instruction.is_with_link);
+			instruction.is_with_link,
+			cpu);
 }

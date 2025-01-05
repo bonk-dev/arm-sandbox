@@ -1,15 +1,12 @@
 #include "ConditionalBranchImmediateExecutor.h"
 #include "../../nzcv.h"
 
-Executors::Begsi::ConditionalBranchImmediateExecutor::ConditionalBranchImmediateExecutor(
-		const std::shared_ptr<AArch64Cpu> &cpu) : BranchingExecutor<InstructionDefs::Begsi::ConditionalBranchImmediate>(cpu) {}
-
 void Executors::Begsi::ConditionalBranchImmediateExecutor::execute(
-		const InstructionDefs::Begsi::ConditionalBranchImmediate &instruction) {
+		const InstructionDefs::Begsi::ConditionalBranchImmediate &instruction, AArch64Cpu& cpu) {
 	using Condition = InstructionDefs::Begsi::ConditionalBranchImmediate::Condition;
 
 	bool isMet = false;
-	const uint64_t nzcv = this->get_cpu()->readNzcvRegister();
+	const uint64_t nzcv = cpu.readNzcvRegister();
 	switch (instruction.condition) {
 		case Condition::Equal:
 			isMet = NZCV::Zero(nzcv);
@@ -64,12 +61,13 @@ void Executors::Begsi::ConditionalBranchImmediateExecutor::execute(
 	}
 
 	if (isMet) {
-		uint64_t pc = this->get_cpu()->getProgramCounter();
+		uint64_t pc = cpu.getProgramCounter();
 		this->branchTo(
 				pc + instruction.immediate,
 				Emulation::BranchType::DirectBranch,
 				true,
-				false);
+				false,
+				cpu);
 	}
 }
 

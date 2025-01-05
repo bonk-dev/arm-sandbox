@@ -1,9 +1,7 @@
 #include "HintExecutor.h"
 
 namespace Executors::Begsi {
-    HintExecutor::HintExecutor(const std::shared_ptr<AArch64Cpu> &cpu) : ExecutorBaseT(cpu) {}
-
-    void HintExecutor::execute(const InstructionDefs::Begsi::Hint &details) {
+    void HintExecutor::execute(const InstructionDefs::Begsi::Hint &details, AArch64Cpu& cpu) {
         // do nothing
     }
 }
