@@ -1,5 +1,4 @@
 #include "A64Decoder.h"
-#include <utility>
 #include <cmath>
 #include <stdexcept>
 #include <map>

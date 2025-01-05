@@ -1,5 +1,4 @@
 #include "LibCStartMain.h"
-#include "../../registers.h"
 
 void Emulation::Libraries::LibC::LibCStartMain::execute(AArch64Cpu &cpu) {
     const virtual_address_t userEntryPointAddress = cpu.readGpRegister64(0);

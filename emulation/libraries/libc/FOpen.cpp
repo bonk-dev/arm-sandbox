@@ -1,5 +1,4 @@
 #include "FOpen.h"
-#include "../../filesystem/VirtualFileStruct.h"
 
 void Emulation::Libraries::LibC::FOpen::execute(AArch64Cpu &cpu) {
 	const virtual_address_t filename_char_ptr = cpu.readGpRegister64(0);
