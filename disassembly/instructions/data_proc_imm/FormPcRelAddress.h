@@ -4,9 +4,6 @@
 
 namespace InstructionDefs::DataProcImm {
 	typedef struct FormPcRelAddress {
-	private:
-		static int32_t decode_immediate(uint32_t encoded);
-
 	public:
 		bool rel_to_4kb_page;
 

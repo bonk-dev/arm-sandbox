@@ -1,8 +1,10 @@
 #include "AddImmediate.h"
 
-constexpr uint32_t DEST_MASK = 0b11111;
-constexpr uint32_t SOURCE_MASK = 0b11111;
-constexpr uint32_t IMM12_MASK = 0b111111111111;
+namespace {
+	constexpr uint32_t DEST_MASK = 0b11111;
+	constexpr uint32_t SOURCE_MASK = 0b11111;
+	constexpr uint32_t IMM12_MASK = 0b111111111111;
+}
 
 InstructionDefs::DataProcImm::AddImmediate::AddImmediate(uint32_t encoded) :
 	is_64bit(encoded >> 31 & 1),
