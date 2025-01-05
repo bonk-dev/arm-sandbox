@@ -44,6 +44,22 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 	return executors;
 }
 
+void register_library_implementations(Emulation::Libraries::Mapper& mapper) {
+	// Register emulated functions
+	mapper.registerLibraryImplementation(
+			"__libc_start_main",
+			std::make_unique<Emulation::Libraries::LibC::LibCStartMain>());
+	mapper.registerLibraryImplementation(
+			"puts",
+			std::make_unique<Emulation::Libraries::LibC::Puts>());
+	mapper.registerLibraryImplementation(
+			"fopen",
+			std::make_unique<Emulation::Libraries::LibC::FOpen>());
+	mapper.registerLibraryImplementation(
+			"__isoc23_fscanf",
+			std::make_unique<Emulation::Libraries::LibC::FScanF>());
+}
+
 int read_elf_main(const char* path) {
 	Loaders::ElfLoader loader(path);
 	loader.loadEntireFile();
@@ -53,20 +69,7 @@ int read_elf_main(const char* path) {
 	loader.allocateSections(cpu->getMemory());
 
 	const auto mapper = std::make_shared<Emulation::Libraries::Mapper>();
-
-	// Register emulated functions
-	mapper->registerLibraryImplementation(
-		"__libc_start_main",
-		std::make_unique<Emulation::Libraries::LibC::LibCStartMain>());
-	mapper->registerLibraryImplementation(
-		"puts",
-		std::make_unique<Emulation::Libraries::LibC::Puts>());
-	mapper->registerLibraryImplementation(
-		"fopen",
-		std::make_unique<Emulation::Libraries::LibC::FOpen>());
-	mapper->registerLibraryImplementation(
-			"__isoc23_fscanf",
-			std::make_unique<Emulation::Libraries::LibC::FScanF>());
+	register_library_implementations(*mapper);
 
 	// Dynamic link
 	mapper->allocateLinkingSegment(cpu->getMemory());
