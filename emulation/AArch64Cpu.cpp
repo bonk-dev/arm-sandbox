@@ -12,7 +12,6 @@ AArch64Cpu::AArch64Cpu() : _memory(std::make_unique<CpuVirtualMemory>()),
 	this->createThread(AARCH64_MAIN_THREAD_ID);
 }
 
-// TODO: might rename to just writeRegister[32/64]
 void AArch64Cpu::writeGpRegister32(regindex_t index, uint32_t val) {
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
@@ -23,7 +22,6 @@ void AArch64Cpu::writeGpRegister32(regindex_t index, uint32_t val) {
 	}
 }
 
-// TODO: might rename to just writeRegister[32/64]
 void AArch64Cpu::writeGpRegister64(regindex_t index, uint64_t val) {
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
