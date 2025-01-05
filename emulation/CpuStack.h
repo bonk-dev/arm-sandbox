@@ -15,7 +15,7 @@ private:
 	size_t _stackPointer;
 
 	[[nodiscard]] size_t _getVectorOffset(virtual_address_t address) const;
-	void* _getUnsafePointer(virtual_address_t address) const;
+	[[nodiscard]] void* _getUnsafePointer(virtual_address_t address) const;
 public:
 	explicit CpuStack(size_t stackSize);
 
