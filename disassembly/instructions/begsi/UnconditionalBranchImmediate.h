@@ -4,9 +4,6 @@
 
 namespace InstructionDefs::Begsi {
 	typedef struct UnconditionalBranchImmediate {
-	private:
-		static int32_t decode_immediate(uint32_t encoded);
-
 	public:
 		/**
 		 * @var is_with_link
@@ -18,7 +15,7 @@ namespace InstructionDefs::Begsi {
 		 * @var immediate
 		 * @brief Offset from PC, in the range +/- 128MB
 		 **/
-		int32_t immediate;
+		int32_t immediate : 26;
 
 		explicit UnconditionalBranchImmediate(uint32_t encoded);
 	} UnconditionalBranchImmediateInstruction;

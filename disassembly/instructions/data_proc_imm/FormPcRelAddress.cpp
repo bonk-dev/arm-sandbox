@@ -6,7 +6,7 @@ int32_t InstructionDefs::DataProcImm::FormPcRelAddress::decode_immediate(uint32_
 	const uint32_t imm_hi = encoded >> 5 & 0b1111111111111111111; // 19 bits
 	const uint32_t joined_imm = (imm_hi << 2) | imm_lo;
 
-	return signed_21_bit { static_cast<int>(joined_imm) }.val;
+	return static_cast<int32_t>(joined_imm);
 }
 
 InstructionDefs::DataProcImm::FormPcRelAddress::FormPcRelAddress(uint32_t encoded) :
