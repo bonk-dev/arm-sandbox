@@ -187,7 +187,7 @@ std::string disassembly::to_pretty_string(const InstructionDefs::LoadsAndStores:
 	return ss.str();
 }
 
-std::string disassembly::to_pretty_string(const InstructionDefs::LoadsAndStores::LoadRegisterPair &i) {
+std::string disassembly::to_pretty_string(const InstructionDefs::LoadsAndStores::LoadStoreRegisterPair &i) {
 	std::stringstream ss;
 
 	if (i.is_load) {
