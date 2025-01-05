@@ -78,7 +78,6 @@ void Emulation::Libraries::Mapper::allocateLinkingSegment(CpuVirtualMemory &memo
 		throw std::runtime_error("Linking table was already allocated");
 	}
 
-	// TODO: maybe allocate in non-user mode area?
 	std::cout << "[Mapper] Allocating linking table segment" << std::endl;
 	this->_linkingTableAddress = memory.allocateSegment(segmentSize);
 	std::cout << "[Mapper] Linking table segment allocated at " << this->_linkingTableAddress.value()
