@@ -1,14 +1,15 @@
 #include "AArch64Cpu.h"
 #include "registers.h"
 
-AArch64Cpu::AArch64Cpu() : _memory(std::make_unique<CpuVirtualMemory>()),
-													 _programCounter(0),
-													 _threads(),
-													 _generalRegisters(AARCH64_GENERAL_PURPOSE_REGISTERS),
-													 _cleanExitAddress(),
-													 _halt(),
-													 _exitCode(),
-													 _fileSystem() {
+AArch64Cpu::AArch64Cpu() : _nzcvConditionRegister(0),
+						   _memory(std::make_unique<CpuVirtualMemory>()),
+						   _programCounter(0),
+						   _threads(),
+						   _generalRegisters(AARCH64_GENERAL_PURPOSE_REGISTERS),
+					  	   _cleanExitAddress(),
+						   _halt(),
+						   _exitCode(),
+						   _fileSystem() {
 	this->createThread(AARCH64_MAIN_THREAD_ID);
 }
 
