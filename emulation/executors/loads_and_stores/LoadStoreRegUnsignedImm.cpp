@@ -24,15 +24,16 @@ void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(
 	if (instruction.is_load) {
 		uint64_t val;
 		if (instruction.is_signed) {
+			// static_cast avoids sign extending to 64bits
 			switch (instruction.size) {
 				case 8:
-					val = cpu.getMemory().read<int8_t>(virtual_address);
+					val = static_cast<uint8_t>(cpu.getMemory().read<int8_t>(virtual_address));
 					break;
 				case 16:
-					val = cpu.getMemory().read<int16_t>(virtual_address);
+					val = static_cast<uint16_t>(cpu.getMemory().read<int16_t>(virtual_address));
 					break;
 				case 32:
-					val = cpu.getMemory().read<int32_t>(virtual_address);
+					val = static_cast<uint32_t>(cpu.getMemory().read<int32_t>(virtual_address));
 					break;
 				case 64:
 					val = cpu.getMemory().read<int64_t>(virtual_address);
