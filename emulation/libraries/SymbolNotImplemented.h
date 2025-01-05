@@ -8,7 +8,7 @@ namespace Emulation::Libraries {
 	private:
 		std::string _symbolName;
 	public:
-        SymbolNotImplemented(const char* symbolName);
+        explicit SymbolNotImplemented(const char* symbolName);
         void execute(AArch64Cpu& cpu) override;
     };
 }
