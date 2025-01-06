@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 project(arm_sandbox)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 
 add_executable(hello_world samples/hello_world/main.cpp)
 add_executable(file_read samples/file_read/main.cpp)
