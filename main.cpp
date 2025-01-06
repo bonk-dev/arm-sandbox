@@ -64,38 +64,38 @@ int read_elf_main(const char* path) {
 	loader.loadEntireFile();
 	loader.parse();
 
-	std::shared_ptr<AArch64Cpu> cpu = std::make_shared<AArch64Cpu>();
-	loader.allocateSections(cpu->getMemory());
+	AArch64Cpu cpu{};
+	loader.allocateSections(cpu.getMemory());
 
 	const auto mapper = std::make_shared<Emulation::Libraries::Mapper>();
 	register_library_implementations(*mapper);
 
 	// Dynamic link
-	mapper->allocateLinkingSegment(cpu->getMemory());
-	loader.linkSymbols(*mapper, cpu->getMemory());
+	mapper->allocateLinkingSegment(cpu.getMemory());
+	loader.linkSymbols(*mapper, cpu.getMemory());
 
 	// Allocate clean exit instruction
-	const virtual_address_t cleanExitAddr = cpu->getMemory().allocateSegment(sizeof(uint32_t));
+	const virtual_address_t cleanExitAddr = cpu.getMemory().allocateSegment(sizeof(uint32_t));
 	const InstructionDefs::Reserved::ReservedCall reservedCall(
 		InstructionDefs::Reserved::ReservedCalls::Exit,
 		InstructionDefs::Reserved::IMM_EXIT_CLEAN_EXIT);
-	cpu->getMemory().write(cleanExitAddr, reservedCall.encode());
-	cpu->setCleanExitAddress(cleanExitAddr);
+	cpu.getMemory().write(cleanExitAddr, reservedCall.encode());
+	cpu.setCleanExitAddress(cleanExitAddr);
 
 	std::cout << "[ElfMain] Entry point: " << std::hex << std::showbase << loader.getEntryPoint() << std::endl;
-	cpu->setProgramCounter(loader.getEntryPoint());
+	cpu.setProgramCounter(loader.getEntryPoint());
 
 	auto executors = map_all_executors(mapper);
 	A64Decoder dec{};
 	InstructionType type;
 
 	// Add test file
-	cpu->getFs().addFile("/tmp/test2.txt", std::make_shared<Filesystem::EmulatedFile>("asd"));
+	cpu.getFs().addFile("/tmp/test2.txt", std::make_shared<Filesystem::EmulatedFile>("asd"));
 
 	std::cout << std::endl <<  "============ [main] Setup done. Starting the execution ============" << std::endl << std::endl;
 
-	virtual_address_t pc = cpu->getProgramCounter();
-	auto encodedInstruction = cpu->getMemory().read<uint32_t>(pc);
+	virtual_address_t pc = cpu.getProgramCounter();
+	auto encodedInstruction = cpu.getMemory().read<uint32_t>(pc);
 	type = dec.decodeNextType(encodedInstruction);
 
 	while (type != InstructionType::Undefined) {
@@ -106,30 +106,30 @@ int read_elf_main(const char* path) {
 			throw std::runtime_error(std::format("Instruction type \"{}\" does not have a valid executor!",
 				static_cast<int>(type)));
 		}
-		executor->second->decodeAndExecute(dec.getRawInstruction(), *cpu);
-		if (cpu->isHalted()) {
+		executor->second->decodeAndExecute(dec.getRawInstruction(), cpu);
+		if (cpu.isHalted()) {
 			break;
 		}
 
-		virtual_address_t newPc = cpu->getProgramCounter();
+		virtual_address_t newPc = cpu.getProgramCounter();
 		if (newPc == pc) {
 			// if the program counter wasn't changed by an executor, increment it
 			pc += sizeof(uint32_t);
-			cpu->setProgramCounter(pc);
+			cpu.setProgramCounter(pc);
 		}
 		else {
 			pc = newPc;
 		}
 
-		encodedInstruction = cpu->getMemory().read<uint32_t>(pc);
+		encodedInstruction = cpu.getMemory().read<uint32_t>(pc);
 	 	type = dec.decodeNextType(encodedInstruction);
 	}
 
-	if (!cpu->isHalted()) {
+	if (!cpu.isHalted()) {
 		std::cerr << "[ElfMain] Undefined instruction: " << std::hex << std::showbase << encodedInstruction << std::endl;
 	}
 	else {
-		std::cout << "[ElfMain] CPU halted. Exit code: " << cpu->getExitCode() << std::endl;
+		std::cout << "[ElfMain] CPU halted. Exit code: " << cpu.getExitCode() << std::endl;
 	}
 
 	return 0;
