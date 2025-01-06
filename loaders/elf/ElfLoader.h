@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "elf.h"
+#include "elf-multiplatform.h"
 #include "../../emulation/CpuVirtualMemory.h"
 #include "../../emulation/libraries/Mapper.h"
 

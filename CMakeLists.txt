@@ -97,4 +97,5 @@ add_executable(arm_sandbox main.cpp
         emulation/libraries/libc/FScanF.h
         emulation/executors/all_executors.h
         loaders/elf/elf-windows.h
+        loaders/elf/elf-multiplatform.h
 )
