@@ -70,9 +70,10 @@ Emulation::Libraries::Mapper::getLibraryImplementation(Emulation::Libraries::sym
 
 void Emulation::Libraries::Mapper::allocateLinkingSegment(CpuVirtualMemory &memory) {
 	// Let's just allocate the max size for the sake of simplicity
-	// (2 << 15) - 1 == 65535 (max value of uint16_t, which is the type of ReservedCall's immediate)
-	// * sizeof(uint32_t) - each entry in the linking table is a single UDF instruction, and all instructions are of type "uint32_t"
-	constexpr size_t segmentSize = ((2 << 15) - 1) * sizeof(uint32_t);
+	// 2^16 == unique numbers expressed by uint16_t
+	// * 2 - each lib call has two instructions - reserved call and RET
+	// * sizeof(uint32_t) - the two instructions are both uint32_ts
+	constexpr size_t segmentSize = (1 << 16) * 2 * sizeof(uint32_t);
 
 	if (this->_linkingTableAddress.has_value()) {
 		throw std::runtime_error("Linking table was already allocated");
@@ -81,5 +82,5 @@ void Emulation::Libraries::Mapper::allocateLinkingSegment(CpuVirtualMemory &memo
 	std::cout << "[Mapper] Allocating linking table segment" << std::endl;
 	this->_linkingTableAddress = memory.allocateSegment(segmentSize);
 	std::cout << "[Mapper] Linking table segment allocated at " << this->_linkingTableAddress.value()
-		<< "; size: " << segmentSize << "b" << std::endl;
+		<< "; size: " << segmentSize << " bytes" << std::endl;
 }
