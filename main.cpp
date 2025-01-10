@@ -1,8 +1,6 @@
-#include <iostream>
 #include <format>
 #include <iomanip>
 #include "disassembly/A64Decoder.h"
-#include "disassembly/disassembly.h"
 #include "emulation/AArch64Cpu.h"
 #include "loaders/elf/ElfLoader.h"
 #include "emulation/executors/all_executors.h"
