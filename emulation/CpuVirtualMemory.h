@@ -9,6 +9,8 @@
 #include <optional>
 #include "emu_types.h"
 #include "CpuStack.h"
+#include "../logging/LoggerBase.h"
+#include "../logging/LoggerFactory.h"
 
 constexpr uint64_t AARCH64_MAIN_THREAD_ID = 1;
 
@@ -18,6 +20,8 @@ constexpr uint64_t AARCH64_MAIN_THREAD_ID = 1;
  */
 class CpuVirtualMemory {
 private:
+	std::unique_ptr<Logging::LoggerBase> _logger = Logging::createLogger("CpuVirtualMemory");
+
 	/**
 	 * @brief Key: virtual segment start; Value: segment data
 	 */
