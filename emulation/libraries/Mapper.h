@@ -23,6 +23,7 @@ namespace Emulation::Libraries {
             }
         };
 
+		std::unique_ptr<Logging::LoggerBase> _logger;
 		std::optional<virtual_address_t> _linkingTableAddress;
         symbol_index_t _nextIndex;
         std::unique_ptr<std::map<const char*, std::shared_ptr<library_impl_symbol_t>, str_cmp>> _implementations;

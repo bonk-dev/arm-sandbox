@@ -7,6 +7,7 @@
 #include "../../disassembly/instructions/begsi/UnconditionalBranchRegister.h"
 
 Emulation::Libraries::Mapper::Mapper() :
+	_logger(Logging::createLogger("Mapper")),
 	_nextIndex(0),
 	_indexSymbols(std::make_unique<std::map<unsigned int, std::shared_ptr<library_impl_symbol_t>>>()),
 	_implementations(std::make_unique<std::map<const char*, std::shared_ptr<library_impl_symbol_t>, str_cmp>>()) {}
@@ -34,7 +35,7 @@ virtual_address_t Emulation::Libraries::Mapper::mapLibraryImplementation(const c
 
 	auto symIter = this->_implementations->find(symbolName);
 	if (symIter == this->_implementations->end()) {
-		std::cout << "[Mapper] Symbol \"" << symbolName << "\" doesn't have an implementation. Replacing with SymbolNotImplemented" << std::endl;
+		_logger->info() << "Symbol \"" << symbolName << "\" doesn't have an implementation. Replacing with SymbolNotImplemented" << std::endl;
 		this->registerLibraryImplementation(
 			symbolName,
 			std::make_unique<SymbolNotImplemented>(symbolName));
@@ -79,8 +80,8 @@ void Emulation::Libraries::Mapper::allocateLinkingSegment(CpuVirtualMemory &memo
 		throw std::runtime_error("Linking table was already allocated");
 	}
 
-	std::cout << "[Mapper] Allocating linking table segment" << std::endl;
+	_logger->verbose() << "Allocating linking table segment" << std::endl;
 	this->_linkingTableAddress = memory.allocateSegment(segmentSize);
-	std::cout << "[Mapper] Linking table segment allocated at " << this->_linkingTableAddress.value()
+	_logger->verbose() << "[Mapper] Linking table segment allocated at " << this->_linkingTableAddress.value()
 		<< "; size: " << segmentSize << " bytes" << std::endl;
 }
