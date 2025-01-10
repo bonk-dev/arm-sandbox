@@ -17,35 +17,33 @@ namespace {
 	std::unique_ptr<Logging::LoggerBase> logger = Logging::createLogger("main");
 }
 
-template<typename ExecutorType>
-void map_e(std::map<InstructionType, std::unique_ptr<ExecutorBase>>& map, InstructionType instructionType) {
-	map[instructionType] = std::make_unique<ExecutorType>();
-}
-
-template<typename ExecutorType, typename... Args>
-void map_ep(
-	std::map<InstructionType, std::unique_ptr<ExecutorBase>>& map,
-	InstructionType instructionType,
-	Args&&... args) {
-	map[instructionType] = std::make_unique<ExecutorType>(std::forward<Args>(args)...);
-}
-
 std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const std::shared_ptr<Emulation::Libraries::Mapper>& mapper) {
-	std::map<InstructionType, std::unique_ptr<ExecutorBase>> executors;
+	std::map<InstructionType, std::unique_ptr<ExecutorBase>> e;
 
-	map_e<Executors::DataProcImm::AddSubImmediateExecutor>(executors, InstructionType::AddOrSubImmediate);
-	map_e<Executors::DataProcImm::FormPcRelAddressExecutor>(executors, InstructionType::PcRelativeAddressing);
-	map_e<Executors::DataProcImm::MoveWideImmediateExecutor>(executors, InstructionType::MoveWideImmediate);
-	map_e<Executors::Begsi::ConditionalBranchImmediateExecutor>(executors, InstructionType::ConditionalBranchImmediate);
-	map_e<Executors::Begsi::UnconditionalBranchImmediateExecutor>(executors, InstructionType::UnconditionalBranchImmediate);
-	map_e<Executors::Begsi::UnconditionalBranchRegisterExecutor>(executors, InstructionType::UnconditionalBranchRegister);
-	map_e<Executors::LoadsAndStores::LoadStoreRegPairExecutor>(executors, InstructionType::LoadStoreRegisterPair);
-	map_e<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>(executors, InstructionType::LoadStoreRegisterUnsignedImm);
-	map_ep<Executors::Reserved::ReservedCallExecutor>(executors, InstructionType::ReservedCall, mapper);
-	map_e<Executors::Begsi::HintExecutor>(executors, InstructionType::Hint);
-	map_e<Executors::DataProcReg::LogicalShiftedRegisterExecutor>(executors, InstructionType::LogicalShiftedRegister);
+	e[InstructionType::AddOrSubImmediate] =
+			std::make_unique<Executors::DataProcImm::AddSubImmediateExecutor>();
+	e[InstructionType::PcRelativeAddressing] =
+			std::make_unique<Executors::DataProcImm::FormPcRelAddressExecutor>();
+	e[InstructionType::MoveWideImmediate] =
+			std::make_unique<Executors::DataProcImm::MoveWideImmediateExecutor>();
+	e[InstructionType::ConditionalBranchImmediate] =
+			std::make_unique<Executors::Begsi::ConditionalBranchImmediateExecutor>();
+	e[InstructionType::UnconditionalBranchImmediate] =
+			std::make_unique<Executors::Begsi::UnconditionalBranchImmediateExecutor>();
+	e[InstructionType::UnconditionalBranchRegister] =
+			std::make_unique<Executors::Begsi::UnconditionalBranchRegisterExecutor>();
+	e[InstructionType::Hint] =
+			std::make_unique<Executors::Begsi::HintExecutor>();
+	e[InstructionType::LoadStoreRegisterPair] =
+			std::make_unique<Executors::LoadsAndStores::LoadStoreRegPairExecutor>();
+	e[InstructionType::LoadStoreRegisterUnsignedImm] =
+			std::make_unique<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>();
+	e[InstructionType::ReservedCall] =
+			std::make_unique<Executors::Reserved::ReservedCallExecutor>(mapper);
+	e[InstructionType::LogicalShiftedRegister] =
+			std::make_unique<Executors::DataProcReg::LogicalShiftedRegisterExecutor>();
 
-	return executors;
+	return e;
 }
 
 void register_library_implementations(Emulation::Libraries::Mapper& mapper) {
