@@ -11,6 +11,7 @@
 #include "emulation/libraries/libc/FScanF.h"
 #include "logging/LoggerBase.h"
 #include "logging/LoggerFactory.h"
+#include "logging/LoggerContainer.h"
 
 namespace {
 	std::unique_ptr<Logging::LoggerBase> logger = Logging::createLogger("main");
@@ -167,13 +168,12 @@ int main(int argc, char** argv) {
 		return InvalidUsage;
 	}
 
-	logger->verbose() << "Loading ELF from " << argv[1] << std::endl;
-
 	Logging::LogLevel logLevel = Logging::LogLevel::Verbose;
 	if (argc >= 3) {
 		logLevel = parseLogLevel(argv[2]);
-		logger->verbose() << "Using " << static_cast<int>(logLevel) << " log level" << std::endl;
+		Logging::setGlobalLogLevel(logLevel);
 	}
 
+	logger->verbose() << "Loading ELF from " << argv[1] << std::endl;
 	return read_elf_main(argv[1], logLevel);
 }

@@ -106,4 +106,7 @@ add_executable(arm_sandbox main.cpp
         logging/LoggerBase.cpp
         logging/StdoutLogger.h
         logging/StdoutLogger.cpp
+        logging/LoggerFactory.cpp
+        logging/LoggerContainer.h
+        logging/LoggerContainer.cpp
 )

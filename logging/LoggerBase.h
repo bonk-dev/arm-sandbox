@@ -1,6 +1,5 @@
 #pragma once
 #include <ostream>
-
 #include "LogLevel.h"
 
 namespace Logging {
@@ -25,6 +24,6 @@ namespace Logging {
         virtual std::ostream& info(bool printPrefix);
         virtual std::ostream& verbose(bool printPrefix);
 
-        virtual ~LoggerBase() = default;
+        virtual ~LoggerBase();
     };
 }
