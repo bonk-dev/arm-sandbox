@@ -13,16 +13,16 @@ namespace Emulation {
 class CpuStack {
 private:
 	std::unique_ptr<Logging::LoggerBase> _logger;
-	std::unique_ptr<std::vector<std::byte>> _stackMemory;
+	std::vector<std::byte> _stackMemory;
 	size_t _stackPointer;
 
 	[[nodiscard]] size_t _getVectorOffset(virtual_address_t address) const;
-	[[nodiscard]] void* _getUnsafePointer(virtual_address_t address) const;
+	[[nodiscard]] void* _getUnsafePointer(virtual_address_t address);
 public:
 	explicit CpuStack(size_t stackSize);
 
 	[[nodiscard]] size_t getStackSize() const {
-		return this->_stackMemory->size();
+		return this->_stackMemory.size();
 	}
 
 	[[nodiscard]] size_t getStackPointer() const {
@@ -37,7 +37,7 @@ public:
 		this->_stackPointer -= sizeof(T);
 
 		const size_t vectorOffset = this->_getVectorOffset(this->_stackPointer);
-		T* ptr = reinterpret_cast<T*>(this->_stackMemory->data() + vectorOffset);
+		T* ptr = reinterpret_cast<T*>(this->_stackMemory.data() + vectorOffset);
 		*ptr = value;
 	}
 
@@ -50,15 +50,15 @@ public:
 	template <typename T>
 	T read(virtual_address_t address) {
 		const size_t vecOffset = this->_getVectorOffset(address);
-		return *reinterpret_cast<T*>(this->_stackMemory->data() + vecOffset);
+		return *reinterpret_cast<T*>(this->_stackMemory.data() + vecOffset);
 	}
 
 	template<typename T>
 	void write(virtual_address_t address, T value) {
 		const size_t vecOffset = this->_getVectorOffset(address);
-		*reinterpret_cast<T*>(this->_stackMemory->data() + vecOffset) = value;
+		*reinterpret_cast<T*>(this->_stackMemory.data() + vecOffset) = value;
 	}
 
-	[[nodiscard]] std::string readCString(virtual_address_t address) const;
-	[[nodiscard]] void* getUnsafePointer(virtual_address_t address) const;
+	[[nodiscard]] std::string readCString(virtual_address_t address);
+	[[nodiscard]] void* getUnsafePointer(virtual_address_t address);
 };
