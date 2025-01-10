@@ -166,9 +166,8 @@ int main(int argc, char** argv) {
 		return InvalidUsage;
 	}
 
-	Logging::LogLevel logLevel = Logging::LogLevel::Verbose;
 	if (argc >= 3) {
-		logLevel = parseLogLevel(argv[2]);
+		Logging::LogLevel logLevel = parseLogLevel(argv[2]);
 		Logging::setGlobalLogLevel(logLevel);
 	}
 
