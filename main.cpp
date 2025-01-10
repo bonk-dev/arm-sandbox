@@ -130,10 +130,10 @@ int read_elf_main(const char* path) {
 	}
 
 	if (!cpu.isHalted()) {
-		logger->error() << "[ElfMain] Undefined instruction: " << std::hex << std::showbase << encodedInstruction << std::endl;
+		logger->error() << "Undefined instruction: " << std::hex << std::showbase << encodedInstruction << std::endl;
 	}
 	else {
-		logger->info() << "[ElfMain] CPU halted. Exit code: " << cpu.getExitCode() << std::endl;
+		logger->info() << "CPU halted. Exit code: " << cpu.getExitCode() << std::endl;
 	}
 
 	return 0;
