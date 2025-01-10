@@ -7,8 +7,12 @@ namespace Logging {
     class LoggerBase {
     private:
         LogLevel _level;
+        std::string _prefix;
+        std::ostream& _print(std::ostream& dest, LogLevel level) const;
+    protected:
+        virtual std::ostream& getStream() = 0;
     public:
-        explicit LoggerBase(LogLevel level);
+        LoggerBase(const char* prefix, LogLevel level);
         [[nodiscard]] LogLevel getLevel() const;
 
         virtual std::ostream& error();
