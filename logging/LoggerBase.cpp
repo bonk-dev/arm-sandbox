@@ -2,12 +2,14 @@
 #include "NullStream.h"
 #include <iostream>
 
-std::ostream & Logging::LoggerBase::_print(std::ostream &dest, const LogLevel level) const {
+std::ostream & Logging::LoggerBase::_print(std::ostream &dest, const LogLevel level, bool printPrefix) const {
     if (this->getLevel() < level) {
         return getNullStream();
     }
 
-    dest << '[' << _prefix << "] ";
+	if (printPrefix) {
+		dest << '[' << _prefix << "] ";
+	}
     return dest;
 }
 
@@ -16,16 +18,28 @@ Logging::LogLevel Logging::LoggerBase::getLevel() const {
     return _level;
 }
 
+std::ostream & Logging::LoggerBase::error(bool printPrefix) {
+    return _print(getStream(), LogLevel::Error, printPrefix);
+}
+
+std::ostream & Logging::LoggerBase::info(bool printPrefix) {
+    return _print(getStream(), LogLevel::Info, printPrefix);
+}
+
+std::ostream & Logging::LoggerBase::verbose(bool printPrefix) {
+    return _print(getStream(), LogLevel::Verbose, printPrefix);
+}
+
 std::ostream & Logging::LoggerBase::error() {
-    return _print(getStream(), LogLevel::Error);
+	return error(true);
 }
 
 std::ostream & Logging::LoggerBase::info() {
-    return _print(getStream(), LogLevel::Info);
+	return info(true);
 }
 
 std::ostream & Logging::LoggerBase::verbose() {
-    return _print(getStream(), LogLevel::Verbose);
+	return verbose(true);
 }
 
 
