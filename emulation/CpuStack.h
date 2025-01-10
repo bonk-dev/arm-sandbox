@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <memory>
 #include "emu_types.h"
+#include "../logging/LoggerBase.h"
 
 namespace Emulation {
 	constexpr size_t STACK_START = 0x7fffffffffff;
@@ -11,6 +12,7 @@ namespace Emulation {
 
 class CpuStack {
 private:
+	std::unique_ptr<Logging::LoggerBase> _logger;
 	std::unique_ptr<std::vector<std::byte>> _stackMemory;
 	size_t _stackPointer;
 

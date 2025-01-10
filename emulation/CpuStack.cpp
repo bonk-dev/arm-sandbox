@@ -1,8 +1,10 @@
 #include "CpuStack.h"
+#include "../logging/LoggerFactory.h"
 #include <numeric>
 #include <iostream>
 
 CpuStack::CpuStack(size_t stackSize):
+	_logger(Logging::createLogger("CpuStack")),
 	_stackMemory(std::make_unique<std::vector<std::byte>>(stackSize)),
 	_stackPointer(Emulation::STACK_START) {}
 
@@ -27,7 +29,7 @@ void *CpuStack::_getUnsafePointer(virtual_address_t address) const {
 }
 
 void *CpuStack::getUnsafePointer(virtual_address_t address) const {
-	std::cout << "[CpuStack] Unsafe access to " << std::showbase << std::hex << address << std::endl;
+	_logger->verbose() << "[CpuStack] Unsafe access to " << std::showbase << std::hex << address << std::endl;
 	return this->_getUnsafePointer(address);
 }
 
