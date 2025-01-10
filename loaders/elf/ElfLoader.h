@@ -6,10 +6,16 @@
 #include "elf-multiplatform.h"
 #include "../../emulation/CpuVirtualMemory.h"
 #include "../../emulation/libraries/Mapper.h"
+#include "../../logging/LoggerBase.h"
 
 namespace Loaders {
 	class ElfLoader {
 	private:
+		/**
+		 * @brief Logger
+		 */
+		std::unique_ptr<Logging::LoggerBase> _logger;
+
 		/**
 		 * @var _rawFile
 		 * @brief Entire ELF file loaded from disk

@@ -6,6 +6,8 @@
 #include <cstring>
 #include <format>
 
+#include "../../logging/LoggerFactory.h"
+
 namespace {
 	constexpr bool has_flag_set(Elf64_Word value, Elf64_Word mask) {
 		return (value & mask) == mask;
@@ -14,6 +16,7 @@ namespace {
 
 namespace Loaders {
 	ElfLoader::ElfLoader(std::string executablePath) :
+		_logger(Logging::createLogger("ElfLoader")),
 		_rawFile{},
 		_filePath(std::move(executablePath)),
 		_entryPoint(0),
@@ -64,14 +67,14 @@ namespace Loaders {
 
 		for (Elf64_Shdr* header : *this->_elfSectionHeaders) {
 			const char* sectionName = this->_getSectionName(header);
-			std::cout << "Section: " << sectionName << std::endl;
+			_logger->verbose() << "Section: " << sectionName << std::endl;
 
 			if (strcmp(sectionName, ".dynamic") == 0) {
 				auto* dynEntry = reinterpret_cast<Elf64_Dyn*>(this->_rawFile->data() + header->sh_offset);
 				while (dynEntry->d_tag != DT_NULL) {
 					if (dynEntry->d_tag == DT_PLTRELSZ) {
 						_pltRelocs = dynEntry->d_un.d_val / sizeof(Elf64_Rela);
-						std::cout << "Amount of plt relocs: " << _pltRelocs << std::endl;
+						_logger->verbose() << "Amount of plt relocs: " << _pltRelocs << std::endl;
 					}
 					dynEntry++;
 				}
@@ -105,7 +108,7 @@ namespace Loaders {
 
 			Elf64_Shdr* header = this->_elfSectionHeaders->at(i);
 			if (has_flag_set(header->sh_flags, SHF_ALLOC) && header->sh_type != SHT_NOBITS) {
-				std::cout << "[ElfLoader] allocating " << this->_getSectionName(header)
+				_logger->verbose() << "Allocating " << this->_getSectionName(header)
 					<< " in virtual memory at virtual: " << std::hex << std::showbase << header->sh_addr  << std::endl;
 				if (header->sh_addr == 0) {
 					throw std::runtime_error("ELF section has the SHF_ALLOC flag set, but the sh_addr field is 0");
@@ -118,7 +121,7 @@ namespace Loaders {
 						header->sh_size);
 			}
 			else {
-				std::cout << "[ElfLoader] not allocating " << this->_getSectionName(header) << std::endl;
+				_logger->verbose() << "Not allocating " << this->_getSectionName(header) << std::endl;
 			}
 		}
 	}
@@ -132,7 +135,7 @@ namespace Loaders {
 		const auto dynsym = reinterpret_cast<Elf64_Sym*>(_rawFile->data() + _dynSymOffset);
 		const auto dynstr = reinterpret_cast<const char*>(_rawFile->data() + _dynStrOffset);
 
-		std::cout << "[ElfLoader] Scanning .rela.plt" << std::endl;
+		_logger->verbose() << "Scanning .rela.plt" << std::endl;
 		for (int i = 0; i < _pltRelocs; ++i) {
 			const Elf64_Rela* rela = relaPtr + i;
 
@@ -144,13 +147,13 @@ namespace Loaders {
 			const Elf64_Sym* symbolInfo = dynsym + symbolIndex;
 			const char* symbolName = &dynstr[symbolInfo->st_name];
 
-			std::cout << "[ElfLoader] R_AARCH64_JUMP_SLOT symbol name: " << symbolName << std::endl;
-			std::cout << "[ElfLoader] R_AARCH64_JUMP_SLOT slot offset: " << rela->r_offset << std::endl;
-			std::cout << "[ElfLoader] Trying to link with the Mapper" << std::endl;
+			_logger->verbose() << "R_AARCH64_JUMP_SLOT symbol name: " << symbolName << std::endl;
+			_logger->verbose() << "R_AARCH64_JUMP_SLOT slot offset: " << rela->r_offset << std::endl;
+			_logger->verbose() << "Trying to link with the Mapper" << std::endl;
 			const virtual_address_t jumpAddress = mapper.mapLibraryImplementation(symbolName, memory);
-			std::cout << "[ElfLoader] Jump address: " << jumpAddress << std::endl;
+			_logger->verbose() << "Jump address: " << jumpAddress << std::endl;
 
-			std::cout << "[ElfLoader] Updating the PLT GOT" << std::endl;
+			_logger->verbose() << "Updating the PLT GOT" << std::endl;
 			memory.write(rela->r_offset, static_cast<uint32_t>(jumpAddress));
 		}
 	}
