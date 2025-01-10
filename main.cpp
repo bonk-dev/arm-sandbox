@@ -11,6 +11,12 @@
 #include "emulation/libraries/libc/FOpen.h"
 #include "emulation/filesystem/EmulatedFile.h"
 #include "emulation/libraries/libc/FScanF.h"
+#include "logging/LoggerBase.h"
+#include "logging/LoggerFactory.h"
+
+namespace {
+	std::unique_ptr<Logging::LoggerBase> logger = Logging::createLogger("main");
+}
 
 template<typename ExecutorType>
 void map_e(std::map<InstructionType, std::unique_ptr<ExecutorBase>>& map, InstructionType instructionType) {
@@ -82,7 +88,7 @@ int read_elf_main(const char* path) {
 	cpu.getMemory().write(cleanExitAddr, reservedCall.encode());
 	cpu.setCleanExitAddress(cleanExitAddr);
 
-	std::cout << "[ElfMain] Entry point: " << std::hex << std::showbase << loader.getEntryPoint() << std::endl;
+	logger->info() << "Entry point: " << std::hex << std::showbase << loader.getEntryPoint() << std::endl;
 	cpu.setProgramCounter(loader.getEntryPoint());
 
 	auto executors = map_all_executors(mapper);
@@ -92,14 +98,14 @@ int read_elf_main(const char* path) {
 	// Add test file
 	cpu.getFs().addFile("/tmp/test2.txt", std::make_shared<Filesystem::EmulatedFile>("asd"));
 
-	std::cout << std::endl <<  "============ [main] Setup done. Starting the execution ============" << std::endl << std::endl;
+	logger->info() << std::endl <<  "============ Setup done. Starting the execution ============" << std::endl << std::endl;
 
 	virtual_address_t pc = cpu.getProgramCounter();
 	auto encodedInstruction = cpu.getMemory().read<uint32_t>(pc);
 	type = dec.decodeNextType(encodedInstruction);
 
 	while (type != InstructionType::Undefined) {
-		std::cout << std::hex << std::noshowbase << "0x" << std::setfill('0') << std::setw(16) << pc << ": ";
+		logger->info() << std::hex << std::noshowbase << "0x" << std::setfill('0') << std::setw(16) << pc << ": ";
 
 		const auto& executor = executors.find(type);
 		if (executor == executors.end()) {
@@ -126,10 +132,10 @@ int read_elf_main(const char* path) {
 	}
 
 	if (!cpu.isHalted()) {
-		std::cerr << "[ElfMain] Undefined instruction: " << std::hex << std::showbase << encodedInstruction << std::endl;
+		logger->error() << "[ElfMain] Undefined instruction: " << std::hex << std::showbase << encodedInstruction << std::endl;
 	}
 	else {
-		std::cout << "[ElfMain] CPU halted. Exit code: " << cpu.getExitCode() << std::endl;
+		logger->info() << "[ElfMain] CPU halted. Exit code: " << cpu.getExitCode() << std::endl;
 	}
 
 	return 0;
@@ -138,11 +144,11 @@ int read_elf_main(const char* path) {
 int main(int argc, char** argv) {
 	if (argc <= 1) {
 		constexpr int InvalidUsage = 1;
-		std::cout << "Usage: arm_sandbox <elf_file_path>" << std::endl;
-		std::cout << "Example: arm_sandbox /home/bonk/hello_word" << std::endl;
+		logger->error() << "Usage: arm_sandbox <elf_file_path>" << std::endl;
+		logger->error() << "Example: arm_sandbox /home/bonk/hello_word" << std::endl;
 		return InvalidUsage;
 	}
 
-	std::cout << "Loading ELF from " << argv[1] << std::endl;
+	logger->verbose() << "Loading ELF from " << argv[1] << std::endl;
 	return read_elf_main(argv[1]);
 }
