@@ -14,8 +14,12 @@ std::ostream & Logging::LoggerBase::_print(std::ostream &dest, const LogLevel le
 }
 
 Logging::LoggerBase::LoggerBase(const char* prefix, const LogLevel level) : _level(level), _prefix(prefix) {}
+
 Logging::LogLevel Logging::LoggerBase::getLevel() const {
     return _level;
+}
+void Logging::LoggerBase::setLevel(Logging::LogLevel level) {
+	_level = level;
 }
 
 std::ostream & Logging::LoggerBase::error(bool printPrefix) {

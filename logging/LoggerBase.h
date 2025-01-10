@@ -13,7 +13,9 @@ namespace Logging {
         virtual std::ostream& getStream() = 0;
     public:
         LoggerBase(const char* prefix, LogLevel level);
-        [[nodiscard]] LogLevel getLevel() const;
+
+		[[nodiscard]] LogLevel getLevel() const;
+		void setLevel(LogLevel level);
 
 		virtual std::ostream& error();
 		virtual std::ostream& info();
