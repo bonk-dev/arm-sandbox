@@ -63,7 +63,7 @@ void register_library_implementations(Emulation::Libraries::Mapper& mapper) {
 			std::make_unique<Emulation::Libraries::LibC::FScanF>());
 }
 
-int read_elf_main(const char* path) {
+int read_elf_main(const char* path, const Logging::LogLevel level) {
 	Loaders::ElfLoader loader(path);
 	loader.loadEntireFile();
 	loader.parse();
@@ -138,6 +138,27 @@ int read_elf_main(const char* path) {
 	return 0;
 }
 
+Logging::LogLevel parseLogLevel(const char* str) {
+	std::string s{str};
+	if (s == "verbose") {
+		return Logging::LogLevel::Verbose;
+	}
+	if (s == "info") {
+		return Logging::LogLevel::Info;
+	}
+	if (s == "warning") {
+		return Logging::LogLevel::Warning;
+	}
+	if (s == "error") {
+		return Logging::LogLevel::Error;
+	}
+	if (s == "quiet") {
+		return Logging::LogLevel::Quiet;
+	}
+
+	throw std::runtime_error("Invalid logging level");
+}
+
 int main(int argc, char** argv) {
 	if (argc <= 1) {
 		constexpr int InvalidUsage = 1;
@@ -147,5 +168,12 @@ int main(int argc, char** argv) {
 	}
 
 	logger->verbose() << "Loading ELF from " << argv[1] << std::endl;
-	return read_elf_main(argv[1]);
+
+	Logging::LogLevel logLevel = Logging::LogLevel::Verbose;
+	if (argc >= 3) {
+		logLevel = parseLogLevel(argv[2]);
+		logger->verbose() << "Using " << static_cast<int>(logLevel) << " log level" << std::endl;
+	}
+
+	return read_elf_main(argv[1], logLevel);
 }
