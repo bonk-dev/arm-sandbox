@@ -5,7 +5,7 @@
 
 CpuStack::CpuStack(size_t stackSize):
 	_logger(Logging::createLogger("CpuStack")),
-	_stackMemory(std::vector<std::byte>(stackSize)),
+	_stackMemory(stackSize),
 	_stackPointer(Emulation::STACK_START) {}
 
 void CpuStack::pop(size_t size) {
