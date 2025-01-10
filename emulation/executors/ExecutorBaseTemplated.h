@@ -17,7 +17,7 @@ public:
 		const auto details = InstructionDetailsT(encoded);
 
 		// Log disassembly
-		_logger->verbose() <<  disassembly::to_pretty_string(details) << std::endl;
+		_logger->verbose(false) <<  disassembly::to_pretty_string(details) << std::endl;
 
 		this->execute(details, cpu);
 	}
