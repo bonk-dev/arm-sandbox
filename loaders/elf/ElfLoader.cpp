@@ -59,45 +59,6 @@ namespace Loaders {
 			throw std::runtime_error("Only AARCH64 executables are supported");
 		}
 
-		auto programHadersPtr = this->_parseStructs<Elf64_Phdr>(
-				elfHeader->e_phnum, elfHeader->e_phoff, elfHeader->e_phentsize);
-		for (Elf64_Phdr* header : *programHadersPtr) {
-			switch (header->p_type) {
-				case PT_NULL:
-					break;
-				case PT_LOAD:
-					std::cout << "PT_LOAD found";
-					break;
-				case PT_DYNAMIC:
-					std::cout << "PT_DYNAMIC found";
-					break;
-				case PT_INTERP:
-					std::cout << "PT_INTERP found";
-					break;
-				case PT_NOTE:
-					std::cout << "PT_NOTE found";
-					break;
-				case PT_SHLIB:
-					std::cout << "PT_SHLIB found";
-					break;
-				case PT_PHDR:
-					std::cout << "PT_PHDR found";
-					break;
-				case PT_LOPROC:
-				case PT_HIPROC:
-					std::cout << "PT_[LO/HI]PROC found";
-					break;
-				case PT_GNU_STACK:
-					std::cout << "PT_GNU_STACK found";
-					break;
-				default:
-					std::cout << "Other program header found: " << header->p_type;
-					break;
-			}
-
-			std::cout << std::endl;
-		}
-
 		this->_elfSectionHeaders = this->_parseStructs<Elf64_Shdr>(
 				elfHeader->e_shnum, elfHeader->e_shoff, elfHeader->e_shentsize);
 
