@@ -6,6 +6,7 @@
 namespace Executors::DataProcImm {
 	class MoveWideImmediateExecutor : public ExecutorBaseT<InstructionDefs::DataProcImm::MoveWideImmediate> {
 	public:
+		MoveWideImmediateExecutor() : ExecutorBaseT("MoveWideImmediateExecutor") {}
 		void execute(const InstructionDefs::DataProcImm::MoveWideImmediate &instruction, AArch64Cpu& cpu) override;
 	};
 }

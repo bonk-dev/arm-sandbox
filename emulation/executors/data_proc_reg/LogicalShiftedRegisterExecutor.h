@@ -5,6 +5,7 @@
 namespace Executors::DataProcReg {
     class LogicalShiftedRegisterExecutor final : public ExecutorBaseT<InstructionDefs::DataProcReg::LogicalShiftedRegister> {
     public:
+        LogicalShiftedRegisterExecutor() : ExecutorBaseT("LogicalShiftedRegisterExecutor") {}
         void execute(const InstructionDefs::DataProcReg::LogicalShiftedRegister &details, AArch64Cpu& cpu) override;
     };
 }

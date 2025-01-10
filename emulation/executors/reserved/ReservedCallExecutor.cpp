@@ -1,7 +1,7 @@
 #include "ReservedCallExecutor.h"
 
 Executors::Reserved::ReservedCallExecutor::ReservedCallExecutor(const std::shared_ptr<Emulation::Libraries::Mapper> &mapper)
-	: _mapper(mapper) {}
+	: ExecutorBaseT("ReservedCallExecutor"), _mapper(mapper) {}
 
 void Executors::Reserved::ReservedCallExecutor::execute(const InstructionDefs::Reserved::ReservedCall &instruction, AArch64Cpu& cpu) {
 	switch (instruction.call_type) {

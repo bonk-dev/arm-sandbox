@@ -8,6 +8,8 @@ namespace Executors::Begsi {
 	protected:
 		void branchTo(virtual_address_t destination, [[maybe_unused]] Emulation::BranchType branchType,
 					  [[maybe_unused]] bool isCondtitional, bool isLink, AArch64Cpu& cpu);
+	public:
+		explicit BranchingExecutor(const char* name) : ExecutorBaseT<InstructionDetailsT>(name) {}
 	};
 
 	template<class InstructionDetailsT>
