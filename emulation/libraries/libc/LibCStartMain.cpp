@@ -10,7 +10,7 @@ void Emulation::Libraries::LibC::LibCStartMain::execute(AArch64Cpu &cpu) {
     // X5 == rtld_fini (unused)
     // X7 == stack_end (unused)
 
-    std::cout << "[__libc_start_main]: Calling main" << std::endl;
+    _logger->info() << "Calling main" << std::endl;
 
     // int main(int argc, char** argv),
     // X0 == argc

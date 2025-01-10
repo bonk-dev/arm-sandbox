@@ -9,6 +9,7 @@ namespace Emulation::Libraries::LibC {
 	 */
 	class FOpen final : public EmulatedSymbol {
 	public:
+		FOpen() : EmulatedSymbol("FOpen") {}
 		void execute(AArch64Cpu &cpu) override;
 	};
 }

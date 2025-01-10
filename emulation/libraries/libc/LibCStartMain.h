@@ -9,6 +9,7 @@ namespace Emulation::Libraries::LibC {
      */
     class LibCStartMain final : public EmulatedSymbol {
     public:
+        LibCStartMain() : EmulatedSymbol("__libc_start_main") {}
         void execute(AArch64Cpu &cpu) override;
     };
 }

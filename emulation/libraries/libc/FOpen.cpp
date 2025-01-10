@@ -7,7 +7,7 @@ void Emulation::Libraries::LibC::FOpen::execute(AArch64Cpu &cpu) {
 	const auto path = cpu.getMemory().readCString(filename_char_ptr);
 	const auto mode = cpu.getMemory().readCString(mode_char_ptr);
 
-	std::cout << "[FOpen] Opening: " << path << " (mode: " << mode << ")" << std::endl;
+	_logger->info() << "Opening: " << path << " (mode: " << mode << ")" << std::endl;
 
 	if (!cpu.getFs().doesFileExist(path)) {
 		cpu.writeGpRegister64(0, 0);

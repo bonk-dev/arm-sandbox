@@ -10,6 +10,7 @@ namespace Emulation::Libraries::LibC {
 	 */
 	class FScanF final : public EmulatedSymbol {
 	public:
+		FScanF() : EmulatedSymbol("FScanF") {}
 		void execute(AArch64Cpu &cpu) override;
 	};
 }
