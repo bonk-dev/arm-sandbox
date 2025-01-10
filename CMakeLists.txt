@@ -99,11 +99,11 @@ add_executable(arm_sandbox main.cpp
         loaders/elf/elf-windows.h
         loaders/elf/elf-multiplatform.h
         logging/LoggerBase.h
-        logging/StdoutLogger.cpp
-        logging/StdoutLogger.h
         logging/LoggerFactory.h
         logging/NullStream.h
         logging/NullStream.cpp
         logging/LogLevel.h
         logging/LoggerBase.cpp
+        logging/StdoutLogger.h
+        logging/StdoutLogger.cpp
 )
