@@ -91,7 +91,6 @@ int read_elf_main(const char* path) {
 
 	auto executors = map_all_executors(mapper);
 	A64Decoder dec{};
-	InstructionType type;
 
 	// Add test file
 	cpu.getFs().addFile("/tmp/test2.txt", std::make_shared<Filesystem::EmulatedFile>("asd"));
@@ -100,7 +99,7 @@ int read_elf_main(const char* path) {
 
 	virtual_address_t pc = cpu.getProgramCounter();
 	auto encodedInstruction = cpu.getMemory().read<uint32_t>(pc);
-	type = dec.decodeNextType(encodedInstruction);
+	InstructionType type = dec.decodeNextType(encodedInstruction);
 
 	while (type != InstructionType::Undefined) {
 		logger->info() << std::hex << std::noshowbase << "0x" << std::setfill('0') << std::setw(16) << pc << ": ";
