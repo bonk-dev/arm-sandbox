@@ -62,7 +62,7 @@ void register_library_implementations(Emulation::Libraries::Mapper& mapper) {
 			std::make_unique<Emulation::Libraries::LibC::FScanF>());
 }
 
-int read_elf_main(const char* path, const Logging::LogLevel level) {
+int read_elf_main(const char* path) {
 	Loaders::ElfLoader loader(path);
 	loader.loadEntireFile();
 	loader.parse();
@@ -173,5 +173,5 @@ int main(int argc, char** argv) {
 	}
 
 	logger->verbose() << "Loading ELF from " << argv[1] << std::endl;
-	return read_elf_main(argv[1], logLevel);
+	return read_elf_main(argv[1]);
 }
