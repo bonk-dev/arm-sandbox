@@ -82,6 +82,6 @@ void Emulation::Libraries::Mapper::allocateLinkingSegment(CpuVirtualMemory &memo
 
 	_logger->verbose() << "Allocating linking table segment" << std::endl;
 	this->_linkingTableAddress = memory.allocateSegment(segmentSize);
-	_logger->verbose() << "[Mapper] Linking table segment allocated at " << this->_linkingTableAddress.value()
+	_logger->verbose() << "Linking table segment allocated at " << this->_linkingTableAddress.value()
 		<< "; size: " << segmentSize << " bytes" << std::endl;
 }

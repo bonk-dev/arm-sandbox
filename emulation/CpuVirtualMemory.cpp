@@ -53,11 +53,11 @@ std::vector<std::byte> &CpuVirtualMemory::_getSegment(virtual_address_t virtualA
 
 void CpuVirtualMemory::write(uintptr_t addr, uint32_t value) {
 	if (_isStackArea(addr)) {
-		_logger->verbose() << "[Memory] 32bit write to stack: " << std::hex << std::showbase << addr << std::endl;
+		_logger->verbose() << "32bit write to stack: " << std::hex << std::showbase << addr << std::endl;
 		this->getStack(AARCH64_MAIN_THREAD_ID)->write(addr, value);
 	}
 	else {
-		_logger->verbose() << "[Memory] 32bit Write to address: " << std::hex << std::showbase << addr << " (val: " << value << ")" << std::endl;
+		_logger->verbose() << "32bit Write to address: " << std::hex << std::showbase << addr << " (val: " << value << ")" << std::endl;
 
 		virtual_address_t start;
 		std::vector<std::byte>& segment = this->_getSegment(addr, start);
@@ -73,11 +73,11 @@ void CpuVirtualMemory::write(uintptr_t addr, uint32_t value) {
 
 void CpuVirtualMemory::write(uintptr_t addr, uint64_t value) {
 	if (_isStackArea(addr)) {
-		_logger->verbose() << "[Memory] 64bit write to stack: " << std::hex << std::showbase << addr << std::endl;
+		_logger->verbose() << "64bit write to stack: " << std::hex << std::showbase << addr << std::endl;
 		this->getStack(AARCH64_MAIN_THREAD_ID)->write(addr, value);
 	}
 	else {
-		_logger->verbose() << "[Memory] 64bit Write to address: " << std::hex << std::showbase << addr << " (val: " << value << ")"<< std::endl;
+		_logger->verbose() << "64bit Write to address: " << std::hex << std::showbase << addr << " (val: " << value << ")"<< std::endl;
 
 		virtual_address_t start;
 		std::vector<std::byte>& segment = this->_getSegment(addr, start);

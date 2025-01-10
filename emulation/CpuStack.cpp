@@ -29,7 +29,7 @@ void *CpuStack::_getUnsafePointer(virtual_address_t address) const {
 }
 
 void *CpuStack::getUnsafePointer(virtual_address_t address) const {
-	_logger->verbose() << "[CpuStack] Unsafe access to " << std::showbase << std::hex << address << std::endl;
+	_logger->verbose() << "Unsafe access to " << std::showbase << std::hex << address << std::endl;
 	return this->_getUnsafePointer(address);
 }
 

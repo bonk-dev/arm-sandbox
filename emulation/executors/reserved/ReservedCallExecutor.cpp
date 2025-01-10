@@ -7,17 +7,17 @@ void Executors::Reserved::ReservedCallExecutor::execute(const InstructionDefs::R
 	switch (instruction.call_type) {
 		case InstructionDefs::Reserved::ReservedCalls::Exit: {
 			if (instruction.immediate == 0) {
-				_logger->info() << "[ReservedCallExecutor] Clean exit" << std::endl;
+				_logger->info() << "Clean exit" << std::endl;
 				const int mainStatusCode = static_cast<int>(cpu.readGpRegister32(0));
 				cpu.haltExecution(mainStatusCode);
 			}
 			break;
 		}
 		case InstructionDefs::Reserved::ReservedCalls::LibraryCall: {
-			_logger->verbose() << "[ReservedCallExecutor] Calling symbol " << instruction.immediate << std::endl;
+			_logger->verbose() << "Calling symbol " << instruction.immediate << std::endl;
 
 			if (!_mapper->hasLibraryImplementation(instruction.immediate)) {
-				_logger->error() << "[ReservedCallExecutor] No library implementation was found for symbol #" << instruction.immediate << std::endl;
+				_logger->error() << "No library implementation was found for symbol #" << instruction.immediate << std::endl;
 				throw std::runtime_error("No lib implementation was found");
 			}
 			else {
