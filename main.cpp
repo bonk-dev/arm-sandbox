@@ -175,7 +175,8 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 	if (opt.showHelp) {
-		throw std::runtime_error("PrintHelp not implemented");
+		Cli::printUsage(*logger);
+		return 0;
 	}
 	if (opt.interactive) {
 		throw std::runtime_error("Interactive mode not implemented");

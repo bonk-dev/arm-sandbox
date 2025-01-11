@@ -1,4 +1,5 @@
 #include <cstring>
+#include <iomanip>
 #include "parser.h"
 
 namespace {
@@ -74,4 +75,16 @@ Cli::Options Cli::parseOptions(int argc, char **argv, std::string& errorOut) {
 	}
 
 	return opt;
+}
+
+void Cli::printUsage(Logging::LoggerBase& logger) {
+	logger.error(false) << "Usage: ./arm_sandbox [options] <emulation target path>" << std::endl
+		<< "-h | --help | Print this help." << std::endl
+		<< "-i | --interactive | Display an interactive menu on startup" << std::endl
+		<< "-l | --log-level | <quiet,error,warning,info,verbose> | Set a global log level" << std::endl
+		<< std::setw(4) << ' ' << "quiet: Only display emulation target out, err and in streams." << std::endl
+		<< std::setw(4) << ' ' << "error: quiet level messages and emulator errors." << std::endl
+		<< std::setw(4) << ' ' << "warning: error level messages and emulator warnings." << std::endl
+		<< std::setw(4) << ' ' << "info: warning level messages and emulator infos." << std::endl
+		<< std::setw(4) << ' ' << "verbose: info level messages and verbose messages." << std::endl;
 }
