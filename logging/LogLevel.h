@@ -6,6 +6,7 @@ namespace Logging {
         Error,
         Warning,
         Info,
-        Verbose
+        Verbose,
+		Invalid
     };
 }

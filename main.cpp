@@ -12,6 +12,8 @@
 #include "logging/LoggerBase.h"
 #include "logging/LoggerFactory.h"
 #include "logging/LoggerContainer.h"
+#include "cli/Options.h"
+#include "cli/parser.h"
 
 namespace {
 	std::unique_ptr<Logging::LoggerBase> logger = Logging::createLogger("main");
@@ -164,6 +166,19 @@ int main(int argc, char** argv) {
 		logger->error() << "Usage: arm_sandbox <elf_file_path>" << std::endl;
 		logger->error() << "Example: arm_sandbox /home/bonk/hello_word" << std::endl;
 		return InvalidUsage;
+	}
+
+	std::string parseError;
+	Cli::Options opt = Cli::parseOptions(argc, argv, parseError);
+	if (!parseError.empty()) {
+		logger->error() << "An error has occurred while parsing cli options: " << std::endl << parseError << std::endl;
+		return 1;
+	}
+	if (opt.showHelp) {
+		throw std::runtime_error("PrintHelp not implemented");
+	}
+	if (opt.interactive) {
+		throw std::runtime_error("Interactive mode not implemented");
 	}
 
 	if (argc >= 3) {

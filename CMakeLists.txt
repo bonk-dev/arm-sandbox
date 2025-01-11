@@ -109,4 +109,7 @@ add_executable(arm_sandbox main.cpp
         logging/LoggerFactory.cpp
         logging/LoggerContainer.h
         logging/LoggerContainer.cpp
+        cli/Options.h
+        cli/parser.h
+        cli/parser.cpp
 )
