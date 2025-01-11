@@ -64,8 +64,8 @@ void register_library_implementations(Emulation::Libraries::Mapper& mapper) {
 			std::make_unique<Emulation::Libraries::LibC::FScanF>());
 }
 
-int read_elf_main(const char* path) {
-	Loaders::ElfLoader loader(path);
+int read_elf_main(const std::string& emulationTarget) {
+	Loaders::ElfLoader loader(emulationTarget);
 	loader.loadEntireFile();
 	loader.parse();
 
@@ -182,11 +182,6 @@ int main(int argc, char** argv) {
 		throw std::runtime_error("Interactive mode not implemented");
 	}
 
-	if (argc >= 3) {
-		Logging::LogLevel logLevel = parseLogLevel(argv[2]);
-		Logging::setGlobalLogLevel(logLevel);
-	}
-
-	logger->verbose() << "Loading ELF from " << argv[1] << std::endl;
-	return read_elf_main(argv[1]);
+	logger->verbose() << "Loading ELF from " << opt.emulationTarget << std::endl;
+	return read_elf_main(opt.emulationTarget);
 }
