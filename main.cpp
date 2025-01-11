@@ -152,12 +152,12 @@ int main(int argc, char** argv) {
 		return 0;
 	}
 	if (opt.interactive) {
-		Cli::InteractiveMenu menu;
+		Cli::InteractiveMenu menu(opt);
 		while (menu.menuLoop()) {
 
 		}
 
-		throw std::runtime_error("Not implemented");
+		opt = menu.getOptions();
 	}
 
 	logger->verbose() << "Loading ELF from " << opt.emulationTarget << std::endl;

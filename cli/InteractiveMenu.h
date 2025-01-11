@@ -7,7 +7,8 @@ namespace Cli {
 		Cli::Options _options;
 		void _printMenu() const;
 	public:
-		InteractiveMenu();
+		explicit InteractiveMenu(Cli::Options startingOptions);
 		bool menuLoop();
+		Cli::Options getOptions() const;
 	};
 }

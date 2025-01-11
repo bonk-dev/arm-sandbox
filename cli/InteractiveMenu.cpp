@@ -21,7 +21,7 @@ namespace {
 }
 
 namespace Cli {
-	InteractiveMenu::InteractiveMenu() : _options() {
+	InteractiveMenu::InteractiveMenu(Cli::Options startingOptions) : _options(std::move(startingOptions)) {
 		_printMenu();
 	}
 
@@ -41,5 +41,9 @@ namespace Cli {
 		std::cout << "2: Set global level (current: " << logLevelToStr(_options.logLevel) << ")" << std::endl;
 		std::cout << "3: Run" << std::endl;
 		std::cout << "4: Exit" << std::endl;
+	}
+
+	Cli::Options InteractiveMenu::getOptions() const {
+		return _options;
 	}
 }
