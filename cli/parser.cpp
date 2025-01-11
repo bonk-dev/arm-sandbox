@@ -28,7 +28,7 @@ namespace {
 	}
 
 	constexpr bool flagMatches(char* arg, const char* shortFlag, const char* longFlag) {
-		return strcmp(arg, "-h") == 0 || strcmp(arg, "--help") == 0;
+		return strcmp(arg, shortFlag) == 0 || strcmp(arg, longFlag) == 0;
 	}
 }
 
@@ -36,7 +36,7 @@ Cli::Options Cli::parseOptions(int argc, char **argv, std::string& errorOut) {
 	Cli::Options opt{};
 
 	bool parsedTarget = false;
-	for (int i = 0; i < argc; ++i) {
+	for (int i = 1; i < argc; ++i) {
 		char* arg = argv[i];
 
 		if (arg[0] != '-') {
