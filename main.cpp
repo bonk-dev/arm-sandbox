@@ -139,27 +139,6 @@ int read_elf_main(const std::string& emulationTarget) {
 	return 0;
 }
 
-Logging::LogLevel parseLogLevel(const char* str) {
-	std::string s{str};
-	if (s == "verbose") {
-		return Logging::LogLevel::Verbose;
-	}
-	if (s == "info") {
-		return Logging::LogLevel::Info;
-	}
-	if (s == "warning") {
-		return Logging::LogLevel::Warning;
-	}
-	if (s == "error") {
-		return Logging::LogLevel::Error;
-	}
-	if (s == "quiet") {
-		return Logging::LogLevel::Quiet;
-	}
-
-	throw std::runtime_error("Invalid logging level");
-}
-
 int main(int argc, char** argv) {
 	if (argc <= 1) {
 		constexpr int InvalidUsage = 1;
