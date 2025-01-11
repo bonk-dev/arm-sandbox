@@ -14,6 +14,7 @@
 #include "logging/LoggerContainer.h"
 #include "cli/Options.h"
 #include "cli/parser.h"
+#include "cli/InteractiveMenu.h"
 
 namespace {
 	std::unique_ptr<Logging::LoggerBase> logger = Logging::createLogger("main");
@@ -151,7 +152,10 @@ int main(int argc, char** argv) {
 		return 0;
 	}
 	if (opt.interactive) {
-		throw std::runtime_error("Interactive mode not implemented");
+		Cli::InteractiveMenu menu;
+		while (menu.menuLoop()) {
+			throw std::runtime_error("Not implemented");
+		}
 	}
 
 	logger->verbose() << "Loading ELF from " << opt.emulationTarget << std::endl;

@@ -112,4 +112,6 @@ add_executable(arm_sandbox main.cpp
         cli/Options.h
         cli/parser.h
         cli/parser.cpp
+        cli/InteractiveMenu.cpp
+        cli/InteractiveMenu.h
 )
