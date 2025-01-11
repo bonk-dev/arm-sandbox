@@ -58,12 +58,12 @@ Cli::Options Cli::parseOptions(int argc, char **argv, std::string& errorOut) {
 			opt.interactive = true;
 		}
 		else if (flagMatches(arg, "-l", "--log-level")) {
-			if (i++ + 1 >= argc) {
+			if (i + 1 >= argc) {
 				errorOut = "You need to specify a log level after -l. Use --help to see available log levels.";
 				break;
 			}
 
-			opt.logLevel = parseLogLevel(arg, errorOut);
+			opt.logLevel = parseLogLevel(argv[++i], errorOut);
 			if (opt.logLevel == Logging::LogLevel::Invalid) {
 				break;
 			}
