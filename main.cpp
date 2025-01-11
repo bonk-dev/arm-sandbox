@@ -140,13 +140,6 @@ int read_elf_main(const std::string& emulationTarget) {
 }
 
 int main(int argc, char** argv) {
-	if (argc <= 1) {
-		constexpr int InvalidUsage = 1;
-		logger->error() << "Usage: arm_sandbox <elf_file_path>" << std::endl;
-		logger->error() << "Example: arm_sandbox /home/bonk/hello_word" << std::endl;
-		return InvalidUsage;
-	}
-
 	std::string parseError;
 	Cli::Options opt = Cli::parseOptions(argc, argv, parseError);
 	if (!parseError.empty()) {
