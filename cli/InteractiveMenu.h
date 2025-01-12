@@ -2,23 +2,24 @@
 #include "Options.h"
 
 namespace Cli {
+	enum class MenuState {
+		Main = 0,
+		ExecTarget = 1,
+		LogLevel = 2,
+		Run = 3,
+		Exit = 4
+	};
+
 	class InteractiveMenu {
 	private:
-		enum class State {
-			Main = 0,
-			ExecTarget = 1,
-			LogLevel = 2,
-			Run = 3,
-			Exit = 4
-		};
-
-		State _state;
+		MenuState _state;
 		Cli::Options _options;
 		void _printMenu() const;
 	public:
+
 		explicit InteractiveMenu(Cli::Options startingOptions);
 		bool menuLoop();
 		[[nodiscard]] Cli::Options getOptions() const;
-		State getState() const;
+		MenuState getState() const;
 	};
 }
