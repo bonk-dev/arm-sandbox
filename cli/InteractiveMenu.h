@@ -12,7 +12,7 @@ namespace Cli {
 			Exit = 4
 		};
 
-		State _screen;
+		State _state;
 		Cli::Options _options;
 		void _printMenu() const;
 	public:

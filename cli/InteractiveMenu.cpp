@@ -49,20 +49,20 @@ namespace {
 namespace Cli {
 	InteractiveMenu::InteractiveMenu(Cli::Options startingOptions) : \
 		_options(std::move(startingOptions)),
-		_screen(State::Main) {}
+		_state(State::Main) {}
 
 	bool InteractiveMenu::menuLoop() {
 		clear_terminal();
 
 		bool shouldContinue;
-		switch (_screen) {
+		switch (_state) {
 			case State::Main: {
 				_printMenu();
 
 				int screenInt = read_until_valid<int>("Choose (1-4): ", [](const int& s, auto _) {
 					return s >= 1 && s <= 4;
 				});
-				_screen = static_cast<State>(screenInt);
+				_state = static_cast<State>(screenInt);
 
 				shouldContinue = true;
 				break;
@@ -89,7 +89,7 @@ namespace Cli {
 				this->_options.emulationTarget = setToEmpty
 						? ""
 						: fileName;
-				_screen = State::Main;
+				_state = State::Main;
 
 				shouldContinue = true;
 				break;
@@ -111,7 +111,7 @@ namespace Cli {
 						});
 
 				this->_options.logLevel = Logging::str_to_log_level(logLevelString);
-				_screen = State::Main;
+				_state = State::Main;
 
 				shouldContinue = true;
 				break;
