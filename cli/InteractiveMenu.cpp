@@ -56,100 +56,23 @@ namespace Cli {
 
 		bool shouldContinue;
 		switch (_state) {
-			case MenuState::Main: {
-				_printMenu();
-
-				int screenInt = read_until_valid<int>("Choose (1-4): ", [](const auto& opt) {
-					if (!opt.has_value()) {
-						return false;
-					}
-
-					const auto& s = opt.value();
-					return s >= 1 && s <= 4;
-				});
-				_state = static_cast<MenuState>(screenInt);
-
-				shouldContinue = true;
+			case MenuState::Main:
+				shouldContinue = _renderMain();
 				break;
-			}
-			case MenuState::ExecTarget: {
-				print_header();
-
-				bool setToEmpty = false;
-				auto fileName = read_until_valid<std::string>(
-						"Specify a path to your execution target (must be an ELF64 binary, built for AArch64), or press ENTER to unset: ",
-						[&setToEmpty](const auto& opt) {
-							if (!opt.has_value()) {
-								setToEmpty = true;
-								return true;
-							}
-
-							const auto& f = opt.value();
-							if (std::filesystem::is_regular_file(f)) {
-								setToEmpty = false;
-								return true;
-							}
-
-							std::cout << "The file does not exist" << std::endl;
-							return false;
-						});
-				this->_options.emulationTarget = setToEmpty
-						? ""
-						: fileName;
-				_state = MenuState::Main;
-
-				shouldContinue = true;
+			case MenuState::ExecTarget:
+				shouldContinue = _renderExecTarget();
 				break;
-			}
-			case MenuState::LogLevel: {
-				print_header();
-
-				auto logLevelString = read_until_valid<std::string>(
-						"Choose log level (quiet, error, warning, info, verbose): ",
-						[](const auto& opt) {
-							if (!opt.has_value()) {
-								return false;
-							}
-
-							const auto& readLogLevel = opt.value();
-							bool valid =
-									readLogLevel == "quiet" ||
-									readLogLevel == "error" ||
-									readLogLevel == "warning" ||
-									readLogLevel == "info" ||
-									readLogLevel == "verbose";
-							return valid;
-						});
-
-				this->_options.logLevel = Logging::str_to_log_level(logLevelString);
-				_state = MenuState::Main;
-
-				shouldContinue = true;
+			case MenuState::LogLevel:
+				shouldContinue = _renderLogLevel();
 				break;
-			}
 			case MenuState::Run:
-				if (this->_options.emulationTarget.empty()) {
-					_showError("You must specify an emulation target.");
-					shouldContinue = true;
-				}
-				else {
-					shouldContinue = false;
-				}
+				shouldContinue = _renderRun();
 				break;
 			case MenuState::Exit:
-				shouldContinue = false;
+				shouldContinue = _renderExit();
 				break;
 			case MenuState::Error: {
-				print_header();
-				std::cout << _error << std::endl;
-				std::cout << "Press ENTER to go back to the main menu." << std::endl;
-
-				std::string s;
-				std::getline(std::cin, s);
-
-				_state = MenuState::Main;
-				shouldContinue = true;
-
+				shouldContinue = _renderError();
 				break;
 			}
 			default:
@@ -182,5 +105,102 @@ namespace Cli {
 	void InteractiveMenu::_showError(const std::string &message) {
 		_state = MenuState::Error;
 		_error = message;
+	}
+
+	bool InteractiveMenu::_renderMain() {
+		_printMenu();
+
+		int screenInt = read_until_valid<int>("Choose (1-4): ", [](const auto& opt) {
+			if (!opt.has_value()) {
+				return false;
+			}
+
+			const auto& s = opt.value();
+			return s >= 1 && s <= 4;
+		});
+		_state = static_cast<MenuState>(screenInt);
+
+		return true;
+	}
+
+	bool InteractiveMenu::_renderExecTarget() {
+		print_header();
+
+		bool setToEmpty = false;
+		auto fileName = read_until_valid<std::string>(
+				"Specify a path to your execution target (must be an ELF64 binary, built for AArch64), or press ENTER to unset: ",
+				[&setToEmpty](const auto& opt) {
+					if (!opt.has_value()) {
+						setToEmpty = true;
+						return true;
+					}
+
+					const auto& f = opt.value();
+					if (std::filesystem::is_regular_file(f)) {
+						setToEmpty = false;
+						return true;
+					}
+
+					std::cout << "The file does not exist" << std::endl;
+					return false;
+				});
+		this->_options.emulationTarget = setToEmpty
+										 ? ""
+										 : fileName;
+		_state = MenuState::Main;
+
+		return true;
+	}
+
+	bool InteractiveMenu::_renderLogLevel() {
+		print_header();
+
+		auto logLevelString = read_until_valid<std::string>(
+				"Choose log level (quiet, error, warning, info, verbose): ",
+				[](const auto& opt) {
+					if (!opt.has_value()) {
+						return false;
+					}
+
+					const auto& readLogLevel = opt.value();
+					bool valid =
+							readLogLevel == "quiet" ||
+							readLogLevel == "error" ||
+							readLogLevel == "warning" ||
+							readLogLevel == "info" ||
+							readLogLevel == "verbose";
+					return valid;
+				});
+
+		this->_options.logLevel = Logging::str_to_log_level(logLevelString);
+		_state = MenuState::Main;
+
+		return true;
+	}
+
+	bool InteractiveMenu::_renderRun() {
+		if (this->_options.emulationTarget.empty()) {
+			_showError("You must specify an emulation target.");
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	bool InteractiveMenu::_renderExit() {
+		return false;
+	}
+
+	bool InteractiveMenu::_renderError() {
+		print_header();
+		std::cout << _error << std::endl;
+		std::cout << "Press ENTER to go back to the main menu." << std::endl;
+
+		std::string s;
+		std::getline(std::cin, s);
+
+		_state = MenuState::Main;
+		return true;
 	}
 }

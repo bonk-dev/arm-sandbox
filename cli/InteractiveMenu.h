@@ -19,6 +19,13 @@ namespace Cli {
 
 		std::string _error;
 		void _showError(const std::string& message);
+
+		bool _renderMain();
+		bool _renderExecTarget();
+		bool _renderLogLevel();
+		bool _renderRun();
+		bool _renderExit();
+		bool _renderError();
 	public:
 
 		explicit InteractiveMenu(Cli::Options startingOptions);
