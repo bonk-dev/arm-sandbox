@@ -153,8 +153,11 @@ int main(int argc, char** argv) {
 	}
 	if (opt.interactive) {
 		Cli::InteractiveMenu menu(opt);
-		while (menu.menuLoop()) {
+		while (menu.menuLoop()) {}
 
+		if (menu.getState() == Cli::MenuState::Exit) {
+			logger->error() << "Exiting" << std::endl;
+			return 0;
 		}
 
 		opt = menu.getOptions();
