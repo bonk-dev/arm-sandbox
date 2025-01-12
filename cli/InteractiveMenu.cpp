@@ -88,7 +88,7 @@ namespace Cli {
 
 				bool setToEmpty = false;
 				auto fileName = read_until_valid<std::string>(
-						"Choose your execution target (must be an ELF64 binary, built for AArch64), or put \"\" to unset: ",
+						"Choose your execution target (must be an ELF64 binary, built for AArch64), or press ENTER to unset: ",
 						[&setToEmpty](const std::string& f, bool wasEmpty) {
 							if (wasEmpty) {
 								setToEmpty = true;
