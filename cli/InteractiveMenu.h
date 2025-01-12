@@ -19,5 +19,6 @@ namespace Cli {
 		explicit InteractiveMenu(Cli::Options startingOptions);
 		bool menuLoop();
 		[[nodiscard]] Cli::Options getOptions() const;
+		State getState() const;
 	};
 }

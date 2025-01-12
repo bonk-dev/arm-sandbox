@@ -142,4 +142,8 @@ namespace Cli {
 	Cli::Options InteractiveMenu::getOptions() const {
 		return _options;
 	}
+
+	InteractiveMenu::State InteractiveMenu::getState() const {
+		return _state;
+	}
 }
