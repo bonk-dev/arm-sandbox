@@ -1,6 +1,7 @@
 #include <iostream>
 #include "InteractiveMenu.h"
 #include "clear-console.h"
+#include <filesystem>
 #include <functional>
 
 namespace {
@@ -80,9 +81,31 @@ namespace Cli {
 
 				break;
 			}
-			case State::ExecTarget:
+			case State::ExecTarget: {
 				print_header();
+
+				bool setToEmpty = false;
+				auto fileName = read_until_valid<std::string>(
+						"Choose your execution target (must be an ELF64 binary, built for AArch64), or put \"\" to unset: ",
+						[&setToEmpty](const std::string& f, bool wasEmpty) {
+							if (wasEmpty) {
+								setToEmpty = true;
+								return true;
+							}
+							else if (std::filesystem::is_regular_file(f)) {
+								setToEmpty = false;
+								return true;
+							}
+
+							std::cout << "The file does not exist" << std::endl;
+							return false;
+						});
+				this->_options.emulationTarget = setToEmpty
+						? ""
+						: fileName;
+				_screen = State::Main;
 				break;
+			}
 			case State::LogLevel:
 				break;
 			case State::Run:
