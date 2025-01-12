@@ -116,4 +116,6 @@ add_executable(arm_sandbox main.cpp
         cli/InteractiveMenu.h
         cli/clear-console.h
         cli/clear-console.cpp
+        logging/utils.h
+        logging/utils.cpp
 )

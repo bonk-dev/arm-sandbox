@@ -1,6 +1,7 @@
 #include <iostream>
 #include "InteractiveMenu.h"
 #include "clear-console.h"
+#include "../logging/utils.h"
 #include <filesystem>
 #include <functional>
 
@@ -131,7 +132,7 @@ namespace Cli {
 
 		print_header();
 		std::cout << "1: Set execution target (current: " << emulTarget << ")" << std::endl;
-		std::cout << "2: Set global level (current: " << logLevelToStr(_options.logLevel) << ")" << std::endl;
+		std::cout << "2: Set global level (current: " << Logging::log_level_to_str(_options.logLevel) << ")" << std::endl;
 		std::cout << "3: Run" << std::endl;
 		std::cout << "4: Exit" << std::endl;
 	}

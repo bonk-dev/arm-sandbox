@@ -1,32 +1,9 @@
 #include <cstring>
 #include <iomanip>
 #include "parser.h"
+#include "../logging/utils.h"
 
 namespace {
-	Logging::LogLevel parseLogLevel(const char* str, std::string& errorOut) {
-		std::string s{str};
-		errorOut = "";
-
-		if (s == "verbose") {
-			return Logging::LogLevel::Verbose;
-		}
-		if (s == "info") {
-			return Logging::LogLevel::Info;
-		}
-		if (s == "warning") {
-			return Logging::LogLevel::Warning;
-		}
-		if (s == "error") {
-			return Logging::LogLevel::Error;
-		}
-		if (s == "quiet") {
-			return Logging::LogLevel::Quiet;
-		}
-
-		errorOut = "Invalid log level. Use --help to see available log levels.";
-		return Logging::LogLevel::Invalid;
-	}
-
 	constexpr bool flagMatches(char* arg, const char* shortFlag, const char* longFlag) {
 		return strcmp(arg, shortFlag) == 0 || strcmp(arg, longFlag) == 0;
 	}
@@ -63,8 +40,9 @@ Cli::Options Cli::parseOptions(int argc, char **argv, std::string& errorOut) {
 				break;
 			}
 
-			opt.logLevel = parseLogLevel(argv[++i], errorOut);
+			opt.logLevel = Logging::str_to_log_level(argv[++i]);
 			if (opt.logLevel == Logging::LogLevel::Invalid) {
+				errorOut = "Invalid log level. Use --help to see available log levels.";
 				break;
 			}
 		}
