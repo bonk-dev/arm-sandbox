@@ -56,7 +56,9 @@ Cli::Options Cli::parseOptions(int argc, char **argv, std::string& errorOut) {
 }
 
 void Cli::printUsage(Logging::LoggerBase& logger) {
-	logger.error(false) << "Usage: ./arm_sandbox [options] <emulation target path>" << std::endl
+	logger.error(false) << "Usage: " << std::endl
+		<< "./arm_sandbox [options] <emulation target path>" << std::endl
+		<< "./arm_sandbox [options] -i" << std::endl
 		<< "-h | --help | Print this help." << std::endl
 		<< "-i | --interactive | Display an interactive menu on startup" << std::endl
 		<< "-l | --log-level | <quiet,error,warning,info,verbose> | Set a global log level" << std::endl
