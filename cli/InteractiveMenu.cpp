@@ -70,6 +70,7 @@ namespace Cli {
 	bool InteractiveMenu::menuLoop() {
 		clear_terminal();
 
+		bool shouldContinue;
 		switch (_screen) {
 			case State::Main: {
 				_printMenu();
@@ -79,6 +80,7 @@ namespace Cli {
 				});
 				_screen = static_cast<State>(screenInt);
 
+				shouldContinue = true;
 				break;
 			}
 			case State::ExecTarget: {
@@ -104,17 +106,22 @@ namespace Cli {
 						? ""
 						: fileName;
 				_screen = State::Main;
+
+				shouldContinue = true;
 				break;
 			}
 			case State::LogLevel:
+				shouldContinue = true;
 				break;
 			case State::Run:
+				shouldContinue = false;
 				break;
 			case State::Exit:
+				shouldContinue = false;
 				break;
 		}
 
-		return true;
+		return shouldContinue;
 	}
 
 	void InteractiveMenu::_printMenu() const {
