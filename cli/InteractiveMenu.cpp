@@ -12,9 +12,10 @@ namespace {
 
 	template<typename ReturnValue>
 	ReturnValue read_until_valid(const std::string& prompt,
-								 const std::function<bool(const ReturnValue&, bool)>& predicate) {
+								 const std::function<bool(std::optional<ReturnValue>)> predicate) {
 		bool invalid;
 		ReturnValue c{};
+		std::optional<ReturnValue> opt;
 		std::stringstream iss;
 		do {
 			invalid = false;
@@ -24,7 +25,7 @@ namespace {
 			std::getline(std::cin, input);
 
 			if (input.empty()) {
-				invalid = !predicate(c, true);
+				opt.reset();
 			}
 			else {
 				iss.clear();
@@ -33,13 +34,13 @@ namespace {
 
 				if (iss.bad()) {
 					invalid = true;
-				}
-				if (invalid) {
 					continue;
 				}
 
-				invalid = !predicate(c, false);
+				opt.emplace(c);
 			}
+
+			invalid = !predicate(opt);
 		} while (invalid);
 
 		return c;
@@ -59,7 +60,12 @@ namespace Cli {
 			case MenuState::Main: {
 				_printMenu();
 
-				int screenInt = read_until_valid<int>("Choose (1-4): ", [](const int& s, auto _) {
+				int screenInt = read_until_valid<int>("Choose (1-4): ", [](const auto& opt) {
+					if (!opt.has_value()) {
+						return false;
+					}
+
+					const auto& s = opt.value();
 					return s >= 1 && s <= 4;
 				});
 				_state = static_cast<MenuState>(screenInt);
@@ -73,12 +79,14 @@ namespace Cli {
 				bool setToEmpty = false;
 				auto fileName = read_until_valid<std::string>(
 						"Choose your execution target (must be an ELF64 binary, built for AArch64), or press ENTER to unset: ",
-						[&setToEmpty](const std::string& f, bool wasEmpty) {
-							if (wasEmpty) {
+						[&setToEmpty](const auto& opt) {
+							if (!opt.has_value()) {
 								setToEmpty = true;
 								return true;
 							}
-							else if (std::filesystem::is_regular_file(f)) {
+
+							const auto& f = opt.value();
+							if (std::filesystem::is_regular_file(f)) {
 								setToEmpty = false;
 								return true;
 							}
@@ -99,14 +107,18 @@ namespace Cli {
 
 				auto logLevelString = read_until_valid<std::string>(
 						"Choose log level (quiet, error, warning, info, verbose): ",
-						[](const auto& readLogLevel, auto wasEmpty) {
+						[](const auto& opt) {
+							if (!opt.has_value()) {
+								return false;
+							}
+
+							const auto& readLogLevel = opt.value();
 							bool valid =
-									!wasEmpty && (
 									readLogLevel == "quiet" ||
 									readLogLevel == "error" ||
 									readLogLevel == "warning" ||
 									readLogLevel == "info" ||
-									readLogLevel == "verbose");
+									readLogLevel == "verbose";
 							return valid;
 						});
 
