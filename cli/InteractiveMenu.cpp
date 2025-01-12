@@ -18,6 +18,10 @@ namespace {
 				throw std::runtime_error("Invalid log level");
 		}
 	}
+
+	void print_header() {
+		std::cout << "arm-sandbox 0.1" << std::endl;
+	}
 }
 
 namespace Cli {
@@ -58,6 +62,7 @@ namespace Cli {
 				break;
 			}
 			case State::ExecTarget:
+				print_header();
 				break;
 			case State::LogLevel:
 				break;
@@ -75,7 +80,7 @@ namespace Cli {
 			? "<none>"
 			: this->_options.emulationTarget.c_str();
 
-		std::cout << "arm-sandbox 0.1" << std::endl;
+		print_header();
 		std::cout << "1: Set execution target (current: " << emulTarget << ")" << std::endl;
 		std::cout << "2: Set global level (current: " << logLevelToStr(_options.logLevel) << ")" << std::endl;
 		std::cout << "3: Run" << std::endl;
