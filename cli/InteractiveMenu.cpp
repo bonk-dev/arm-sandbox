@@ -117,8 +117,6 @@ namespace Cli {
 				break;
 			}
 			case MenuState::Run:
-				shouldContinue = false;
-				break;
 			case MenuState::Exit:
 				shouldContinue = false;
 				break;
