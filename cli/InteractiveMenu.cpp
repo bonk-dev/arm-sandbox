@@ -128,9 +128,30 @@ namespace Cli {
 				break;
 			}
 			case MenuState::Run:
+				if (this->_options.emulationTarget.empty()) {
+					_showError("You must specify an emulation target.");
+					shouldContinue = true;
+				}
+				else {
+					shouldContinue = false;
+				}
+				break;
 			case MenuState::Exit:
 				shouldContinue = false;
 				break;
+			case MenuState::Error: {
+				print_header();
+				std::cout << _error << std::endl;
+				std::cout << "Press ENTER to go back to the main menu." << std::endl;
+
+				std::string s;
+				std::getline(std::cin, s);
+
+				_state = MenuState::Main;
+				shouldContinue = true;
+
+				break;
+			}
 			default:
 				throw std::runtime_error("Invalid menu state");
 		}
@@ -156,5 +177,10 @@ namespace Cli {
 
 	Cli::MenuState InteractiveMenu::getState() const {
 		return _state;
+	}
+
+	void InteractiveMenu::_showError(const std::string &message) {
+		_state = MenuState::Error;
+		_error = message;
 	}
 }

@@ -7,7 +7,8 @@ namespace Cli {
 		ExecTarget = 1,
 		LogLevel = 2,
 		Run = 3,
-		Exit = 4
+		Exit = 4,
+		Error = 5
 	};
 
 	class InteractiveMenu {
@@ -15,6 +16,9 @@ namespace Cli {
 		MenuState _state;
 		Cli::Options _options;
 		void _printMenu() const;
+
+		std::string _error;
+		void _showError(const std::string& message);
 	public:
 
 		explicit InteractiveMenu(Cli::Options startingOptions);
