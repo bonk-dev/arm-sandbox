@@ -40,7 +40,7 @@ namespace {
 				continue;
 			}
 
-			invalid = predicate(c);
+			invalid = !predicate(c);
 		} while (invalid);
 
 		return c;
