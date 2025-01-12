@@ -6,23 +6,6 @@
 #include <functional>
 
 namespace {
-	const char* logLevelToStr(Logging::LogLevel level) {
-		switch (level) {
-			case Logging::LogLevel::Quiet:
-				return "quiet";
-			case Logging::LogLevel::Error:
-				return "error";
-			case Logging::LogLevel::Warning:
-				return "warning";
-			case Logging::LogLevel::Info:
-				return "info";
-			case Logging::LogLevel::Verbose:
-				return "verbose";
-			default:
-				throw std::runtime_error("Invalid log level");
-		}
-	}
-
 	void print_header() {
 		std::cout << "arm-sandbox 0.1" << std::endl;
 	}
@@ -111,9 +94,28 @@ namespace Cli {
 				shouldContinue = true;
 				break;
 			}
-			case State::LogLevel:
+			case State::LogLevel: {
+				print_header();
+
+				auto logLevelString = read_until_valid<std::string>(
+						"Choose log level (quiet, error, warning, info, verbose): ",
+						[](const auto& readLogLevel, auto wasEmpty) {
+							bool valid =
+									!wasEmpty && (
+									readLogLevel == "quiet" ||
+									readLogLevel == "error" ||
+									readLogLevel == "warning" ||
+									readLogLevel == "info" ||
+									readLogLevel == "verbose");
+							return valid;
+						});
+
+				this->_options.logLevel = Logging::str_to_log_level(logLevelString);
+				_screen = State::Main;
+
 				shouldContinue = true;
 				break;
+			}
 			case State::Run:
 				shouldContinue = false;
 				break;
