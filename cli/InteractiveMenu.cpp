@@ -131,6 +131,8 @@ namespace Cli {
 			case MenuState::Exit:
 				shouldContinue = false;
 				break;
+			default:
+				throw std::runtime_error("Invalid menu state");
 		}
 
 		return shouldContinue;
