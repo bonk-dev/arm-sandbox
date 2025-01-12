@@ -25,23 +25,35 @@ namespace {
 	}
 
 	template<typename ReturnValue>
-	ReturnValue read_until_valid(const std::string& prompt, bool (*predicate)(const ReturnValue& readValue)) {
+	ReturnValue read_until_valid(const std::string& prompt,
+								 bool (*predicate)(const ReturnValue& readValue, bool wasEmpty)) {
 		bool invalid;
-		ReturnValue c;
+		ReturnValue c{};
+		std::stringstream iss;
 		do {
 			invalid = false;
 			std::cout << prompt;
-			std::cin >> c;
-			if (std::cin.bad()) {
-				invalid = true;
-			}
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			if (invalid) {
-				continue;
-			}
 
-			invalid = !predicate(c);
+			std::string input;
+			std::getline(std::cin, input);
+
+			if (input.empty()) {
+				invalid = !predicate(c, true);
+			}
+			else {
+				iss.clear();
+				iss.str(input);
+				iss >> c;
+
+				if (iss.bad()) {
+					invalid = true;
+				}
+				if (invalid) {
+					continue;
+				}
+
+				invalid = !predicate(c, false);
+			}
 		} while (invalid);
 
 		return c;
@@ -60,7 +72,7 @@ namespace Cli {
 			case State::Main: {
 				_printMenu();
 
-				int screenInt = read_until_valid<int>("Choose (1-4): ", [](const int& s) {
+				int screenInt = read_until_valid<int>("Choose (1-4): ", [](const int& s, auto _) {
 					return s >= 1 && s <= 4;
 				});
 				_screen = static_cast<State>(screenInt);
