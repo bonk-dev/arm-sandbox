@@ -19,34 +19,34 @@ namespace {
 	}
 }
 
-namespace NZCV {
+namespace nzcv {
 	// Read bits
 
-	constexpr bool Negative(const uint64_t nzcvValue) {
+	constexpr bool negative(const uint64_t nzcvValue) {
 		return (nzcvValue >> n_offset) & 1;
 	}
-	constexpr bool Zero(const uint64_t nzcvValue) {
+	constexpr bool zero(const uint64_t nzcvValue) {
 		return (nzcvValue >> z_offset) & 1;
 	}
-	constexpr bool Carry(const uint64_t nzcvValue) {
+	constexpr bool carry(const uint64_t nzcvValue) {
 		return (nzcvValue >> c_offset) & 1;
 	}
-	constexpr bool Overflow(const uint64_t nzcvValue) {
+	constexpr bool overflow(const uint64_t nzcvValue) {
 		return (nzcvValue >> v_offset) & 1;
 	}
 
 	// Set/reset bits
 
-	constexpr uint64_t Negative(const uint64_t nzcvValue, bool negative) {
+	constexpr uint64_t negative(const uint64_t nzcvValue, bool negative) {
 		return set_reset_bit(nzcvValue, n_offset, negative);
 	}
-	constexpr uint64_t Zero(const uint64_t nzcvValue, bool zero) {
+	constexpr uint64_t zero(const uint64_t nzcvValue, bool zero) {
 		return set_reset_bit(nzcvValue, z_offset, zero);
 	}
-	constexpr uint64_t Carry(const uint64_t nzcvValue, bool carry) {
+	constexpr uint64_t carry(const uint64_t nzcvValue, bool carry) {
 		return set_reset_bit(nzcvValue, c_offset, carry);
 	}
-	constexpr uint64_t Overflow(const uint64_t nzcvValue, bool overflow) {
+	constexpr uint64_t overflow(const uint64_t nzcvValue, bool overflow) {
 		return set_reset_bit(nzcvValue, v_offset, overflow);
 	}
 }

@@ -37,14 +37,14 @@ public:
     [[nodiscard]] uint64_t readGpRegister64(regindex_t index) const;
 
 	/**
-	 * Reads the NZCV register (condition flags)
-	 * @return NZCV register value
+	 * Reads the nzcv register (condition flags)
+	 * @return nzcv register value
 	 */
 	[[nodiscard]] uint64_t readNzcvRegister() const;
 
 	/**
-	 * Writes a new value to the NZCV register, zeroing out bits 27:0 and 63:32 (these are reserved)
-	 * @param newValue The new NZCV reg. value
+	 * Writes a new value to the nzcv register, zeroing out bits 27:0 and 63:32 (these are reserved)
+	 * @param newValue The new nzcv reg. value
 	 */
 	void writeNzcvRegsiter(uint64_t newValue);
 

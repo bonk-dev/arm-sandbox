@@ -9,46 +9,46 @@ void Executors::Begsi::ConditionalBranchImmediateExecutor::execute(
 	const uint64_t nzcv = cpu.readNzcvRegister();
 	switch (instruction.condition) {
 		case Condition::Equal:
-			isMet = NZCV::Zero(nzcv);
+			isMet = nzcv::zero(nzcv);
 			break;
 		case Condition::NotEqual:
-			isMet = NZCV::Zero(nzcv) == 0;
+			isMet = nzcv::zero(nzcv) == 0;
 			break;
 		case Condition::CarrySet:
-			isMet = NZCV::Carry(nzcv);
+			isMet = nzcv::carry(nzcv);
 			break;
 		case Condition::CarryClear:
-			isMet = NZCV::Carry(nzcv) == 0;
+			isMet = nzcv::carry(nzcv) == 0;
 			break;
 		case Condition::Negative:
-			isMet = NZCV::Negative(nzcv);
+			isMet = nzcv::negative(nzcv);
 			break;
 		case Condition::NotNegative:
-			isMet = NZCV::Negative(nzcv) == 0;
+			isMet = nzcv::negative(nzcv) == 0;
 			break;
 		case Condition::OverflowSet:
-			isMet = NZCV::Overflow(nzcv);
+			isMet = nzcv::overflow(nzcv);
 			break;
 		case Condition::OverflowClear:
-			isMet = NZCV::Overflow(nzcv) == 0;
+			isMet = nzcv::overflow(nzcv) == 0;
 			break;
 		case Condition::Higher:
-			isMet = NZCV::Carry(nzcv) && NZCV::Zero(nzcv) == 0;
+			isMet = nzcv::carry(nzcv) && nzcv::zero(nzcv) == 0;
 			break;
 		case Condition::LowerOrSame:
-			isMet = NZCV::Carry(nzcv) == 0 || NZCV::Zero(nzcv);
+			isMet = nzcv::carry(nzcv) == 0 || nzcv::zero(nzcv);
 			break;
 		case Condition::GreaterOrEqual:
-			isMet = NZCV::Negative(nzcv) == NZCV::Overflow(nzcv);
+			isMet = nzcv::negative(nzcv) == nzcv::overflow(nzcv);
 			break;
 		case Condition::LessThan:
-			isMet = NZCV::Negative(nzcv) != NZCV::Overflow(nzcv);
+			isMet = nzcv::negative(nzcv) != nzcv::overflow(nzcv);
 			break;
 		case Condition::GreaterThan:
-			isMet = NZCV::Zero(nzcv) == 0 && NZCV::Negative(nzcv) == NZCV::Overflow(nzcv);
+			isMet = nzcv::zero(nzcv) == 0 && nzcv::negative(nzcv) == nzcv::overflow(nzcv);
 			break;
 		case Condition::LessOrEqual:
-			isMet = NZCV::Zero(nzcv) || NZCV::Negative(nzcv) != NZCV::Overflow(nzcv);
+			isMet = nzcv::zero(nzcv) || nzcv::negative(nzcv) != nzcv::overflow(nzcv);
 			break;
 		case Condition::Always:
 			isMet = true;

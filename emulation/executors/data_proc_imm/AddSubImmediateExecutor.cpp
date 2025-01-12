@@ -13,10 +13,10 @@ namespace {
 		const UnsignedIntType u_sum = a + b + static_cast<unsigned int>(carry);
 		const UnsignedIntType s_sum = static_cast<SignedIntType>(a) + static_cast<SignedIntType>(b) + static_cast<unsigned int>(carry);
 
-		nzcv = NZCV::Negative(nzcv, s_sum < 0);
-		nzcv = NZCV::Zero(nzcv, u_sum == 0);
-		nzcv = NZCV::Carry(nzcv, u_sum < a);
-		nzcv = NZCV::Overflow(nzcv, s_sum < static_cast<SignedIntType>(a));
+		nzcv = nzcv::negative(nzcv, s_sum < 0);
+		nzcv = nzcv::zero(nzcv, u_sum == 0);
+		nzcv = nzcv::carry(nzcv, u_sum < a);
+		nzcv = nzcv::overflow(nzcv, s_sum < static_cast<SignedIntType>(a));
 
 		return u_sum;
 	}
