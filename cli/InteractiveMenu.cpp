@@ -21,17 +21,56 @@ namespace {
 }
 
 namespace Cli {
-	InteractiveMenu::InteractiveMenu(Cli::Options startingOptions) : _options(std::move(startingOptions)) {
-		_printMenu();
-	}
+	InteractiveMenu::InteractiveMenu(Cli::Options startingOptions) : \
+		_options(std::move(startingOptions)),
+		_screen(State::Main) {}
 
 	bool InteractiveMenu::menuLoop() {
+		std::cout.clear();
+
+		switch (_screen) {
+			case State::Main: {
+				_printMenu();
+
+				bool invalid;
+				do {
+					invalid = false;
+					std::cout << "Choose (1-4): ";
+
+					int c;
+					std::cin >> c;
+					if (std::cin.bad()) {
+						invalid = true;
+					}
+					std::cin.clear();
+					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+					if (invalid) {
+						continue;
+					}
+
+					if (c >= 1 && c <= 4) {
+						_screen = static_cast<State>(c);
+					}
+					else {
+						invalid = true;
+					}
+				} while (invalid);
+				break;
+			}
+			case State::ExecTarget:
+				break;
+			case State::LogLevel:
+				break;
+			case State::Run:
+				break;
+			case State::Exit:
+				break;
+		}
+
 		return true;
 	}
 
 	void InteractiveMenu::_printMenu() const {
-		std::cout.clear();
-
 		const char* emulTarget = this->_options.emulationTarget.empty()
 			? "<none>"
 			: this->_options.emulationTarget.c_str();
