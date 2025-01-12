@@ -48,7 +48,7 @@ Cli::Options Cli::parseOptions(int argc, char **argv, std::string& errorOut) {
 		}
 	}
 
-	if (!parsedTarget && !opt.interactive) {
+	if (!parsedTarget && !opt.interactive && !opt.showHelp) {
 		errorOut = "You must specify an emulation target. Use --help for usage.";
 	}
 
