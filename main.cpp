@@ -11,7 +11,6 @@
 #include "emulation/libraries/libc/FScanF.h"
 #include "logging/LoggerBase.h"
 #include "logging/LoggerFactory.h"
-#include "logging/LoggerContainer.h"
 #include "cli/Options.h"
 #include "cli/parser.h"
 #include "cli/InteractiveMenu.h"
