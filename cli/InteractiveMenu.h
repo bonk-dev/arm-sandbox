@@ -15,7 +15,6 @@ namespace Cli {
 	private:
 		MenuState _state;
 		Cli::Options _options;
-		void _printMenu() const;
 
 		std::string _error;
 		void _showError(const std::string& message);

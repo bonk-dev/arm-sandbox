@@ -82,18 +82,6 @@ namespace Cli {
 		return shouldContinue;
 	}
 
-	void InteractiveMenu::_printMenu() const {
-		const char* emulTarget = this->_options.emulationTarget.empty()
-			? "<none>"
-			: this->_options.emulationTarget.c_str();
-
-		print_header();
-		std::cout << "1: Set execution target (current: " << emulTarget << ")" << std::endl;
-		std::cout << "2: Set global level (current: " << Logging::log_level_to_str(_options.logLevel) << ")" << std::endl;
-		std::cout << "3: Run" << std::endl;
-		std::cout << "4: Exit" << std::endl;
-	}
-
 	Cli::Options InteractiveMenu::getOptions() const {
 		return _options;
 	}
@@ -108,7 +96,15 @@ namespace Cli {
 	}
 
 	bool InteractiveMenu::_renderMain() {
-		_printMenu();
+		const char* emulTarget = this->_options.emulationTarget.empty()
+								 ? "<none>"
+								 : this->_options.emulationTarget.c_str();
+
+		print_header();
+		std::cout << "1: Set execution target (current: " << emulTarget << ")" << std::endl;
+		std::cout << "2: Set global level (current: " << Logging::log_level_to_str(_options.logLevel) << ")" << std::endl;
+		std::cout << "3: Run" << std::endl;
+		std::cout << "4: Exit" << std::endl;
 
 		int screenInt = read_until_valid<int>("Choose (1-4): ", [](const auto& opt) {
 			if (!opt.has_value()) {
