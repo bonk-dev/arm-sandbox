@@ -18,7 +18,6 @@ namespace {
 		std::optional<ReturnValue> opt;
 		std::stringstream iss;
 		do {
-			invalid = false;
 			std::cout << prompt;
 
 			std::string input;
