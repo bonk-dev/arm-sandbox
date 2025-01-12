@@ -188,9 +188,12 @@ namespace Cli {
 		}
 	}
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "readability-convert-member-functions-to-static"
 	bool InteractiveMenu::_renderExit() {
 		return false;
 	}
+#pragma clang diagnostic pop
 
 	bool InteractiveMenu::_renderError() {
 		print_header();
