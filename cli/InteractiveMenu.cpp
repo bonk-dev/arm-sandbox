@@ -1,6 +1,7 @@
 #include <iostream>
 #include "InteractiveMenu.h"
 #include "clear-console.h"
+#include <functional>
 
 namespace {
 	const char* logLevelToStr(Logging::LogLevel level) {
@@ -26,7 +27,7 @@ namespace {
 
 	template<typename ReturnValue>
 	ReturnValue read_until_valid(const std::string& prompt,
-								 bool (*predicate)(const ReturnValue& readValue, bool wasEmpty)) {
+								 const std::function<bool(const ReturnValue&, bool)>& predicate) {
 		bool invalid;
 		ReturnValue c{};
 		std::stringstream iss;
