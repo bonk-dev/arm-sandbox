@@ -22,6 +22,29 @@ namespace {
 	void print_header() {
 		std::cout << "arm-sandbox 0.1" << std::endl;
 	}
+
+	template<typename ReturnValue>
+	ReturnValue read_until_valid(const std::string& prompt, bool (*predicate)(const ReturnValue& readValue)) {
+		bool invalid;
+		ReturnValue c;
+		do {
+			invalid = false;
+			std::cout << prompt;
+			std::cin >> c;
+			if (std::cin.bad()) {
+				invalid = true;
+			}
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			if (invalid) {
+				continue;
+			}
+
+			invalid = predicate(c);
+		} while (invalid);
+
+		return c;
+	}
 }
 
 namespace Cli {
@@ -36,10 +59,10 @@ namespace Cli {
 			case State::Main: {
 				_printMenu();
 
-				bool invalid;
-				do {
-					invalid = false;
-					std::cout << "Choose (1-4): ";
+				int screenInt = read_until_valid<int>("Choose (1-4): ", [](const int& s) {
+					return s >= 1 && s <= 4;
+				});
+				_screen = static_cast<State>(screenInt);
 
 					int c;
 					std::cin >> c;
