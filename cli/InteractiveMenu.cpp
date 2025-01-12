@@ -1,5 +1,6 @@
 #include <iostream>
 #include "InteractiveMenu.h"
+#include "clear-console.h"
 
 namespace {
 	const char* logLevelToStr(Logging::LogLevel level) {
@@ -53,7 +54,7 @@ namespace Cli {
 		_screen(State::Main) {}
 
 	bool InteractiveMenu::menuLoop() {
-		std::cout.clear();
+		clear_terminal();
 
 		switch (_screen) {
 			case State::Main: {
