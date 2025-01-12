@@ -20,6 +20,6 @@ namespace Cli {
 		explicit InteractiveMenu(Cli::Options startingOptions);
 		bool menuLoop();
 		[[nodiscard]] Cli::Options getOptions() const;
-		MenuState getState() const;
+		[[nodiscard]] MenuState getState() const;
 	};
 }
