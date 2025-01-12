@@ -18,6 +18,6 @@ namespace Cli {
 	public:
 		explicit InteractiveMenu(Cli::Options startingOptions);
 		bool menuLoop();
-		Cli::Options getOptions() const;
+		[[nodiscard]] Cli::Options getOptions() const;
 	};
 }
