@@ -1,5 +1,5 @@
 #include <iostream>
-#include "clear-console.h"
+#include "clear_terminal.h"
 
 void clear_terminal() {
 #if defined(_WIN32) or defined(WIN32)

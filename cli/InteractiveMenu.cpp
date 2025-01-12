@@ -1,6 +1,6 @@
 #include <iostream>
 #include "InteractiveMenu.h"
-#include "clear-console.h"
+#include "clear_terminal.h"
 #include "../logging/utils.h"
 #include <filesystem>
 #include <functional>
