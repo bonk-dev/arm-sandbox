@@ -65,24 +65,6 @@ namespace Cli {
 				});
 				_screen = static_cast<State>(screenInt);
 
-					int c;
-					std::cin >> c;
-					if (std::cin.bad()) {
-						invalid = true;
-					}
-					std::cin.clear();
-					std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-					if (invalid) {
-						continue;
-					}
-
-					if (c >= 1 && c <= 4) {
-						_screen = static_cast<State>(c);
-					}
-					else {
-						invalid = true;
-					}
-				} while (invalid);
 				break;
 			}
 			case State::ExecTarget:
