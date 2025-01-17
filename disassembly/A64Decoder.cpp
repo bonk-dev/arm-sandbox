@@ -44,6 +44,7 @@ InstructionType find_instruction_type_fast(std::map<mask_values_t, InstructionTy
 static std::map<mask_values_t, InstructionType> data_proc_imm_op1 {
 		{ mask_values_t(0b1110, 0b0100), InstructionType::AddOrSubImmediate },
 		{ mask_values_t(0b1100, 0b0000), InstructionType::PcRelativeAddressing },
+		{ mask_values_t(0b1110, 0b1000), InstructionType::LogicalImmediate, },
 		{ mask_values_t(0b1110, 0b1010), InstructionType::MoveWideImmediate }
 };
 InstructionType decode_data_processing_imm_type(uint32_t raw_instruction) {

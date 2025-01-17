@@ -11,6 +11,7 @@ enum class InstructionType {
 	UnconditionalBranchImmediate,
 	UnconditionalBranchRegister,
 	PcRelativeAddressing,
+	LogicalImmediate,
 	MoveWideImmediate,
 	LogicalShiftedRegister,
 	LoadStoreRegisterPair,
