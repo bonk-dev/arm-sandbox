@@ -11,4 +11,6 @@ namespace i {
     constexpr EnumType val_enum(const uint32_t encoded, const unsigned int bitLength, const unsigned int shift) {
         return static_cast<EnumType>((encoded >> shift) & (1 << bitLength) - 1);
     }
+
+	constexpr unsigned int regindex_length_bits = 5;
 }
