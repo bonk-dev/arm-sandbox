@@ -62,22 +62,22 @@ void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(
 		}
 
 		if (instruction.is_using_64bit_reg) {
-			cpu.writeGpRegister64(
+			cpu.writeRegister64(
 					instruction.src_dst_reg, val);
 		}
 		else {
-			cpu.writeGpRegister32(
+			cpu.writeRegister32(
 					instruction.src_dst_reg, val);
 		}
 	}
 	else {
 		if (instruction.is_using_64bit_reg) {
 			cpu.getMemory().write(
-					virtual_address, cpu.readGpRegister64(instruction.src_dst_reg));
+					virtual_address, cpu.readRegister64(instruction.src_dst_reg));
 		}
 		else {
 			cpu.getMemory().write(
-					virtual_address, cpu.readGpRegister32(instruction.src_dst_reg));
+					virtual_address, cpu.readRegister32(instruction.src_dst_reg));
 		}
 	}
 }

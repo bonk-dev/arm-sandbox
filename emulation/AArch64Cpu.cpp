@@ -13,7 +13,7 @@ AArch64Cpu::AArch64Cpu() : _nzcvConditionRegister(0),
 	this->createThread(AARCH64_MAIN_THREAD_ID);
 }
 
-void AArch64Cpu::writeGpRegister32(regindex_t index, uint32_t val, bool useSp) {
+void AArch64Cpu::writeRegister32(regindex_t index, uint32_t val, bool useSp) {
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
 			if (useSp) {
@@ -24,11 +24,11 @@ void AArch64Cpu::writeGpRegister32(regindex_t index, uint32_t val, bool useSp) {
 			this->_generalRegisters[index] = val;
 	}
 }
-void AArch64Cpu::writeGpRegister32(regindex_t index, uint32_t val) {
-	writeGpRegister32(index, val, false);
+void AArch64Cpu::writeRegister32(regindex_t index, uint32_t val) {
+	writeRegister32(index, val, false);
 }
 
-void AArch64Cpu::writeGpRegister64(regindex_t index, uint64_t val, bool useSp) {
+void AArch64Cpu::writeRegister64(regindex_t index, uint64_t val, bool useSp) {
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
 			if (useSp) {
@@ -39,18 +39,18 @@ void AArch64Cpu::writeGpRegister64(regindex_t index, uint64_t val, bool useSp) {
 			this->_generalRegisters[index] = val;
 	}
 }
-void AArch64Cpu::writeGpRegister64(regindex_t index, uint64_t val) {
-	writeGpRegister64(index, val, false);
+void AArch64Cpu::writeRegister64(regindex_t index, uint64_t val) {
+	writeRegister64(index, val, false);
 }
 
-void AArch64Cpu::writeGpRegister64(Emulation::Registers registerName, const uint64_t val, bool useSp) {
-	writeGpRegister64(static_cast<regindex_t>(registerName), val, useSp);
+void AArch64Cpu::writeRegister64(Emulation::Registers registerName, uint64_t val, bool useSp) {
+	writeRegister64(static_cast<regindex_t>(registerName), val, useSp);
 }
-void AArch64Cpu::writeGpRegister64(Emulation::Registers registerName, const uint64_t val) {
-	writeGpRegister64(registerName, val, false);
+void AArch64Cpu::writeRegister64(Emulation::Registers registerName, uint64_t val) {
+	writeRegister64(registerName, val, false);
 }
 
-uint32_t AArch64Cpu::readGpRegister32(regindex_t index, bool useSp) const {
+uint32_t AArch64Cpu::readRegister32(regindex_t index, bool useSp) const {
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
 			return useSp
@@ -60,11 +60,11 @@ uint32_t AArch64Cpu::readGpRegister32(regindex_t index, bool useSp) const {
 			return this->_generalRegisters[index];
 	}
 }
-uint32_t AArch64Cpu::readGpRegister32(regindex_t index) const {
-	return readGpRegister32(index, false);
+uint32_t AArch64Cpu::readRegister32(regindex_t index) const {
+	return readRegister32(index, false);
 }
 
-uint64_t AArch64Cpu::readGpRegister64(regindex_t index, bool useSp) const {
+uint64_t AArch64Cpu::readRegister64(regindex_t index, bool useSp) const {
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
 			return useSp
@@ -74,8 +74,8 @@ uint64_t AArch64Cpu::readGpRegister64(regindex_t index, bool useSp) const {
 			return this->_generalRegisters[index];
 	}
 }
-uint64_t AArch64Cpu::readGpRegister64(regindex_t index) const {
-	return readGpRegister64(index, false);
+uint64_t AArch64Cpu::readRegister64(regindex_t index) const {
+	return readRegister64(index, false);
 }
 
 CpuVirtualMemory & AArch64Cpu::getMemory() const {

@@ -3,7 +3,7 @@
 void
 Executors::Begsi::UnconditionalBranchRegisterExecutor::execute(
 		const InstructionDefs::Begsi::UnconditionalBranchRegister &instruction, AArch64Cpu& cpu) {
-	const virtual_address_t target = cpu.readGpRegister64(instruction.destination_reg);
+	const virtual_address_t target = cpu.readRegister64(instruction.destination_reg);
 	this->branchTo(
 			target,
 			Emulation::BranchType::IndirectCall,

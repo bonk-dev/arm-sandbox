@@ -1,9 +1,9 @@
 #include "FScanF.h"
 
 void Emulation::Libraries::LibC::FScanF::execute(AArch64Cpu &cpu) {
-	const virtual_address_t fileStructPtr = cpu.readGpRegister64(0);
-	const virtual_address_t formatCharPtr = cpu.readGpRegister64(1);
-	const virtual_address_t destinationBufferPtr = cpu.readGpRegister64(2);
+	const virtual_address_t fileStructPtr = cpu.readRegister64(0);
+	const virtual_address_t formatCharPtr = cpu.readRegister64(1);
+	const virtual_address_t destinationBufferPtr = cpu.readRegister64(2);
 
 	_logger->info() << "Reading file struct at " << std::hex << std::showbase << fileStructPtr << std::endl;
 

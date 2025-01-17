@@ -8,8 +8,8 @@ void Executors::DataProcReg::LogicalShiftedRegisterExecutor::execute(
         throw std::runtime_error("32-bit logical shifted reg. optional shift amount needs to be in the 0-31 range");
     }
 
-    uint64_t first = details.operand1Reg == 31 ? 0 : cpu.readGpRegister64(details.operand1Reg);
-    uint64_t second = details.operand2Reg == 31 ? 0 : cpu.readGpRegister64(details.operand2Reg);
+    uint64_t first = details.operand1Reg == 31 ? 0 : cpu.readRegister64(details.operand1Reg);
+    uint64_t second = details.operand2Reg == 31 ? 0 : cpu.readRegister64(details.operand2Reg);
 
     if (!details.is64Bit) {
         first &= std::numeric_limits<uint32_t>::max();
@@ -67,9 +67,9 @@ void Executors::DataProcReg::LogicalShiftedRegisterExecutor::execute(
     }
 
     if (details.is64Bit) {
-        cpu.writeGpRegister64(details.destinationReg, result);
+		cpu.writeRegister64(details.destinationReg, result);
     }
     else {
-        cpu.writeGpRegister32(details.destinationReg, result);
+		cpu.writeRegister32(details.destinationReg, result);
     }
 }

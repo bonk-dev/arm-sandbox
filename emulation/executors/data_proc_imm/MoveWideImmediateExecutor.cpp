@@ -14,18 +14,18 @@ void Executors::DataProcImm::MoveWideImmediateExecutor::execute(
 			break;
 		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::KeepBits:
 			result = instruction.is_64bit
-					? cpu.readGpRegister64(instruction.destination_reg)
-					: cpu.readGpRegister32(instruction.destination_reg);
+					? cpu.readRegister64(instruction.destination_reg)
+					: cpu.readRegister32(instruction.destination_reg);
 			result &= ~(0b1111111111111111 << instruction.left_shift);
 			result |= (instruction.immediate << instruction.left_shift);
 			break;
 	}
 
 	if (instruction.is_64bit) {
-		cpu.writeGpRegister64(instruction.destination_reg, result);
+		cpu.writeRegister64(instruction.destination_reg, result);
 	}
 	else {
-		cpu.writeGpRegister32(instruction.destination_reg, result);
+		cpu.writeRegister32(instruction.destination_reg, result);
 	}
 }
 
