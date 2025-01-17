@@ -49,4 +49,16 @@ namespace nzcv {
 	constexpr uint64_t overflow(const uint64_t nzcvValue, bool overflow) {
 		return set_reset_bit(nzcvValue, v_offset, overflow);
 	}
+
+	/**
+	 * Construct a NZCV value all in one go
+	 * @param neg Was result negative
+	 * @param zero Was result zero
+	 * @param carry Has unsigned carry occurred
+	 * @param overflow Has signed overflow occurred
+	 * @return
+	 */
+	constexpr uint64_t nzcv(bool neg, bool zero, bool carry, bool overflow) {
+		return (neg << 3) | (zero << 2) | (carry << 1) | overflow;
+	}
 }
