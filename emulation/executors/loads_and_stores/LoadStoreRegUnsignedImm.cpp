@@ -1,11 +1,11 @@
 #include "LoadStoreRegUnsignedImm.h"
-#include "../../exceptions/FeatureFpNotImplemented.h"
+#include "../../exceptions/FeatureNotImplemented.h"
 #include "../../../disassembly/instructions/loads_and_stores/indexing_helper.h"
 
 void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(
 		const InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm& instruction, AArch64Cpu& cpu) {
 	if (instruction.is_simd) {
-		throw Exceptions::FeatureFpNotImplemented("LoadStoreRegUnsignedImm");
+		throw Exceptions::FeatureNotImplemented("FP", "LoadStoreRegUnsignedImm");
 	}
 	if (instruction.get_is_prefetch()) {
 		// do nothing

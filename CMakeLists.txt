@@ -41,8 +41,8 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/loads_and_stores/LoadStoreRegUnsignedImm.cpp
         emulation/executors/loads_and_stores/LoadStoreRegUnsignedImm.cpp
         emulation/executors/loads_and_stores/LoadStoreRegUnsignedImm.h
-        emulation/exceptions/FeatureFpNotImplemented.cpp
-        emulation/exceptions/FeatureFpNotImplemented.h
+        emulation/exceptions/FeatureNotImplemented.cpp
+        emulation/exceptions/FeatureNotImplemented.h
         disassembly/instructions/IndexingMode.h
         disassembly/instructions/loads_and_stores/indexing_helper.h
         loaders/elf/ElfLoader.h
