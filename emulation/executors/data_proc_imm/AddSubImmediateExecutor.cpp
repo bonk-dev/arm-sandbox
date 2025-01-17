@@ -25,8 +25,8 @@ namespace {
 void Executors::DataProcImm::AddSubImmediateExecutor::execute(
 		const InstructionDefs::DataProcImm::AddImmediate& instruction, AArch64Cpu& cpu) {
     uint64_t val = instruction.is_64bit
-        ? cpu.readGpRegister64(instruction.source_reg_index)
-        : cpu.readGpRegister32(instruction.source_reg_index);
+        ? cpu.readGpRegister64(instruction.source_reg_index, true)
+        : cpu.readGpRegister32(instruction.source_reg_index, true);
 
 	uint16_t imm = instruction.immediate;
     if (instruction.shift_12) {
@@ -51,14 +51,12 @@ void Executors::DataProcImm::AddSubImmediateExecutor::execute(
 		cpu.writeNzcvRegsiter(nzcv);
     }
 
-	// SP is not writeable using ADD/SUB
+	// SP is not writeable using ADDS/SUBS
 	// it's used as the destination then the result is to be discarded, for example when comparing values to 0 (CMP Xn, #0)
-	if (static_cast<Emulation::Registers>(instruction.destination_reg_index) != Emulation::Registers::Sp) {
-		if (instruction.is_64bit) {
-			cpu.writeGpRegister64(instruction.destination_reg_index, result);
-		}
-		else {
-			cpu.writeGpRegister32(instruction.destination_reg_index, result);
-		}
+	if (instruction.is_64bit) {
+		cpu.writeGpRegister64(instruction.destination_reg_index, result, instruction.set_flags);
+	}
+	else {
+		cpu.writeGpRegister32(instruction.destination_reg_index, result, instruction.set_flags);
 	}
 }
