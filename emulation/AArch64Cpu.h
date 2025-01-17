@@ -26,14 +26,19 @@ private:
 public:
     AArch64Cpu();
 
-    void writeGpRegister32(regindex_t index, uint32_t val);
-    void writeGpRegister64(regindex_t index, uint64_t val);
+    void writeGpRegister32(regindex_t index, uint32_t val, bool useSp);
+	void writeGpRegister32(regindex_t index, uint32_t val);
+    void writeGpRegister64(regindex_t index, uint64_t val, bool useSp);
+	void writeGpRegister64(regindex_t index, uint64_t val);
+	void writeGpRegister64(Emulation::Registers registerName, uint64_t val, bool useSp);
 	void writeGpRegister64(Emulation::Registers registerName, uint64_t val);
 
 	[[nodiscard]] uint64_t getProgramCounter() const;
 	void setProgramCounter(uint64_t pc);
 
+	[[nodiscard]] uint32_t readGpRegister32(regindex_t index, bool useSp) const;
     [[nodiscard]] uint32_t readGpRegister32(regindex_t index) const;
+	[[nodiscard]] uint64_t readGpRegister64(regindex_t index, bool useSp) const;
     [[nodiscard]] uint64_t readGpRegister64(regindex_t index) const;
 
 	/**

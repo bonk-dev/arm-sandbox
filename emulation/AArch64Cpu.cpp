@@ -13,46 +13,69 @@ AArch64Cpu::AArch64Cpu() : _nzcvConditionRegister(0),
 	this->createThread(AARCH64_MAIN_THREAD_ID);
 }
 
+void AArch64Cpu::writeGpRegister32(regindex_t index, uint32_t val, bool useSp) {
+	switch (static_cast<Emulation::Registers>(index)) {
+		case Emulation::Registers::Sp:
+			if (useSp) {
+				this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->setStackPointer(val);
+			}
+			break;
+		default:
+			this->_generalRegisters[index] = val;
+	}
+}
 void AArch64Cpu::writeGpRegister32(regindex_t index, uint32_t val) {
+	writeGpRegister32(index, val, true);
+}
+
+void AArch64Cpu::writeGpRegister64(regindex_t index, uint64_t val, bool useSp) {
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
-			this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->setStackPointer(val);
+			if (useSp) {
+				this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->setStackPointer(val);
+			}
 			break;
 		default:
 			this->_generalRegisters[index] = val;
 	}
 }
-
 void AArch64Cpu::writeGpRegister64(regindex_t index, uint64_t val) {
-	switch (static_cast<Emulation::Registers>(index)) {
-		case Emulation::Registers::Sp:
-			this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->setStackPointer(val);
-			break;
-		default:
-			this->_generalRegisters[index] = val;
-	}
+	writeGpRegister64(index, val, true);
 }
 
-void AArch64Cpu::writeGpRegister64(Emulation::Registers registerName, const uint64_t val) {
+void AArch64Cpu::writeGpRegister64(Emulation::Registers registerName, const uint64_t val, bool useSp) {
 	writeGpRegister64(static_cast<regindex_t>(registerName), val);
 }
+void AArch64Cpu::writeGpRegister64(Emulation::Registers registerName, const uint64_t val) {
+	writeGpRegister64(registerName, val, true);
+}
 
-uint32_t AArch64Cpu::readGpRegister32(regindex_t index) const {
+uint32_t AArch64Cpu::readGpRegister32(regindex_t index, bool useSp) const {
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
-			return this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->getStackPointer();
+			return useSp
+				? this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->getStackPointer()
+				: 0;
 		default:
 			return this->_generalRegisters[index];
 	}
 }
+uint32_t AArch64Cpu::readGpRegister32(regindex_t index) const {
+	return readGpRegister32(index, true);
+}
 
-uint64_t AArch64Cpu::readGpRegister64(regindex_t index) const {
+uint64_t AArch64Cpu::readGpRegister64(regindex_t index, bool useSp) const {
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
-			return this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->getStackPointer();
+			return useSp
+				? this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->getStackPointer()
+				: 0;
 		default:
 			return this->_generalRegisters[index];
 	}
+}
+uint64_t AArch64Cpu::readGpRegister64(regindex_t index) const {
+	return readGpRegister64(index, true);
 }
 
 CpuVirtualMemory & AArch64Cpu::getMemory() const {
