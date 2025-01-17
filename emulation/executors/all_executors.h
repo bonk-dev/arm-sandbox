@@ -4,6 +4,7 @@
 #include "begsi/UnconditionalBranchRegisterExecutor.h"
 #include "data_proc_imm/AddSubImmediateExecutor.h"
 #include "data_proc_imm/FormPcRelAddressExecutor.h"
+#include "data_proc_imm/LogicalImmediateExecutor.h"
 #include "data_proc_imm/MoveWideImmediateExecutor.h"
 #include "data_proc_reg/LogicalShiftedRegisterExecutor.h"
 #include "loads_and_stores/LoadStoreRegPairExecutor.h"

@@ -26,6 +26,8 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 			std::make_unique<Executors::DataProcImm::AddSubImmediateExecutor>();
 	e[InstructionType::PcRelativeAddressing] =
 			std::make_unique<Executors::DataProcImm::FormPcRelAddressExecutor>();
+	e[InstructionType::LogicalImmediate] =
+			std::make_unique<Executors::DataProcImm::LogicalImmediateExecutor>();
 	e[InstructionType::MoveWideImmediate] =
 			std::make_unique<Executors::DataProcImm::MoveWideImmediateExecutor>();
 	e[InstructionType::ConditionalBranchImmediate] =
