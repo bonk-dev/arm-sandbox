@@ -121,4 +121,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/data_proc_imm/LogicalImmediate.h
         disassembly/instructions/LogicalOperation.h
         disassembly/instructions/data_proc_imm/LogicalImmediate.cpp
+        emulation/executors/data_proc_imm/LogicalImmediateExecutor.cpp
+        emulation/executors/data_proc_imm/LogicalImmediateExecutor.h
 )
