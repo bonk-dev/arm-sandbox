@@ -118,5 +118,7 @@ add_executable(arm_sandbox main.cpp
         cli/clear_terminal.cpp
         logging/utils.h
         logging/utils.cpp
+        disassembly/instructions/data_proc_imm/LogicalImmediate.h
         disassembly/instructions/LogicalOperation.h
+        disassembly/instructions/data_proc_imm/LogicalImmediate.cpp
 )
