@@ -2,21 +2,11 @@
 #include <cstdint>
 
 #include "../../../emulation/emu_types.h"
+#include "../LogicalOperation.h"
 
 namespace InstructionDefs::DataProcReg {
     struct LogicalShiftedRegister {
     public:
-        enum class Operation : uint8_t {
-            // Bitwise AND
-            And = 0b00,
-            // Bitwise OR
-            Or = 0b01,
-            // Bitwise XOR
-            Xor = 0b10,
-            // Bitwise AND with condititon flag update
-            AndSetFlags = 0b11
-        };
-
         enum class ShiftType : uint8_t {
             LogicalShiftLeft = 0b00,
             LogicalShiftRight = 0b01,
@@ -31,7 +21,7 @@ namespace InstructionDefs::DataProcReg {
         /**
          * @brief What kind of bitwise operation should be done on the two register values.
          */
-        Operation operation;
+        InstructionDefs::LogicalOperation operation;
 
         /**
          * @brief What kind of optional shift should be done on the second register value.

@@ -255,9 +255,11 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::Uncondit
 }
 
 std::string disassembly::to_pretty_string(const InstructionDefs::DataProcReg::LogicalShiftedRegister &i) {
+	using Operation = InstructionDefs::LogicalOperation;
+
 	std::stringstream ss;
 	// MOV Xd, Xn alias
-	if (i.operation == InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::Or
+	if (i.operation == Operation::Or
 		&& i.operand1Reg == 31
 		&& i.shiftAmount == 0
 		&& i.shiftType == InstructionDefs::DataProcReg::LogicalShiftedRegister::ShiftType::LogicalShiftLeft) {
@@ -265,16 +267,16 @@ std::string disassembly::to_pretty_string(const InstructionDefs::DataProcReg::Lo
 	}
 	else {
 		switch (i.operation) {
-			case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::And:
+			case Operation::And:
 				ss << (i.negate ? "BIC" : "AND");
 				break;
-			case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::Or:
+			case Operation::Or:
 				ss << "ORR";
 				break;
-			case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::Xor:
+			case Operation::Xor:
 				ss << "EOR";
 				break;
-			case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::AndSetFlags:
+			case Operation::AndSetFlags:
 				ss << (i.negate ? "BICS" : "ANDS");
 				break;
 			default:

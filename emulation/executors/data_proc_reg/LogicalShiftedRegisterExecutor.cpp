@@ -51,16 +51,16 @@ void Executors::DataProcReg::LogicalShiftedRegisterExecutor::execute(
 
     uint64_t result;
     switch (details.operation) {
-        case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::And:
+        case InstructionDefs::LogicalOperation::And:
             result = first & second;
         break;
-        case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::Or:
+        case InstructionDefs::LogicalOperation::Or:
             result = first | second;
         break;
-        case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::Xor:
+        case InstructionDefs::LogicalOperation::Xor:
             result = first ^ second;
         break;
-        case InstructionDefs::DataProcReg::LogicalShiftedRegister::Operation::AndSetFlags:
+        case InstructionDefs::LogicalOperation::AndSetFlags:
             throw std::runtime_error("Set flags not implemented");
         default:
             throw std::runtime_error("Invalid operation");
