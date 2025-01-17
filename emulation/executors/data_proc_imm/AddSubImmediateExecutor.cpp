@@ -54,9 +54,9 @@ void Executors::DataProcImm::AddSubImmediateExecutor::execute(
 	// SP is not writeable using ADDS/SUBS
 	// it's used as the destination then the result is to be discarded, for example when comparing values to 0 (CMP Xn, #0)
 	if (instruction.is_64bit) {
-		cpu.writeGpRegister64(instruction.destination_reg_index, result, instruction.set_flags);
+		cpu.writeGpRegister64(instruction.destination_reg_index, result, !instruction.set_flags);
 	}
 	else {
-		cpu.writeGpRegister32(instruction.destination_reg_index, result, instruction.set_flags);
+		cpu.writeGpRegister32(instruction.destination_reg_index, result, !instruction.set_flags);
 	}
 }
