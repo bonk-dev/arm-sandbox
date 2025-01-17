@@ -381,3 +381,7 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::Conditio
 
 	return ss.str();
 }
+
+std::string disassembly::to_pretty_string(const InstructionDefs::DataProcImm::LogicalImmediate &i) {
+	throw std::runtime_error("Not implemented");
+}
