@@ -25,7 +25,7 @@ void AArch64Cpu::writeGpRegister32(regindex_t index, uint32_t val, bool useSp) {
 	}
 }
 void AArch64Cpu::writeGpRegister32(regindex_t index, uint32_t val) {
-	writeGpRegister32(index, val, true);
+	writeGpRegister32(index, val, false);
 }
 
 void AArch64Cpu::writeGpRegister64(regindex_t index, uint64_t val, bool useSp) {
@@ -40,14 +40,14 @@ void AArch64Cpu::writeGpRegister64(regindex_t index, uint64_t val, bool useSp) {
 	}
 }
 void AArch64Cpu::writeGpRegister64(regindex_t index, uint64_t val) {
-	writeGpRegister64(index, val, true);
+	writeGpRegister64(index, val, false);
 }
 
 void AArch64Cpu::writeGpRegister64(Emulation::Registers registerName, const uint64_t val, bool useSp) {
 	writeGpRegister64(static_cast<regindex_t>(registerName), val);
 }
 void AArch64Cpu::writeGpRegister64(Emulation::Registers registerName, const uint64_t val) {
-	writeGpRegister64(registerName, val, true);
+	writeGpRegister64(registerName, val, false);
 }
 
 uint32_t AArch64Cpu::readGpRegister32(regindex_t index, bool useSp) const {
@@ -61,7 +61,7 @@ uint32_t AArch64Cpu::readGpRegister32(regindex_t index, bool useSp) const {
 	}
 }
 uint32_t AArch64Cpu::readGpRegister32(regindex_t index) const {
-	return readGpRegister32(index, true);
+	return readGpRegister32(index, false);
 }
 
 uint64_t AArch64Cpu::readGpRegister64(regindex_t index, bool useSp) const {
@@ -75,7 +75,7 @@ uint64_t AArch64Cpu::readGpRegister64(regindex_t index, bool useSp) const {
 	}
 }
 uint64_t AArch64Cpu::readGpRegister64(regindex_t index) const {
-	return readGpRegister64(index, true);
+	return readGpRegister64(index, false);
 }
 
 CpuVirtualMemory & AArch64Cpu::getMemory() const {
