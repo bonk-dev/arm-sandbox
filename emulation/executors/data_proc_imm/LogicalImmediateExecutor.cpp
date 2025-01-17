@@ -32,4 +32,6 @@ void Executors::DataProcImm::LogicalImmediateExecutor::execute(
 							   false));
 			break;
 	}
+
+	cpu.writeGpRegister64(instruction.destinationReg, val, true);
 }
