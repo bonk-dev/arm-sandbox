@@ -10,6 +10,28 @@ namespace {
 		std::cout << "arm-sandbox 0.1" << std::endl;
 	}
 
+	std::string read_line_until_valid(const std::string& prompt,
+								 	  const std::function<bool(std::optional<std::string>)>& predicate) {
+		bool invalid;
+		std::string c{};
+		std::optional<std::string> opt;
+		do {
+			std::cout << prompt;
+
+			std::getline(std::cin, c);
+			if (c.empty()) {
+				opt.reset();
+			}
+			else {
+				opt.emplace(c);
+			}
+
+			invalid = !predicate(opt);
+		} while (invalid);
+
+		return c;
+	}
+
 	template<typename ReturnValue>
 	ReturnValue read_until_valid(const std::string& prompt,
 								 const std::function<bool(std::optional<ReturnValue>)> predicate) {
@@ -179,6 +201,49 @@ namespace Cli {
 	}
 
 	bool InteractiveMenu::_renderBreakpoints() {
+		bool runLoop = true;
+		do {
+			clear_terminal();
+			print_header();
+
+			if (_options.breakpoints.empty()) {
+				std::cout << "No breakpoints were defined" << std::endl;
+			} else {
+				int index = 1;
+				for (virtual_address_t breakpoint: _options.breakpoints) {
+					std::cout << "Breakpoint #" << std::dec << std::noshowbase << index << ": "
+							  << std::hex << std::showbase << breakpoint << " [delete: del " << std::dec
+							  << std::noshowbase << index++ << ']' << std::endl;
+				}
+			}
+
+			size_t breakpointCount = _options.breakpoints.size();
+			auto cmd = read_line_until_valid(
+					"What do you want to do? ('del <n>', 'add <address>', 'back'): ",
+					[](const auto &opt) {
+						if (opt.has_value()) {
+							const std::string &s = opt.value();
+							return s.starts_with("del ") || s.starts_with("add ") || s == "back";
+						}
+
+						return false;
+					});
+			if (cmd.starts_with("del ")) {
+				unsigned int n = std::stoul(cmd.substr(4), nullptr, 10);
+				if (n < 1 || n > breakpointCount) {
+					std::cout << "Invalid breakpoint index" << std::endl;
+				} else {
+					_options.breakpoints.erase(_options.breakpoints.begin() + (n - 1));
+				}
+			} else if (cmd.starts_with("add ")) {
+				virtual_address_t breakAddress = std::stoul(cmd.substr(4), nullptr, 16);
+				_options.breakpoints.push_back(breakAddress);
+			} else if (cmd == "back") {
+				runLoop = false;
+			}
+		} while (runLoop);
+
+		_state = MenuState::Main;
 		return true;
 	}
 
