@@ -46,6 +46,23 @@ Cli::Options Cli::parseOptions(int argc, char **argv, std::string& errorOut) {
 				break;
 			}
 		}
+		else if (flagMatches(arg, "-b", "--breakpoint")) {
+			if (i + 1 >= argc) {
+				errorOut = "You need to specify a hex virtual address after -b. Use --help to see usage.";
+				break;
+			}
+
+			try {
+				unsigned int virt_address = std::stoul(argv[++i], nullptr, 16);
+				opt.breakpoints.push_back(virt_address);
+			} catch(std::invalid_argument&) {
+				errorOut = "Invalid breakpoint address: " + std::string(argv[i]);
+				break;
+			} catch(std::out_of_range&) {
+				errorOut = "Invalid breakpoint address: " + std::string(argv[i]);
+				break;
+			}
+		}
 	}
 
 	if (!parsedTarget && !opt.interactive && !opt.showHelp) {

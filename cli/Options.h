@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include "../logging/LogLevel.h"
+#include "../emulation/emu_types.h"
+#include <vector>
 
 namespace Cli {
 	/**
@@ -26,5 +28,10 @@ namespace Cli {
 		 * @brief If true, the app should print the usage and exit immediately.
 		 */
 		bool showHelp;
+
+		/**
+		 * @brief List of virtual addresses to break on
+		 */
+		std::vector<virtual_address_t> breakpoints;
 	};
 }
