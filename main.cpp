@@ -135,7 +135,45 @@ int read_elf_main(const Cli::Options& options) {
 				} else if (cmd == "continue") {
 					manualStepping = false;
 					// execute rest, exit manualStepping mode
-				} else {
+				}
+				else if (cmd.starts_with("p")) {
+					// print value of something
+					if (cmd.length() < 4) {
+						logger->error() << "Usage: p X0 or p X1 etc. (only reg printing is implemented)" << std::endl;
+					}
+					else {
+						std::string arg = cmd.substr(2);
+						int reg_size = 0;
+						if (arg.starts_with('X') || arg.starts_with('x')) {
+							reg_size = 64;
+						}
+						else if (arg.starts_with('W') || arg.starts_with('w')) {
+							reg_size = 32;
+						}
+						else {
+							logger->error() << "Invalid register" << std::endl;
+						}
+
+						if (reg_size > 0) {
+							unsigned int index = std::stoul(arg.substr(1), nullptr, 10);
+							if (index > AARCH64_GENERAL_PURPOSE_REGISTERS) {
+								logger->error() << "Invalid register index" << std::endl;
+							}
+							else {
+								uint64_t reg_value = reg_size == 64
+													 ? cpu.readRegister64(index, true)
+													 : cpu.readRegister32(index, true);
+
+								logger->error() << std::dec << std::noshowbase << 'X' << index << " = " << std::hex
+												<< std::showbase << reg_value << std::endl;
+							}
+						}
+					}
+
+					// don't continue the execution if p command was used
+					valid = false;
+				}
+				else {
 					valid = false;
 				}
 			} while (!valid);
