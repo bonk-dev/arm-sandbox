@@ -181,7 +181,8 @@ int read_elf_main(const Cli::Options& options) {
 			throw std::runtime_error(std::format("Instruction type \"{}\" does not have a valid executor!",
 												 static_cast<int>(type)));
 		}
-		if (std::find(options.breakpoints.begin(), options.breakpoints.end(), pc) != options.breakpoints.end()) {
+		if (!manualStepping && std::find(
+				options.breakpoints.begin(), options.breakpoints.end(), pc) != options.breakpoints.end()) {
 			manualStepping = true;
 
 			logger->error(false) << std::endl << "============= Breakpoint hit =============" << std::endl;
