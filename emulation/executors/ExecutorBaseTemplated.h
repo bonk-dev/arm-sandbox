@@ -13,6 +13,12 @@ public:
 	explicit ExecutorBaseT(const char* name): _logger(Logging::createLogger(name)) {}
 
 	virtual void execute(const InstructionDetailsT& details, AArch64Cpu& cpu) = 0;
+	void decodeAndLog(uint32_t encoded) override {
+		const auto details = InstructionDetailsT(encoded);
+
+		// Log disassembly
+		_logger->info(false) <<  disassembly::to_pretty_string(details) << std::endl;
+	}
 	void decodeAndExecute(uint32_t encoded, AArch64Cpu& cpu) override {
 		const auto details = InstructionDetailsT(encoded);
 
