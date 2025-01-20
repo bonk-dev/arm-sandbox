@@ -65,6 +65,9 @@ namespace Cli {
 			case MenuState::LogLevel:
 				shouldContinue = _renderLogLevel();
 				break;
+			case MenuState::Breakpoints:
+				shouldContinue = _renderBreakpoints();
+				break;
 			case MenuState::Run:
 				shouldContinue = _renderRun();
 				break;
@@ -103,16 +106,17 @@ namespace Cli {
 		print_header();
 		std::cout << "1: Set execution target (current: " << emulTarget << ")" << std::endl;
 		std::cout << "2: Set global level (current: " << Logging::log_level_to_str(_options.logLevel) << ")" << std::endl;
-		std::cout << "3: Run" << std::endl;
-		std::cout << "4: Exit" << std::endl;
+		std::cout << "3: Setup breakpoints" << std::endl;
+		std::cout << "4: Run" << std::endl;
+		std::cout << "5: Exit" << std::endl;
 
-		int screenInt = read_until_valid<int>("Choose (1-4): ", [](const auto& opt) {
+		int screenInt = read_until_valid<int>("Choose (1-5): ", [](const auto& opt) {
 			if (!opt.has_value()) {
 				return false;
 			}
 
 			const auto& s = opt.value();
-			return s >= 1 && s <= 4;
+			return s >= 1 && s <= 5;
 		});
 		_state = static_cast<MenuState>(screenInt);
 
@@ -171,6 +175,10 @@ namespace Cli {
 		this->_options.logLevel = Logging::str_to_log_level(logLevelString);
 		_state = MenuState::Main;
 
+		return true;
+	}
+
+	bool InteractiveMenu::_renderBreakpoints() {
 		return true;
 	}
 

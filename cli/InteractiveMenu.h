@@ -6,9 +6,10 @@ namespace Cli {
 		Main = 0,
 		ExecTarget = 1,
 		LogLevel = 2,
-		Run = 3,
-		Exit = 4,
-		Error = 5
+		Breakpoints = 3,
+		Run = 4,
+		Exit = 5,
+		Error = 6
 	};
 
 	class InteractiveMenu {
@@ -22,6 +23,7 @@ namespace Cli {
 		bool _renderMain();
 		bool _renderExecTarget();
 		bool _renderLogLevel();
+		bool _renderBreakpoints();
 		bool _renderRun();
 		bool _renderExit();
 		bool _renderError();
