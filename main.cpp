@@ -66,8 +66,8 @@ void register_library_implementations(Emulation::Libraries::Mapper& mapper) {
 			std::make_unique<Emulation::Libraries::LibC::FScanF>());
 }
 
-int read_elf_main(const std::string& emulationTarget) {
-	Loaders::ElfLoader loader(emulationTarget);
+int read_elf_main(const Cli::Options& options) {
+	Loaders::ElfLoader loader(options.emulationTarget);
 	loader.loadEntireFile();
 	loader.parse();
 
@@ -165,5 +165,5 @@ int main(int argc, char** argv) {
 	}
 
 	logger->verbose() << "Loading ELF from " << opt.emulationTarget << std::endl;
-	return read_elf_main(opt.emulationTarget);
+	return read_elf_main(opt);
 }
