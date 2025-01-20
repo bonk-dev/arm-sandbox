@@ -104,14 +104,43 @@ int read_elf_main(const Cli::Options& options) {
 	auto encodedInstruction = cpu.getMemory().read<uint32_t>(pc);
 	InstructionType type = dec.decodeNextType(encodedInstruction);
 
+	bool manualStepping = false;
 	while (type != InstructionType::Undefined) {
-		logger->info() << std::hex << std::noshowbase << "0x" << std::setfill('0') << std::setw(16) << pc << ": ";
+		logger->info() << std::hex << std::noshowbase << (manualStepping ? "next: " : "") << "0x" << std::setfill('0') << std::setw(16) << pc << ": ";
 
 		const auto& executor = executors.find(type);
 		if (executor == executors.end()) {
 			throw std::runtime_error(std::format("Instruction type \"{}\" does not have a valid executor!",
-				static_cast<int>(type)));
+												 static_cast<int>(type)));
 		}
+		if (std::find(options.breakpoints.begin(), options.breakpoints.end(), pc) != options.breakpoints.end()) {
+			manualStepping = true;
+
+			logger->error(false) << std::endl << "============= Breakpoint hit =============" << std::endl;
+			logger->error(false) << "Next instruction: ";
+		}
+
+		if (manualStepping) {
+			executor->second->decodeAndLog(dec.getRawInstruction());
+			logger->error(false) << std::endl;
+
+			std::string cmd;
+			bool valid;
+			do {
+				std::getline(std::cin, cmd);
+				valid = true;
+
+				if (cmd == "stepi") {
+					// execute rest, stay in manualStepping mode
+				} else if (cmd == "continue") {
+					manualStepping = false;
+					// execute rest, exit manualStepping mode
+				} else {
+					valid = false;
+				}
+			} while (!valid);
+		}
+
 		executor->second->decodeAndExecute(dec.getRawInstruction(), cpu);
 		if (cpu.isHalted()) {
 			break;
