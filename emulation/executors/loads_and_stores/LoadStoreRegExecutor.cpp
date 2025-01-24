@@ -10,6 +10,7 @@ void Executors::LoadsAndStores::LoadStoreRegExecutor::execute(
 			instruction.baseReg,
 			true); // always 64bit op
 
+	// TODO: Handle unprivileged
 	if (instruction.isLoad) {
 		uint64_t val;
 		if (instruction.isSigned) {
