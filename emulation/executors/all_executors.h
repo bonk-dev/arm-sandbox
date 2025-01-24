@@ -9,5 +9,6 @@
 #include "data_proc_reg/AddSubExtendedRegisterExecutor.h"
 #include "data_proc_reg/LogicalShiftedRegisterExecutor.h"
 #include "loads_and_stores/LoadStoreRegPairExecutor.h"
+#include "loads_and_stores/LoadStoreRegExecutor.h"
 #include "loads_and_stores/LoadStoreRegUnsignedImm.h"
 #include "reserved/ReservedCallExecutor.h"

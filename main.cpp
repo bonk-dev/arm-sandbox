@@ -40,6 +40,8 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 			std::make_unique<Executors::Begsi::HintExecutor>();
 	e[InstructionType::LoadStoreRegisterPair] =
 			std::make_unique<Executors::LoadsAndStores::LoadStoreRegPairExecutor>();
+	e[InstructionType::LoadStoreRegister] =
+			std::make_unique<Executors::LoadsAndStores::LoadStoreRegExecutor>();
 	e[InstructionType::LoadStoreRegisterUnsignedImm] =
 			std::make_unique<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>();
 	e[InstructionType::ReservedCall] =

@@ -132,4 +132,6 @@ add_executable(arm_sandbox main.cpp
         emulation/carry_arithmetic.h
         disassembly/instructions/loads_and_stores/LoadStoreReg.h
         disassembly/instructions/loads_and_stores/LoadStoreReg.cpp
+        emulation/executors/loads_and_stores/LoadStoreRegExecutor.h
+        emulation/executors/loads_and_stores/LoadStoreRegExecutor.cpp
 )

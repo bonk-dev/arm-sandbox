@@ -13,6 +13,7 @@
 #include "instructions/data_proc_register/LogicalShiftedRegister.h"
 #include "instructions/reserved/ReservedCall.h"
 #include "instructions/data_proc_register/AddSubExtendedRegister.h"
+#include "instructions/loads_and_stores/LoadStoreReg.h"
 
 namespace disassembly {
 	std::string to_pretty_string(const InstructionDefs::DataProcImm::AddImmediate& i);
@@ -21,6 +22,7 @@ namespace disassembly {
 	std::string to_pretty_string(const InstructionDefs::DataProcImm::MoveWideImmediate& i);
 	std::string to_pretty_string(const InstructionDefs::LoadsAndStores::LoadStoreRegUnsignedImm& i);
 	std::string to_pretty_string(const InstructionDefs::LoadsAndStores::LoadStoreRegisterPair& i);
+	std::string to_pretty_string(const InstructionDefs::LoadsAndStores::LoadStoreReg& i);
 	std::string to_pretty_string(const InstructionDefs::Begsi::Hint& i);
 	std::string to_pretty_string(const InstructionDefs::Begsi::ConditionalBranchImmediate& i);
 	std::string to_pretty_string(const InstructionDefs::Begsi::UnconditionalBranchImmediate& i);
