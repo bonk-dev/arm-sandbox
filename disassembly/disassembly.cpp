@@ -387,5 +387,47 @@ std::string disassembly::to_pretty_string(const InstructionDefs::DataProcImm::Lo
 }
 
 std::string disassembly::to_pretty_string(const InstructionDefs::DataProcReg::AddSubExtendedRegister &i) {
-	return std::string();
+	std::stringstream ss;
+
+	ss << (i.subtract ? "SUB" : "ADD");
+	if (i.setFlags) {
+		ss << 'S';
+	}
+
+	ss << ' ' << gp_reg_name_zero(i.destinationReg, i.is64Bit) << ", "
+		<< gp_reg_name(i.firstSourceReg, i.is64Bit) << ", "
+		<< gp_reg_name(i.secondSourceReg, i.is64Bit) << ", ";
+
+	switch (i.extendVariant) {
+		case InstructionDefs::DataProcReg::AddSubExtendedRegister::ExtendVariant::Uxtb:
+			ss << "UXTB";
+			break;
+		case InstructionDefs::DataProcReg::AddSubExtendedRegister::ExtendVariant::Uxth:
+			ss << "UXTH";
+			break;
+		case InstructionDefs::DataProcReg::AddSubExtendedRegister::ExtendVariant::Uxtw:
+			ss << "UXTW";
+			break;
+		case InstructionDefs::DataProcReg::AddSubExtendedRegister::ExtendVariant::Uxtx:
+			ss << "UXTX";
+			break;
+		case InstructionDefs::DataProcReg::AddSubExtendedRegister::ExtendVariant::Sxtb:
+			ss << "SXTB";
+			break;
+		case InstructionDefs::DataProcReg::AddSubExtendedRegister::ExtendVariant::Sxth:
+			ss << "SXTH";
+			break;
+		case InstructionDefs::DataProcReg::AddSubExtendedRegister::ExtendVariant::Sxtw:
+			ss << "SXTW";
+			break;
+		case InstructionDefs::DataProcReg::AddSubExtendedRegister::ExtendVariant::Sxtx:
+			ss << "SXTX";
+			break;
+	}
+
+	if (i.shiftAmount > 0) {
+		ss << ", LSL #" << static_cast<int>(i.shiftAmount);
+	}
+
+	return ss.str();
 }
