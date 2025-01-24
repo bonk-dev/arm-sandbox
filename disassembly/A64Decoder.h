@@ -16,6 +16,7 @@ enum class InstructionType {
 	AddSubExtendedRegister,
 	LogicalShiftedRegister,
 	LoadStoreRegisterPair,
+	LoadStoreRegister,
 	LoadStoreRegisterUnsignedImm,
 	ReservedCall,
 	Undefined = 0xFFFFFFF

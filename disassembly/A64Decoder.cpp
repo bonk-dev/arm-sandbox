@@ -125,10 +125,27 @@ static std::map<mask_values_t , std::map<mask_values_t, InstructionType>> load_a
 		{
 			mask_values_t(0b0011, 0b0011),
 			{
+				// these are the 4 LoadRegisterVariants, let's just check separately these to be safe
+				{
+					mask_values_t(0b100100000000011, 0b000000000000000),
+					InstructionType::LoadStoreRegister
+				},
+				{
+					mask_values_t(0b100100000000011, 0b000000000000001),
+					InstructionType::LoadStoreRegister
+				},
+				{
+					mask_values_t(0b100100000000011, 0b000000000000010),
+					InstructionType::LoadStoreRegister
+				},
+				{
+					mask_values_t(0b100100000000011, 0b000000000000011),
+					InstructionType::LoadStoreRegister
+				},
 				{
 					mask_values_t(0b100000000000000, 0b100000000000000),
 					InstructionType::LoadStoreRegisterUnsignedImm
-				}
+				},
 			}
 		}
 };
