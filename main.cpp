@@ -143,6 +143,7 @@ int read_elf_main(const Cli::Options& options) {
 	loader.loadEntireFile();
 	loader.parse();
 
+	// TODO: Properly initialize the stack (put argc, argv, environ etc.)
 	AArch64Cpu cpu{};
 	loader.allocateSections(cpu.getMemory());
 
