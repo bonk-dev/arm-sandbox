@@ -1,26 +1,6 @@
 #include "AddSubImmediateExecutor.h"
 #include "../../nzcv.h"
-
-namespace {
-	template<typename IntType>
-	IntType add_with_carry(IntType a, IntType b, bool carry) {
-		uint64_t discarded_nzcv = 0;
-		return add_with_carry(a, b, carry, discarded_nzcv);
-	}
-
-	template<typename UnsignedIntType, typename SignedIntType>
-	UnsignedIntType add_with_carry(UnsignedIntType a, UnsignedIntType b, bool carry, uint64_t& nzcv) {
-		const UnsignedIntType u_sum = a + b + static_cast<unsigned int>(carry);
-		const UnsignedIntType s_sum = static_cast<SignedIntType>(a) + static_cast<SignedIntType>(b) + static_cast<unsigned int>(carry);
-
-		nzcv = nzcv::negative(nzcv, s_sum < 0);
-		nzcv = nzcv::zero(nzcv, u_sum == 0);
-		nzcv = nzcv::carry(nzcv, u_sum < a);
-		nzcv = nzcv::overflow(nzcv, s_sum < static_cast<SignedIntType>(a));
-
-		return u_sum;
-	}
-}
+#include "../../carry_arithmetic.h"
 
 void Executors::DataProcImm::AddSubImmediateExecutor::execute(
 		const InstructionDefs::DataProcImm::AddImmediate& instruction, AArch64Cpu& cpu) {
@@ -41,10 +21,10 @@ void Executors::DataProcImm::AddSubImmediateExecutor::execute(
 
 	uint64_t nzcv = 0;
 	if (instruction.is_64bit) {
-		result = add_with_carry<uint64_t, int64_t>(val, imm, false, nzcv);
+		result = Emulation::add_with_carry<uint64_t, int64_t>(val, imm, false, nzcv);
 	}
 	else {
-		result = add_with_carry<uint32_t, int32_t>(val, imm, false, nzcv);
+		result = Emulation::add_with_carry<uint32_t, int32_t>(val, imm, false, nzcv);
 	}
 
     if (instruction.set_flags) {

@@ -127,4 +127,5 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/data_proc_register/AddSubExtendedRegister.cpp
         emulation/exceptions/InstructionUnallocatedError.h
         emulation/exceptions/InstructionUnallocatedError.cpp
+        emulation/carry_arithmetic.h
 )
