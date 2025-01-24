@@ -16,6 +16,7 @@ namespace InstructionDefs::LoadsAndStores {
 		bool isUnscaledImm;
 
 		bool isLoad;
+		bool isSigned;
 
 		regindex_t targetReg;
 		regindex_t baseReg;

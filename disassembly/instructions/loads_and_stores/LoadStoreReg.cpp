@@ -32,6 +32,7 @@ InstructionDefs::LoadsAndStores::LoadStoreReg::LoadStoreReg(uint32_t encoded) :
 		encoding(decode_indexing_mode(encoded)),
 		isUnscaledImm(decode_is_unscaled(encoded)),
 		isLoad(i::val(encoded, 2, 22) != 0b00), // TODO: FEATURE_FP has different encoding for isLoad
+		isSigned(i::val(encoded, 1, 23) && size <= 32),
 		targetReg(i::val(encoded, 5, 0)),
 		baseReg(i::val(encoded, 5, 5)),
 		immediate(static_cast<int16_t>(i::val(encoded, 9, 12))) {
