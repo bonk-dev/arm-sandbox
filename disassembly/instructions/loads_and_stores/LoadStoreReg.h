@@ -17,6 +17,7 @@ namespace InstructionDefs::LoadsAndStores {
 
 		bool isLoad;
 		bool isSigned;
+		bool isUsing64BitReg;
 
 		regindex_t targetReg;
 		regindex_t baseReg;
