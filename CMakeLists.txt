@@ -124,4 +124,6 @@ add_executable(arm_sandbox main.cpp
         emulation/executors/data_proc_imm/LogicalImmediateExecutor.cpp
         emulation/executors/data_proc_imm/LogicalImmediateExecutor.h
         disassembly/instructions/data_proc_register/AddSubExtendedRegister.h
+        emulation/exceptions/InstructionUnallocatedError.h
+        emulation/exceptions/InstructionUnallocatedError.cpp
 )
