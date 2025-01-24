@@ -96,9 +96,10 @@ InstructionType decode_branches_exc_sys(uint32_t raw_instruction) {
 	return InstructionType::Undefined;
 }
 
-// Top-level -> Data processing (register) -> (op1 field)
+// Top-level -> Data processing (register) -> (op2 field)
 static std::map<mask_values_t, InstructionType> data_proc_imm_op1zero_op2 {
-			{ mask_values_t(0b1000, 0b0000), InstructionType::LogicalShiftedRegister }
+			{ mask_values_t(0b1000, 0b0000), InstructionType::LogicalShiftedRegister },
+			{ mask_values_t(0b1001, 0b1001), InstructionType::AddSubExtendedRegister }
 };
 InstructionType decode_data_processing_register_type(uint32_t raw_instruction) {
 	const uint32_t op1 = raw_instruction >> 28 & 0b1;
