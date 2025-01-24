@@ -13,6 +13,7 @@ enum class InstructionType {
 	PcRelativeAddressing,
 	LogicalImmediate,
 	MoveWideImmediate,
+	AddSubExtendedRegister,
 	LogicalShiftedRegister,
 	LoadStoreRegisterPair,
 	LoadStoreRegisterUnsignedImm,

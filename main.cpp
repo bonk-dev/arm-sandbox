@@ -44,6 +44,8 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 			std::make_unique<Executors::LoadsAndStores::LoadStoreRegUnsignedImm>();
 	e[InstructionType::ReservedCall] =
 			std::make_unique<Executors::Reserved::ReservedCallExecutor>(mapper);
+	e[InstructionType::AddSubExtendedRegister] =
+			std::make_unique<Executors::DataProcReg::AddSubExtendedRegisterExecutor>();
 	e[InstructionType::LogicalShiftedRegister] =
 			std::make_unique<Executors::DataProcReg::LogicalShiftedRegisterExecutor>();
 

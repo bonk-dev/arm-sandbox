@@ -12,6 +12,7 @@
 #include "instructions/begsi/UnconditionalBranchRegister.h"
 #include "instructions/data_proc_register/LogicalShiftedRegister.h"
 #include "instructions/reserved/ReservedCall.h"
+#include "instructions/data_proc_register/AddSubExtendedRegister.h"
 
 namespace disassembly {
 	std::string to_pretty_string(const InstructionDefs::DataProcImm::AddImmediate& i);
@@ -24,6 +25,7 @@ namespace disassembly {
 	std::string to_pretty_string(const InstructionDefs::Begsi::ConditionalBranchImmediate& i);
 	std::string to_pretty_string(const InstructionDefs::Begsi::UnconditionalBranchImmediate& i);
 	std::string to_pretty_string(const InstructionDefs::Begsi::UnconditionalBranchRegister& i);
+	std::string to_pretty_string(const InstructionDefs::DataProcReg::AddSubExtendedRegister& i);
 	std::string to_pretty_string(const InstructionDefs::DataProcReg::LogicalShiftedRegister& i);
 	std::string to_pretty_string(const InstructionDefs::Reserved::ReservedCall& i);
 }
