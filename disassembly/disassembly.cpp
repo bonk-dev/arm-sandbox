@@ -433,5 +433,43 @@ std::string disassembly::to_pretty_string(const InstructionDefs::DataProcReg::Ad
 }
 
 std::string disassembly::to_pretty_string(const InstructionDefs::LoadsAndStores::LoadStoreReg &i) {
-	throw std::runtime_error("Not implemented");
+	if (i.isSimd) {
+		throw std::runtime_error("SIMD not supported");
+	}
+
+	std::stringstream ss;
+
+	if (i.size == 64 && !i.isSimd && i.encoding == InstructionDefs::IndexingMode::SignedOffset && i.isSigned) {
+		ss << "PRFUM";
+	}
+	else {
+		ss << (i.isLoad ? "LD" : "ST");
+		if (i.encoding == InstructionDefs::IndexingMode::SignedOffset) {
+			ss << (i.isUnscaledImm ? "U" : "T");
+		}
+		ss << 'R';
+
+		if (i.isSigned) {
+			ss << 'S';
+		}
+
+		switch (i.size) {
+			case 8:
+				ss << 'B';
+				break;
+			case 16:
+				ss << 'H';
+				break;
+			case 32:
+				if (i.isSigned) {
+					ss << 'W';
+				}
+				break;
+		}
+
+		ss << ' ' << gp_reg_name_zero(i.targetReg) << ", ";
+		append_indexing_semantics(ss, i.baseReg, i.encoding, i.immediate);
+	}
+
+	return ss.str();
 }
