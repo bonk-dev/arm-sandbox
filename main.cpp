@@ -14,6 +14,7 @@
 #include "cli/Options.h"
 #include "cli/parser.h"
 #include "cli/InteractiveMenu.h"
+#include "emulation/systemv_abi.h"
 
 namespace {
 	std::unique_ptr<Logging::LoggerBase> logger = Logging::createLogger("main");
@@ -143,8 +144,17 @@ int read_elf_main(const Cli::Options& options) {
 	loader.loadEntireFile();
 	loader.parse();
 
-	// TODO: Properly initialize the stack (put argc, argv, environ etc.)
 	AArch64Cpu cpu{};
+
+	// Initialize the System V stack
+	Emulation::SystemVStackInitInfo initInfo {
+			{"/hello_world"}, // program args
+			{
+			 {"PWD", "/home/bonk"} // environment variables (e.g. PWD=/home/bonk)
+			}
+	};
+	Emulation::initialize_system_v_stack(*cpu.getMemory().getStack(AARCH64_MAIN_THREAD_ID), initInfo);
+
 	loader.allocateSections(cpu.getMemory());
 
 	const auto mapper = std::make_shared<Emulation::Libraries::Mapper>();
