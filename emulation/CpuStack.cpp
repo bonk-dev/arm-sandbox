@@ -6,7 +6,10 @@
 CpuStack::CpuStack(size_t stackSize):
 	_logger(Logging::createLogger("CpuStack")),
 	_stackMemory(stackSize),
-	_stackPointer(Emulation::STACK_START) {}
+	_stackPointer(Emulation::STACK_START) {
+
+	std::fill(_stackMemory.begin(), _stackMemory.end(), (std::byte)0xCC);
+}
 
 void CpuStack::pop(size_t size) {
 	if (this->_stackPointer + size <= std::numeric_limits<size_t>::max()) {
