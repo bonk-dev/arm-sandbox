@@ -1,6 +1,14 @@
 #include "AArch64Cpu.h"
 #include "registers.h"
 
+namespace {
+	inline void check_regindex(const regindex_t index) {
+		if (index < 0 || index > 31) {
+			throw std::runtime_error("Invalid register index");
+		}
+	}
+}
+
 AArch64Cpu::AArch64Cpu() : _nzcvConditionRegister(0),
 						   _memory(std::make_unique<CpuVirtualMemory>()),
 						   _programCounter(0),
@@ -14,6 +22,8 @@ AArch64Cpu::AArch64Cpu() : _nzcvConditionRegister(0),
 }
 
 void AArch64Cpu::writeRegister32(regindex_t index, uint32_t val, bool useSp) {
+	check_regindex(index);
+
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
 			if (useSp) {
@@ -29,6 +39,8 @@ void AArch64Cpu::writeRegister32(regindex_t index, uint32_t val) {
 }
 
 void AArch64Cpu::writeRegister64(regindex_t index, uint64_t val, bool useSp) {
+	check_regindex(index);
+
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
 			if (useSp) {
@@ -51,6 +63,8 @@ void AArch64Cpu::writeRegister64(Emulation::Registers registerName, uint64_t val
 }
 
 uint32_t AArch64Cpu::readRegister32(regindex_t index, bool useSp) const {
+	check_regindex(index);
+
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
 			return useSp
@@ -65,6 +79,8 @@ uint32_t AArch64Cpu::readRegister32(regindex_t index) const {
 }
 
 uint64_t AArch64Cpu::readRegister64(regindex_t index, bool useSp) const {
+	check_regindex(index);
+
 	switch (static_cast<Emulation::Registers>(index)) {
 		case Emulation::Registers::Sp:
 			return useSp
