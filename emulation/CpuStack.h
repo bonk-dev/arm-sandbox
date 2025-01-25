@@ -41,6 +41,8 @@ public:
 		*ptr = value;
 	}
 
+	void push(const std::string& str);
+
 	template <typename T>
 	void pop() {
 		this->pop(sizeof(T));

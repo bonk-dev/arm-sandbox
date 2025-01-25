@@ -40,3 +40,12 @@ std::string CpuStack::readCString(virtual_address_t address) {
 	char* ptr = reinterpret_cast<char*>(this->_getUnsafePointer(address));
 	return {ptr};
 }
+
+void CpuStack::push(const std::string& str) {
+	this->_stackPointer -= str.size() + 1; // string + NULL
+
+	const size_t vectorOffset = this->_getVectorOffset(this->_stackPointer);
+	char* ptr = reinterpret_cast<char*>(this->_stackMemory.data() + vectorOffset);
+	str.copy(ptr, str.size(), 0);
+	*(ptr + str.size()) = '\x00';
+}
