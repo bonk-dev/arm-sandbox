@@ -67,11 +67,11 @@ void Executors::DataProcReg::AddSubExtendedRegisterExecutor::execute(
 	uint64_t nzcv;
 	if (details.is64Bit) {
 		auto result = Emulation::add_with_carry<uint64_t, int64_t>(firstOperand, secondOperand, false, nzcv);
-		cpu.writeRegister64(result, false);
+		cpu.writeRegister64(details.destinationReg, result, false);
 	}
 	else {
 		auto result = Emulation::add_with_carry<uint32_t, int32_t>(firstOperand, secondOperand, false, nzcv);
-		cpu.writeRegister32(result, false);
+		cpu.writeRegister32(details.destinationReg, result, false);
 	}
 
 	if (details.setFlags) {
