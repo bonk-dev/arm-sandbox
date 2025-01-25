@@ -155,6 +155,7 @@ int read_elf_main(const Cli::Options& options) {
 	};
 	Emulation::initialize_system_v_stack(*cpu.getMemory().getStack(AARCH64_MAIN_THREAD_ID), initInfo);
 
+	// Allocate ELF sections
 	loader.allocateSections(cpu.getMemory());
 
 	const auto mapper = std::make_shared<Emulation::Libraries::Mapper>();
