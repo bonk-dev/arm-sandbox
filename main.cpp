@@ -15,6 +15,7 @@
 #include "cli/parser.h"
 #include "cli/InteractiveMenu.h"
 #include "emulation/systemv_abi.h"
+#include "logging/LoggerContainer.h"
 
 namespace {
 	std::unique_ptr<Logging::LoggerBase> logger = Logging::createLogger("main");
@@ -261,6 +262,7 @@ int main(int argc, char** argv) {
 		opt = menu.getOptions();
 	}
 
+	Logging::setGlobalLogLevel(opt.logLevel);
 	logger->verbose() << "Loading ELF from " << opt.emulationTarget << std::endl;
 	return read_elf_main(opt);
 }
