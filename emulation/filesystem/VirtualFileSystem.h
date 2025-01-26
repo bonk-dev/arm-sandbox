@@ -10,7 +10,7 @@ namespace Filesystem {
 	class VirtualFileSystem {
 	private:
 		uint64_t _availableFileId;
-		std::map<std::string, std::shared_ptr<Filesystem::File>> _files;
+		std::map<std::string, std::shared_ptr<Filesystem::File>> _filesByPath;
 		std::map<uint64_t, std::shared_ptr<Filesystem::File>> _filesById;
 
 		/**
