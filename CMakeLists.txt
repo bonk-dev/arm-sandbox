@@ -32,7 +32,7 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/begsi/UnconditionalBranchImmediate.h
         disassembly/instructions/begsi/UnconditionalBranchImmediate.cpp
         disassembly/instructions/loads_and_stores/LoadStoreRegisterPair.h
-        disassembly/instructions/loads_and_stores/LoadRegisterPair.cpp
+        disassembly/instructions/loads_and_stores/LoadStoreRegisterPair.cpp
         disassembly/instructions/data_proc_imm/MoveWideImmediate.h
         disassembly/instructions/data_proc_imm/MoveWideImmediate.cpp
         emulation/executors/data_proc_imm/MoveWideImmediateExecutor.cpp
