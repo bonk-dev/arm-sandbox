@@ -135,4 +135,6 @@ add_executable(arm_sandbox main.cpp
         emulation/executors/loads_and_stores/LoadStoreRegExecutor.h
         emulation/executors/loads_and_stores/LoadStoreRegExecutor.cpp
         emulation/systemv_abi.h
+        cli/debugger.h
+        cli/debugger.cpp
 )
