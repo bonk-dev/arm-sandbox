@@ -14,7 +14,8 @@ make
 ```
 
 ### Windows (Visual Studio)
-- TODO: add info about tools
-- Visual Studio -> Open a folder
+- Clone this repo
+- Make sure you have the "Desktop development with C++" workload installed 
+- Run Visual Studio -> Open a local folder
 - Build
 
