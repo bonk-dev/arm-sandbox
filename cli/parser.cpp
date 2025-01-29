@@ -4,7 +4,7 @@
 #include "../logging/utils.h"
 
 namespace {
-	constexpr bool flagMatches(char* arg, const char* shortFlag, const char* longFlag) {
+	inline bool flagMatches(char* arg, const char* shortFlag, const char* longFlag) {
 		return strcmp(arg, shortFlag) == 0 || strcmp(arg, longFlag) == 0;
 	}
 }
