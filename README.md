@@ -1,5 +1,13 @@
 # arm-sandbox
-This repository contains an AArch64 emulator, which is also a Linux sandbox.
+arm-sandbox is an app that creates a virtual Linux environment for apps.
+It's able to run programs built for AArch64, packaged in ELF format.
+
+## Features
+- incomplete A64 set emulation support
+- A64 disassembler
+- dynamic linker (supports only emulating library methods, doesn't actually link to real libraries - yet)
+- filesystem emulation
+- basic debugger (registry reading & breakpoints)
 
 ## Build
 ### Linux
