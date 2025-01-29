@@ -1,5 +1,6 @@
-# arm-sandbox
-arm-sandbox is an app that creates a virtual Linux environment for apps.
+![logo](assets/arm-sandbox.png)
+
+**arm-sandbox** is an ARM emulator which creates a virtual Linux environment for apps.
 It's able to run programs built for AArch64, packaged in ELF format.
 
 ## Features
