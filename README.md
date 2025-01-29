@@ -1,8 +1,6 @@
 # arm-sandbox
 This repository contains an AArch64 emulator, which is also a Linux sandbox.
 
-It was made for a school project.
-
 ## Build
 ### Linux
 ```UNIX
