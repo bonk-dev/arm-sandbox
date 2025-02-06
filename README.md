@@ -8,7 +8,7 @@ It's able to run programs built for AArch64, packaged in ELF format.
 - A64 disassembler
 - dynamic linker (supports only emulating library methods, doesn't actually link to real libraries - yet)
 - filesystem emulation
-- basic debugger (registry reading & breakpoints)
+- basic debugger (register reading & breakpoints)
 
 ## Build
 ### Linux
