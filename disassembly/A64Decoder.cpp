@@ -4,15 +4,15 @@
 #include <map>
 
 namespace {
-// Explanation for the maps:
-// std::tuple<uint32_t, uint32_t> contains:
-// 	1 - mask for the field (e.g. when only the 2 MSBs are to be compared, value 1 is equal to 1100)
-//	2 - field value after ANDing the decoded value with the mask (1)
-// example:
-// ADD/SUB (immediate):
-// op1 decode field == 010x (only the first 3 most significant bits are compared)
-// (1) == 1110
-// (2) == 0100 (x are replaced with 0)
+	// Explanation for the maps:
+	// std::tuple<uint32_t, uint32_t> contains:
+	// 	1 - mask for the field (e.g. when only the 2 MSBs are to be compared, value 1 is equal to 1100)
+	//	2 - field value after ANDing the decoded value with the mask (1)
+	// example:
+	// ADD/SUB (immediate):
+	// op1 decode field == 010x (only the first 3 most significant bits are compared)
+	// (1) == 1110
+	// (2) == 0100 (x are replaced with 0)
 	typedef std::tuple<uint32_t, uint32_t> mask_values_t;
 
 	constexpr bool MATCHES_MASK(uint32_t val, mask_values_t mask_and_value) {
@@ -42,8 +42,8 @@ namespace {
 	}
 
 
-// Top-level -> Data processing (immediate) -> (op1 field)
-	static std::map<mask_values_t, InstructionType> data_proc_imm_op1{
+	// Top-level -> Data processing (immediate) -> (op1 field)
+	std::map<mask_values_t, InstructionType> data_proc_imm_op1{
 			{mask_values_t(0b1110, 0b0100), InstructionType::AddOrSubImmediate},
 			{mask_values_t(0b1100, 0b0000), InstructionType::PcRelativeAddressing},
 			{mask_values_t(0b1110, 0b1000), InstructionType::LogicalImmediate,},
@@ -63,8 +63,8 @@ namespace {
 		}
 	}
 
-// Top-level -> Branches, Exception Generating and System instructions -> (op0 field) -> (op1 field)
-	static std::map<mask_values_t, std::map<mask_values_t, InstructionType>> br_exc_sys_op0_op1{
+	// Top-level -> Branches, Exception Generating and System instructions -> (op0 field) -> (op1 field)
+	std::map<mask_values_t, std::map<mask_values_t, InstructionType>> br_exc_sys_op0_op1{
 			{
 					mask_values_t(0b111, 0b010),
 					{
@@ -101,8 +101,8 @@ namespace {
 		return InstructionType::Undefined;
 	}
 
-// Top-level -> Data processing (register) -> (op2 field)
-	static std::map<mask_values_t, InstructionType> data_proc_imm_op1zero_op2{
+	// Top-level -> Data processing (register) -> (op2 field)
+	std::map<mask_values_t, InstructionType> data_proc_imm_op1zero_op2{
 			{mask_values_t(0b1000, 0b0000), InstructionType::LogicalShiftedRegister},
 			{mask_values_t(0b1001, 0b1001), InstructionType::AddSubExtendedRegister}
 	};
@@ -116,8 +116,8 @@ namespace {
 			   : InstructionType::Undefined;
 	}
 
-// Top-level -> Load and store -> (op0 field) -> (op2 field)
-	static std::map<mask_values_t, std::map<mask_values_t, InstructionType>> load_and_store_op0_op2{
+	// Top-level -> Load and store -> (op0 field) -> (op2 field)
+	std::map<mask_values_t, std::map<mask_values_t, InstructionType>> load_and_store_op0_op2{
 			{
 					mask_values_t(0b0011, 0b0010),
 					{
@@ -183,7 +183,7 @@ namespace {
 
 	typedef InstructionType (*decode_sublevel_instruction_t)(uint32_t);
 
-	static std::map<mask_values_t, decode_sublevel_instruction_t> top_level_op1{
+	std::map<mask_values_t, decode_sublevel_instruction_t> top_level_op1{
 			{mask_values_t(0b1110, 0b1000), &decode_data_processing_imm_type},
 			{mask_values_t(0b1110, 0b1010), &decode_branches_exc_sys},
 			{mask_values_t(0b0111, 0b0101), &decode_data_processing_register_type},
