@@ -79,6 +79,12 @@ namespace {
 					}
 			},
 			{
+				mask_values_t(0b011, 0b001),
+				{
+						{mask_values_t(0b10000000000000, 0b00000000000000), InstructionType::CompareAndBranchImmediate}
+				}
+			},
+			{
 					mask_values_t(0b111, 0b110),
 					{
 							{mask_values_t(0b11111111111111, 0b01000000110010), InstructionType::Hint},

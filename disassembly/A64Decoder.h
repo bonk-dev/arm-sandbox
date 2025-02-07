@@ -10,6 +10,7 @@ enum class InstructionType {
 	ConditionalBranchImmediate,
 	UnconditionalBranchImmediate,
 	UnconditionalBranchRegister,
+	CompareAndBranchImmediate,
 	PcRelativeAddressing,
 	LogicalImmediate,
 	MoveWideImmediate,
