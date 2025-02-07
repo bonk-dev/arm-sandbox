@@ -49,11 +49,27 @@ void AArch64Cpu::writeRegister(regindex_t index, uint64_t val, size_t size) {
 }
 
 uint64_t AArch64Cpu::readRegisterSp(regindex_t index, size_t size) const {
-	throw std::runtime_error("Todo: implement");
+	check_regindex(index);
+
+	uint64_t val = 0;
+	if (is_stack_pointer(index)) {
+		val = this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->getStackPointer();
+	}
+	else {
+		val = this->_generalRegisters[index];
+	}
+
+	return val & get_mask(size);
 }
 
 uint64_t AArch64Cpu::readRegister(regindex_t index, size_t size) const {
-	throw std::runtime_error("Todo: implement");
+	check_regindex(index);
+
+	if (is_stack_pointer(index)) {
+		return 0;
+	}
+
+	return this->_generalRegisters[index] & get_mask(size);
 }
 
 //uint32_t AArch64Cpu::readRegister32(regindex_t index, bool useSp) const {
