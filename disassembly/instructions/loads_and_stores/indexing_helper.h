@@ -24,11 +24,11 @@ namespace InstructionDefs::IndexingHelpers {
 				virt_addr += immediate;
 				break;
 			case InstructionDefs::IndexingMode::PostIndex:
-				cpu.writeRegister64(base_reg, virt_addr + immediate, true);
+				cpu.writeRegisterSp(base_reg, virt_addr + immediate, 64);
 				break;
 			case InstructionDefs::IndexingMode::PreIndex:
 				virt_addr += immediate;
-				cpu.writeRegister64(base_reg, virt_addr, true);
+				cpu.writeRegisterSp(base_reg, virt_addr, 64);
 				break;
 			default:
 				throw std::runtime_error("Illegal indexing mode");

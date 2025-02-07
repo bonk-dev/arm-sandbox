@@ -60,14 +60,7 @@ void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(
 			}
 		}
 
-		if (instruction.is_using_64bit_reg) {
-			cpu.writeRegister64(
-					instruction.src_dst_reg, val);
-		}
-		else {
-			cpu.writeRegister32(
-					instruction.src_dst_reg, val);
-		}
+		cpu.writeRegister(instruction.src_dst_reg, val, instruction.is_using_64bit_reg ? 64 : 32);
 	}
 	else {
 		if (instruction.is_using_64bit_reg) {

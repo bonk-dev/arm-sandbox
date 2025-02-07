@@ -50,14 +50,7 @@ void Executors::LoadsAndStores::LoadStoreRegExecutor::execute(
 			}
 		}
 
-		if (instruction.isUsing64BitReg) {
-			cpu.writeRegister64(
-					instruction.targetReg, val);
-		}
-		else {
-			cpu.writeRegister32(
-					instruction.targetReg, val);
-		}
+		cpu.writeRegister(instruction.targetReg, val, instruction.isUsing64BitReg ? 64 : 32);
 	}
 	else {
 		if (instruction.isUsing64BitReg) {
