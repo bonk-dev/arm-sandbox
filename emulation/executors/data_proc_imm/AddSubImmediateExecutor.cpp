@@ -4,10 +4,7 @@
 
 void Executors::DataProcImm::AddSubImmediateExecutor::execute(
 		const InstructionDefs::DataProcImm::AddImmediate& instruction, AArch64Cpu& cpu) {
-    uint64_t val = instruction.is_64bit
-        ? cpu.readRegister64(instruction.source_reg_index, true)
-        : cpu.readRegister32(instruction.source_reg_index, true);
-
+    uint64_t val = cpu.readRegisterSp(instruction.source_reg_index, instruction.is_64bit ? 64 : 32);
 	uint16_t imm = instruction.immediate;
     if (instruction.shift_12) {
         imm <<= 12;
