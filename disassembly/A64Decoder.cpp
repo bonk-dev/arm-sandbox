@@ -46,7 +46,7 @@ namespace {
 	std::map<mask_values_t, InstructionType> data_proc_imm_op1{
 			{mask_values_t(0b1110, 0b0100), InstructionType::AddOrSubImmediate},
 			{mask_values_t(0b1100, 0b0000), InstructionType::PcRelativeAddressing},
-			{mask_values_t(0b1110, 0b1000), InstructionType::LogicalImmediate,},
+			{mask_values_t(0b1110, 0b1000), InstructionType::LogicalImmediate},
 			{mask_values_t(0b1110, 0b1010), InstructionType::MoveWideImmediate}
 	};
 
@@ -68,23 +68,21 @@ namespace {
 			{
 					mask_values_t(0b111, 0b010),
 					{
-							{mask_values_t(0b11000000000000, 0),                InstructionType::ConditionalBranchImmediate}
+							{mask_values_t(0b11000000000000, 0), InstructionType::ConditionalBranchImmediate}
 					}
 			},
 			{
 					mask_values_t(0b011, 0b000),
 					{
 							// 0,0 just means that there no other instructions with the same op0 field
-							{mask_values_t(0,
-										   0),                                  InstructionType::UnconditionalBranchImmediate}
+							{mask_values_t(0, 0), InstructionType::UnconditionalBranchImmediate}
 					}
 			},
 			{
 					mask_values_t(0b111, 0b110),
 					{
 							{mask_values_t(0b11111111111111, 0b01000000110010), InstructionType::Hint},
-							{mask_values_t(0b10000000000000,
-										   0b10000000000000), InstructionType::UnconditionalBranchRegister}
+							{mask_values_t(0b10000000000000, 0b10000000000000), InstructionType::UnconditionalBranchRegister}
 					}
 			}
 	};
