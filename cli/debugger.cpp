@@ -40,10 +40,7 @@ bool Cli::handle_manual_stepping_mode(ExecutorBase &executor, uint32_t instructi
 					if (index > AARCH64_GENERAL_PURPOSE_REGISTERS) {
 						logger->error() << "Invalid register index" << std::endl;
 					} else {
-						uint64_t reg_value = reg_size == 64
-											 ? cpu.readRegister64(index, true)
-											 : cpu.readRegister32(index, true);
-
+						uint64_t reg_value = cpu.readRegisterSp(index, reg_size);
 						logger->error() << std::dec << std::noshowbase << 'X' << index << " = " << std::hex
 										<< std::showbase << reg_value << std::endl;
 					}

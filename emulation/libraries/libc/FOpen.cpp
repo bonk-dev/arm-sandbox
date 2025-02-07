@@ -1,8 +1,8 @@
 #include "FOpen.h"
 
 void Emulation::Libraries::LibC::FOpen::execute(AArch64Cpu &cpu) {
-	const virtual_address_t filename_char_ptr = cpu.readRegister64(0);
-	const virtual_address_t mode_char_ptr = cpu.readRegister64(1);
+	const virtual_address_t filename_char_ptr = cpu.readRegister(0, 64);
+	const virtual_address_t mode_char_ptr = cpu.readRegister(1, 64);
 
 	const auto path = cpu.getMemory().readCString(filename_char_ptr);
 	const auto mode = cpu.getMemory().readCString(mode_char_ptr);

@@ -8,7 +8,7 @@ void Executors::Reserved::ReservedCallExecutor::execute(const InstructionDefs::R
 		case InstructionDefs::Reserved::ReservedCalls::Exit: {
 			if (instruction.immediate == 0) {
 				_logger->info() << "Clean exit" << std::endl;
-				const int mainStatusCode = static_cast<int>(cpu.readRegister32(0));
+				const int mainStatusCode = static_cast<int>(cpu.readRegister(0, 32));
 				cpu.haltExecution(mainStatusCode);
 			}
 			break;

@@ -1,9 +1,9 @@
 #include "LibCStartMain.h"
 
 void Emulation::Libraries::LibC::LibCStartMain::execute(AArch64Cpu &cpu) {
-    const virtual_address_t userEntryPointAddress = cpu.readRegister64(0);
-    const int argc = static_cast<int>(cpu.readRegister64(1));
-    const virtual_address_t argvPtr = cpu.readRegister64(2);
+    const virtual_address_t userEntryPointAddress = cpu.readRegister(0, 64);
+    const int argc = static_cast<int>(cpu.readRegister(1, 64));
+    const virtual_address_t argvPtr = cpu.readRegister(2, 64);
 
     // X3 == init (unused)
     // X4 == fini (unused)
