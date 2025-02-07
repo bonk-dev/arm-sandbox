@@ -66,10 +66,5 @@ void Executors::DataProcReg::LogicalShiftedRegisterExecutor::execute(
             throw std::runtime_error("Invalid operation");
     }
 
-    if (details.is64Bit) {
-		cpu.writeRegister64(details.destinationReg, result);
-    }
-    else {
-		cpu.writeRegister32(details.destinationReg, result);
-    }
+	cpu.writeRegister(details.destinationReg, result, details.is64Bit ? 64 : 32);
 }
