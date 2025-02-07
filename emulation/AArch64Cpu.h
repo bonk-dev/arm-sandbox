@@ -35,11 +35,6 @@ public:
 	[[nodiscard]] uint64_t getProgramCounter() const;
 	void setProgramCounter(uint64_t pc);
 
-//	[[nodiscard]] uint32_t readRegister32(regindex_t index, bool useSp) const;
-//    [[nodiscard]] uint32_t readRegister32(regindex_t index) const;
-//	[[nodiscard]] uint64_t readRegister64(regindex_t index, bool useSp) const;
-//    [[nodiscard]] uint64_t readRegister64(regindex_t index) const;
-
 	/**
 	 * Reads the nzcv register (condition flags)
 	 * @return nzcv register value
