@@ -6,5 +6,5 @@ void Emulation::Libraries::LibC::Puts::execute(AArch64Cpu &cpu) {
     const auto result = puts(str.c_str());
 
     // return value is written to X0
-	cpu.writeRegister64(0, result);
+	cpu.writeRegister(0, result, 64);
 }

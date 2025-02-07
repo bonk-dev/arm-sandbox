@@ -15,12 +15,12 @@ void Emulation::Libraries::LibC::LibCStartMain::execute(AArch64Cpu &cpu) {
     // int main(int argc, char** argv),
     // X0 == argc
     // X1 == argv
-	cpu.writeRegister64(0, argc);
-	cpu.writeRegister64(1, argvPtr);
+	cpu.writeRegister(0, argc, 64);
+	cpu.writeRegister(1, argvPtr, 64);
 
     cpu.setProgramCounter(userEntryPointAddress);
 
     // this is a hack to jump to the clean address, because at this point LR is set to the instruction after __libc_start_main
     // which is abort().
-	cpu.writeRegister64(Registers::Lr, cpu.getCleanExitAddress());
+	cpu.writeRegister(30, cpu.getCleanExitAddress(), 64);
 }
