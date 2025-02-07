@@ -7,6 +7,13 @@ namespace {
 			throw std::runtime_error("Invalid register index");
 		}
 	}
+	inline uint64_t get_mask(unsigned int size) {
+		// 1 << (1 - size)
+		// -1
+		// << 1
+		// + 1
+		return (((1 << (size - 1)) - 1) << 1) + 1;
+	}
 }
 
 AArch64Cpu::AArch64Cpu() : _nzcvConditionRegister(0),
@@ -21,45 +28,21 @@ AArch64Cpu::AArch64Cpu() : _nzcvConditionRegister(0),
 	this->createThread(AARCH64_MAIN_THREAD_ID);
 }
 
-void AArch64Cpu::writeRegister32(regindex_t index, uint32_t val, bool useSp) {
+void AArch64Cpu::writeRegisterSp(regindex_t index, uint64_t val, size_t size) {
 	check_regindex(index);
-
-	switch (static_cast<Emulation::Registers>(index)) {
-		case Emulation::Registers::Sp:
-			if (useSp) {
-				this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->setStackPointer(val);
-			}
-			break;
-		default:
-			this->_generalRegisters[index] = val;
+	if (static_cast<Emulation::Registers>(index) == Emulation::Registers::Sp) {
+		this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->setStackPointer(val);
+	}
+	else {
+		this->_generalRegisters[index] = val & get_mask(size);
 	}
 }
-void AArch64Cpu::writeRegister32(regindex_t index, uint32_t val) {
-	writeRegister32(index, val, false);
-}
 
-void AArch64Cpu::writeRegister64(regindex_t index, uint64_t val, bool useSp) {
+void AArch64Cpu::writeRegister(regindex_t index, uint64_t val, size_t size) {
 	check_regindex(index);
-
-	switch (static_cast<Emulation::Registers>(index)) {
-		case Emulation::Registers::Sp:
-			if (useSp) {
-				this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->setStackPointer(val);
-			}
-			break;
-		default:
-			this->_generalRegisters[index] = val;
+	if (static_cast<Emulation::Registers>(index) != Emulation::Registers::Sp) {
+		this->_generalRegisters[index] = val & get_mask(size);
 	}
-}
-void AArch64Cpu::writeRegister64(regindex_t index, uint64_t val) {
-	writeRegister64(index, val, false);
-}
-
-void AArch64Cpu::writeRegister64(Emulation::Registers registerName, uint64_t val, bool useSp) {
-	writeRegister64(static_cast<regindex_t>(registerName), val, useSp);
-}
-void AArch64Cpu::writeRegister64(Emulation::Registers registerName, uint64_t val) {
-	writeRegister64(registerName, val, false);
 }
 
 uint32_t AArch64Cpu::readRegister32(regindex_t index, bool useSp) const {
