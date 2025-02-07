@@ -26,12 +26,15 @@ private:
 public:
     AArch64Cpu();
 
-    void writeRegister32(regindex_t index, uint32_t val, bool useSp);
-	void writeRegister32(regindex_t index, uint32_t val);
-    void writeRegister64(regindex_t index, uint64_t val, bool useSp);
-	void writeRegister64(regindex_t index, uint64_t val);
-	void writeRegister64(Emulation::Registers registerName, uint64_t val, bool useSp);
-	void writeRegister64(Emulation::Registers registerName, uint64_t val);
+//    void writeRegister32(regindex_t index, uint32_t val, bool useSp);
+//	void writeRegister32(regindex_t index, uint32_t val);
+//    void writeRegister64(regindex_t index, uint64_t val, bool useSp);
+//	void writeRegister64(regindex_t index, uint64_t val);
+//	void writeRegister64(Emulation::Registers registerName, uint64_t val, bool useSp);
+//	void writeRegister64(Emulation::Registers registerName, uint64_t val);
+
+	void writeRegisterSp(regindex_t index, uint64_t val, size_t size);
+	void writeRegister(regindex_t index, uint64_t val, size_t size);
 
 	[[nodiscard]] uint64_t getProgramCounter() const;
 	void setProgramCounter(uint64_t pc);
