@@ -33,5 +33,5 @@ void Executors::DataProcImm::LogicalImmediateExecutor::execute(
 			break;
 	}
 
-	cpu.writeRegister64(instruction.destinationReg, val, true);
+	cpu.writeRegisterSp(instruction.destinationReg, val, 64);
 }

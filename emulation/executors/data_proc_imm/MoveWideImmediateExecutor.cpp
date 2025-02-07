@@ -21,12 +21,7 @@ void Executors::DataProcImm::MoveWideImmediateExecutor::execute(
 			break;
 	}
 
-	if (instruction.is_64bit) {
-		cpu.writeRegister64(instruction.destination_reg, result);
-	}
-	else {
-		cpu.writeRegister32(instruction.destination_reg, result);
-	}
+	cpu.writeRegister(instruction.destination_reg, result, instruction.is_64bit ? 64 : 32);
 }
 
 

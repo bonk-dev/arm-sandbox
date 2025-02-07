@@ -33,10 +33,10 @@ void Executors::DataProcImm::AddSubImmediateExecutor::execute(
 
 	// SP is not writeable using ADDS/SUBS
 	// it's used as the destination then the result is to be discarded, for example when comparing values to 0 (CMP Xn, #0)
-	if (instruction.is_64bit) {
-		cpu.writeRegister64(instruction.destination_reg_index, result, !instruction.set_flags);
+	if (instruction.set_flags) {
+		cpu.writeRegister(instruction.destination_reg_index, result, instruction.is_64bit ? 64 : 32);
 	}
 	else {
-		cpu.writeRegister32(instruction.destination_reg_index, result, !instruction.set_flags);
+		cpu.writeRegisterSp(instruction.destination_reg_index, result, instruction.is_64bit ? 64 : 32);
 	}
 }
