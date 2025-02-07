@@ -13,10 +13,7 @@ namespace InstructionDefs::IndexingHelpers {
 			regindex_t base_reg,
 			bool is_wide = true
 	) {
-		uintptr_t virt_addr = is_wide
-							  ? cpu.readRegister64(base_reg, true)
-							  : cpu.readRegister32(base_reg, true);
-
+		uintptr_t virt_addr = cpu.readRegisterSp(base_reg, is_wide ? 64 : 32);
 		switch (mode) {
 			case InstructionDefs::IndexingMode::NonTemporalOffset:
 			case InstructionDefs::IndexingMode::SignedOffset:

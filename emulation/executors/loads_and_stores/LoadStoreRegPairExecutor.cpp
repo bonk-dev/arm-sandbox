@@ -26,10 +26,10 @@ void Executors::LoadsAndStores::LoadStoreRegPairExecutor::execute(
 		}
 		else {
 			if (instruction.is_wide) {
-				cpu.getMemory().write(virtual_address, cpu.readRegister64(reg_index));
+				cpu.getMemory().write<uint64_t>(virtual_address, cpu.readRegister(reg_index, 64));
 			}
 			else {
-				cpu.getMemory().write(virtual_address, cpu.readRegister32(reg_index));
+				cpu.getMemory().write<uint32_t>(virtual_address, cpu.readRegister(reg_index, 32));
 			}
 		}
 

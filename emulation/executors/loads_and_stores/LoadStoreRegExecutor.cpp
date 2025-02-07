@@ -54,12 +54,12 @@ void Executors::LoadsAndStores::LoadStoreRegExecutor::execute(
 	}
 	else {
 		if (instruction.isUsing64BitReg) {
-			cpu.getMemory().write(
-					virtual_address, cpu.readRegister64(instruction.targetReg));
+			cpu.getMemory().write<uint64_t>(
+					virtual_address, cpu.readRegister(instruction.targetReg, 64));
 		}
 		else {
-			cpu.getMemory().write(
-					virtual_address, cpu.readRegister32(instruction.targetReg));
+			cpu.getMemory().write<uint32_t>(
+					virtual_address, cpu.readRegister(instruction.targetReg, 32));
 		}
 	}
 }

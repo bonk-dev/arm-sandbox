@@ -64,12 +64,12 @@ void Executors::LoadsAndStores::LoadStoreRegUnsignedImm::execute(
 	}
 	else {
 		if (instruction.is_using_64bit_reg) {
-			cpu.getMemory().write(
-					virtual_address, cpu.readRegister64(instruction.src_dst_reg));
+			cpu.getMemory().write<uint64_t>(
+					virtual_address, cpu.readRegister(instruction.src_dst_reg, 64));
 		}
 		else {
-			cpu.getMemory().write(
-					virtual_address, cpu.readRegister32(instruction.src_dst_reg));
+			cpu.getMemory().write<uint32_t>(
+					virtual_address, cpu.readRegister(instruction.src_dst_reg, 32));
 		}
 	}
 }
