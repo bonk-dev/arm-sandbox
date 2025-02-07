@@ -13,10 +13,7 @@ namespace InstructionDefs::IndexingHelpers {
 			regindex_t base_reg,
 			bool is_wide = true
 	) {
-		uintptr_t virt_addr = is_wide
-							  ? cpu.readRegister64(base_reg, true)
-							  : cpu.readRegister32(base_reg, true);
-
+		uintptr_t virt_addr = cpu.readRegisterSp(base_reg, is_wide ? 64 : 32);
 		switch (mode) {
 			case InstructionDefs::IndexingMode::NonTemporalOffset:
 			case InstructionDefs::IndexingMode::SignedOffset:
@@ -24,11 +21,11 @@ namespace InstructionDefs::IndexingHelpers {
 				virt_addr += immediate;
 				break;
 			case InstructionDefs::IndexingMode::PostIndex:
-				cpu.writeRegister64(base_reg, virt_addr + immediate, true);
+				cpu.writeRegisterSp(base_reg, virt_addr + immediate, 64);
 				break;
 			case InstructionDefs::IndexingMode::PreIndex:
 				virt_addr += immediate;
-				cpu.writeRegister64(base_reg, virt_addr, true);
+				cpu.writeRegisterSp(base_reg, virt_addr, 64);
 				break;
 			default:
 				throw std::runtime_error("Illegal indexing mode");

@@ -50,23 +50,16 @@ void Executors::LoadsAndStores::LoadStoreRegExecutor::execute(
 			}
 		}
 
-		if (instruction.isUsing64BitReg) {
-			cpu.writeRegister64(
-					instruction.targetReg, val);
-		}
-		else {
-			cpu.writeRegister32(
-					instruction.targetReg, val);
-		}
+		cpu.writeRegister(instruction.targetReg, val, instruction.isUsing64BitReg ? 64 : 32);
 	}
 	else {
 		if (instruction.isUsing64BitReg) {
-			cpu.getMemory().write(
-					virtual_address, cpu.readRegister64(instruction.targetReg));
+			cpu.getMemory().write_u64(
+					virtual_address, cpu.readRegister(instruction.targetReg, 64));
 		}
 		else {
-			cpu.getMemory().write(
-					virtual_address, cpu.readRegister32(instruction.targetReg));
+			cpu.getMemory().write_u32(
+					virtual_address, cpu.readRegister(instruction.targetReg, 32));
 		}
 	}
 }

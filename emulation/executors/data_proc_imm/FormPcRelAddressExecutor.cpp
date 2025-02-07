@@ -20,7 +20,7 @@ void Executors::DataProcImm::FormPcRelAddressExecutor::execute(
 		result = pc + instruction.immediate;
 	}
 
-	cpu.writeRegister64(instruction.destination_reg_index, result);
+	cpu.writeRegister(instruction.destination_reg_index, result, 64);
 }
 
 

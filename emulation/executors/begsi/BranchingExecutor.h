@@ -20,7 +20,7 @@ namespace Executors::Begsi {
 		uint64_t pc = cpu.getProgramCounter();
 
 		if (isLink) {
-			cpu.writeRegister64(30, pc + 4);
+			cpu.writeRegister(30, pc + 4, 64);
 		}
 
 		pc = destination;

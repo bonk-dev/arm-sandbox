@@ -53,6 +53,9 @@ public:
 	void write(uintptr_t addr, uint32_t value);
 	void write(uintptr_t addr, uint64_t value);
 
+	void write_u32(uintptr_t addr, uint32_t value);
+	void write_u64(uintptr_t addr, uint64_t value);
+
 	void write(virtual_address_t destination,
 			   std::vector<std::byte>::const_iterator begin,
 			   std::vector<std::byte>::difference_type size);

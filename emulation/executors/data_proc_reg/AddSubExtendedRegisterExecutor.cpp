@@ -49,13 +49,12 @@ namespace {
 
 void Executors::DataProcReg::AddSubExtendedRegisterExecutor::execute(
 		const AddSubExtendedRegister &details, AArch64Cpu &cpu) {
-	const uint64_t firstOperand = details.is64Bit
-			? cpu.readRegister64(details.firstSourceReg, true)
-			: cpu.readRegister32(details.firstSourceReg, true);
-	uint64_t secondOperand = details.is64Bit
+	const uint64_t firstOperand = cpu.readRegisterSp(details.firstSourceReg, details.is64Bit ? 64 : 32);
+	const size_t secondOpSize = details.is64Bit
 			&& (details.extendVariant == AddSubExtendedRegister::ExtendVariant::Sxtw || details.extendVariant == AddSubExtendedRegister::ExtendVariant::Uxtx)
-		    ? cpu.readRegister64(details.secondSourceReg)
-		    : cpu.readRegister32(details.secondSourceReg);
+		    ? 64
+		    : 32; // no sp
+	uint64_t secondOperand = cpu.readRegister(details.secondSourceReg, secondOpSize);
 	secondOperand = extend(secondOperand, details.extendVariant, details.is64Bit);
 	secondOperand <<= details.shiftAmount;
 
@@ -67,11 +66,11 @@ void Executors::DataProcReg::AddSubExtendedRegisterExecutor::execute(
 	uint64_t nzcv;
 	if (details.is64Bit) {
 		auto result = Emulation::add_with_carry<uint64_t, int64_t>(firstOperand, secondOperand, false, nzcv);
-		cpu.writeRegister64(details.destinationReg, result, false);
+		cpu.writeRegister(details.destinationReg, result, 64);
 	}
 	else {
 		auto result = Emulation::add_with_carry<uint32_t, int32_t>(firstOperand, secondOperand, false, nzcv);
-		cpu.writeRegister32(details.destinationReg, result, false);
+		cpu.writeRegister(details.destinationReg, result, 64);
 	}
 
 	if (details.setFlags) {

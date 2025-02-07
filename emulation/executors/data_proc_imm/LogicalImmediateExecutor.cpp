@@ -12,7 +12,7 @@ namespace {
 
 void Executors::DataProcImm::LogicalImmediateExecutor::execute(
 		const InstructionDefs::DataProcImm::LogicalImmediate &instruction, AArch64Cpu &cpu) {
-	uint64_t val = cpu.readRegister64(instruction.sourceReg);
+	uint64_t val = cpu.readRegister(instruction.sourceReg, 64);
 	switch (instruction.operation) {
 		case InstructionDefs::LogicalOperation::And:
 			val &= instruction.bitmask;
@@ -33,5 +33,5 @@ void Executors::DataProcImm::LogicalImmediateExecutor::execute(
 			break;
 	}
 
-	cpu.writeRegister64(instruction.destinationReg, val, true);
+	cpu.writeRegisterSp(instruction.destinationReg, val, 64);
 }

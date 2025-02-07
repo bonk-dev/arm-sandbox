@@ -202,3 +202,11 @@ void *CpuVirtualMemory::getUnsafePointer(virtual_address_t virtualAddress) {
 		return reinterpret_cast<void *>(segment.data() + index);
 	}
 }
+
+void CpuVirtualMemory::write_u32(uintptr_t addr, uint32_t value) {
+	write(addr, value);
+}
+
+void CpuVirtualMemory::write_u64(uintptr_t addr, uint64_t value) {
+	write(addr, value);
+}

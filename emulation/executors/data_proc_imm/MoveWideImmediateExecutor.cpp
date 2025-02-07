@@ -13,20 +13,13 @@ void Executors::DataProcImm::MoveWideImmediateExecutor::execute(
 			result = instruction.immediate << instruction.left_shift;
 			break;
 		case InstructionDefs::DataProcImm::MoveWideImmediateOpType::KeepBits:
-			result = instruction.is_64bit
-					? cpu.readRegister64(instruction.destination_reg)
-					: cpu.readRegister32(instruction.destination_reg);
+			result = cpu.readRegister(instruction.destination_reg, instruction.is_64bit ? 64 : 32);
 			result &= ~(0b1111111111111111 << instruction.left_shift);
 			result |= (instruction.immediate << instruction.left_shift);
 			break;
 	}
 
-	if (instruction.is_64bit) {
-		cpu.writeRegister64(instruction.destination_reg, result);
-	}
-	else {
-		cpu.writeRegister32(instruction.destination_reg, result);
-	}
+	cpu.writeRegister(instruction.destination_reg, result, instruction.is_64bit ? 64 : 32);
 }
 
 

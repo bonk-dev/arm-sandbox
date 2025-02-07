@@ -18,18 +18,18 @@ void Executors::LoadsAndStores::LoadStoreRegPairExecutor::execute(
 	for (uint8_t reg_index : reg_indexes) {
 		if (instruction.is_load) {
 			if (instruction.is_wide) {
-				cpu.writeRegister64(reg_index, cpu.getMemory().read<uint64_t>(virtual_address));
+				cpu.writeRegister(reg_index, cpu.getMemory().read<uint64_t>(virtual_address), 64);
 			}
 			else {
-				cpu.writeRegister32(reg_index, cpu.getMemory().read<uint32_t>(virtual_address));
+				cpu.writeRegister(reg_index, cpu.getMemory().read<uint32_t>(virtual_address), 32);
 			}
 		}
 		else {
 			if (instruction.is_wide) {
-				cpu.getMemory().write(virtual_address, cpu.readRegister64(reg_index));
+				cpu.getMemory().write_u64(virtual_address, cpu.readRegister(reg_index, 64));
 			}
 			else {
-				cpu.getMemory().write(virtual_address, cpu.readRegister32(reg_index));
+				cpu.getMemory().write_u32(virtual_address, cpu.readRegister(reg_index, 32));
 			}
 		}
 
