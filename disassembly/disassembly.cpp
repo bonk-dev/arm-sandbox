@@ -473,3 +473,12 @@ std::string disassembly::to_pretty_string(const InstructionDefs::LoadsAndStores:
 
 	return ss.str();
 }
+
+std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::CompareAndBranchImmediate &i) {
+	std::stringstream ss;
+
+	ss << "CB" << (i.branchIfNonZero ? "NZ" : "Z") << ' ' << gp_reg_name_zero(i.index, i.is64bit) << ", ";
+	insert_signed_hex(ss, i.immediate);
+
+	return ss.str();
+}
