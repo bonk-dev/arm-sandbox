@@ -137,4 +137,6 @@ add_executable(arm_sandbox main.cpp
         emulation/systemv_abi.h
         cli/debugger.h
         cli/debugger.cpp
+        disassembly/instructions/begsi/CompareAndBranchImmediate.h
+        disassembly/instructions/begsi/CompareAndBranchImmediate.cpp
 )
