@@ -45,37 +45,45 @@ void AArch64Cpu::writeRegister(regindex_t index, uint64_t val, size_t size) {
 	}
 }
 
-uint32_t AArch64Cpu::readRegister32(regindex_t index, bool useSp) const {
-	check_regindex(index);
-
-	switch (static_cast<Emulation::Registers>(index)) {
-		case Emulation::Registers::Sp:
-			return useSp
-				? this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->getStackPointer()
-				: 0;
-		default:
-			return this->_generalRegisters[index];
-	}
-}
-uint32_t AArch64Cpu::readRegister32(regindex_t index) const {
-	return readRegister32(index, false);
+uint64_t AArch64Cpu::readRegisterSp(regindex_t index, size_t size) const {
+	throw std::runtime_error("Todo: implement");
 }
 
-uint64_t AArch64Cpu::readRegister64(regindex_t index, bool useSp) const {
-	check_regindex(index);
+uint64_t AArch64Cpu::readRegister(regindex_t index, size_t size) const {
+	throw std::runtime_error("Todo: implement");
+}
 
-	switch (static_cast<Emulation::Registers>(index)) {
-		case Emulation::Registers::Sp:
-			return useSp
-				? this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->getStackPointer()
-				: 0;
-		default:
-			return this->_generalRegisters[index];
-	}
-}
-uint64_t AArch64Cpu::readRegister64(regindex_t index) const {
-	return readRegister64(index, false);
-}
+//uint32_t AArch64Cpu::readRegister32(regindex_t index, bool useSp) const {
+//	check_regindex(index);
+//
+//	switch (static_cast<Emulation::Registers>(index)) {
+//		case Emulation::Registers::Sp:
+//			return useSp
+//				? this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->getStackPointer()
+//				: 0;
+//		default:
+//			return this->_generalRegisters[index];
+//	}
+//}
+//uint32_t AArch64Cpu::readRegister32(regindex_t index) const {
+//	return readRegister32(index, false);
+//}
+//
+//uint64_t AArch64Cpu::readRegister64(regindex_t index, bool useSp) const {
+//	check_regindex(index);
+//
+//	switch (static_cast<Emulation::Registers>(index)) {
+//		case Emulation::Registers::Sp:
+//			return useSp
+//				? this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->getStackPointer()
+//				: 0;
+//		default:
+//			return this->_generalRegisters[index];
+//	}
+//}
+//uint64_t AArch64Cpu::readRegister64(regindex_t index) const {
+//	return readRegister64(index, false);
+//}
 
 CpuVirtualMemory & AArch64Cpu::getMemory() const {
 	return *this->_memory;

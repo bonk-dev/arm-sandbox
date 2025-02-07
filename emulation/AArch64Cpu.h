@@ -29,13 +29,16 @@ public:
 	void writeRegisterSp(regindex_t index, uint64_t val, size_t size);
 	void writeRegister(regindex_t index, uint64_t val, size_t size);
 
+	[[nodiscard]] uint64_t readRegisterSp(regindex_t index, size_t size) const;
+	[[nodiscard]] uint64_t readRegister(regindex_t index, size_t size) const;
+
 	[[nodiscard]] uint64_t getProgramCounter() const;
 	void setProgramCounter(uint64_t pc);
 
-	[[nodiscard]] uint32_t readRegister32(regindex_t index, bool useSp) const;
-    [[nodiscard]] uint32_t readRegister32(regindex_t index) const;
-	[[nodiscard]] uint64_t readRegister64(regindex_t index, bool useSp) const;
-    [[nodiscard]] uint64_t readRegister64(regindex_t index) const;
+//	[[nodiscard]] uint32_t readRegister32(regindex_t index, bool useSp) const;
+//    [[nodiscard]] uint32_t readRegister32(regindex_t index) const;
+//	[[nodiscard]] uint64_t readRegister64(regindex_t index, bool useSp) const;
+//    [[nodiscard]] uint64_t readRegister64(regindex_t index) const;
 
 	/**
 	 * Reads the nzcv register (condition flags)
