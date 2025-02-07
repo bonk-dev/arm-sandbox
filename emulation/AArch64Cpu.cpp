@@ -14,6 +14,9 @@ namespace {
 		// + 1
 		return (((1 << (size - 1)) - 1) << 1) + 1;
 	}
+	inline bool is_stack_pointer(const regindex_t index) {
+		return static_cast<Emulation::Registers>(index) == Emulation::Registers::Sp;
+	}
 }
 
 AArch64Cpu::AArch64Cpu() : _nzcvConditionRegister(0),
@@ -30,7 +33,7 @@ AArch64Cpu::AArch64Cpu() : _nzcvConditionRegister(0),
 
 void AArch64Cpu::writeRegisterSp(regindex_t index, uint64_t val, size_t size) {
 	check_regindex(index);
-	if (static_cast<Emulation::Registers>(index) == Emulation::Registers::Sp) {
+	if (is_stack_pointer(index)) {
 		this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->setStackPointer(val);
 	}
 	else {
@@ -40,7 +43,7 @@ void AArch64Cpu::writeRegisterSp(regindex_t index, uint64_t val, size_t size) {
 
 void AArch64Cpu::writeRegister(regindex_t index, uint64_t val, size_t size) {
 	check_regindex(index);
-	if (static_cast<Emulation::Registers>(index) != Emulation::Registers::Sp) {
+	if (!is_stack_pointer(index)) {
 		this->_generalRegisters[index] = val & get_mask(size);
 	}
 }
