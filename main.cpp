@@ -33,6 +33,8 @@ std::map<InstructionType, std::unique_ptr<ExecutorBase>> map_all_executors(const
 			std::make_unique<Executors::DataProcImm::LogicalImmediateExecutor>();
 	e[InstructionType::MoveWideImmediate] =
 			std::make_unique<Executors::DataProcImm::MoveWideImmediateExecutor>();
+	e[InstructionType::CompareAndBranchImmediate] =
+			std::make_unique<Executors::Begsi::CompareAndBranchImmediateExecutor>();
 	e[InstructionType::ConditionalBranchImmediate] =
 			std::make_unique<Executors::Begsi::ConditionalBranchImmediateExecutor>();
 	e[InstructionType::UnconditionalBranchImmediate] =
