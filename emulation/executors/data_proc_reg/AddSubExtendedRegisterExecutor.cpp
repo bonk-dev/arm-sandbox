@@ -49,13 +49,12 @@ namespace {
 
 void Executors::DataProcReg::AddSubExtendedRegisterExecutor::execute(
 		const AddSubExtendedRegister &details, AArch64Cpu &cpu) {
-	const uint64_t firstOperand = details.is64Bit
-			? cpu.readRegister64(details.firstSourceReg, true)
-			: cpu.readRegister32(details.firstSourceReg, true);
-	uint64_t secondOperand = details.is64Bit
+	const uint64_t firstOperand = cpu.readRegisterSp(details.firstSourceReg, details.is64Bit ? 64 : 32);
+	const size_t secondOpSize = details.is64Bit
 			&& (details.extendVariant == AddSubExtendedRegister::ExtendVariant::Sxtw || details.extendVariant == AddSubExtendedRegister::ExtendVariant::Uxtx)
-		    ? cpu.readRegister64(details.secondSourceReg)
-		    : cpu.readRegister32(details.secondSourceReg);
+		    ? 64
+		    : 32; // no sp
+	uint64_t secondOperand = cpu.readRegister(details.secondSourceReg, secondOpSize);
 	secondOperand = extend(secondOperand, details.extendVariant, details.is64Bit);
 	secondOperand <<= details.shiftAmount;
 
