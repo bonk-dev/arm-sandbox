@@ -141,6 +141,8 @@ add_executable(arm_sandbox main.cpp
         disassembly/instructions/begsi/CompareAndBranchImmediate.cpp
         emulation/executors/begsi/CompareAndBranchImmediateExecutor.h
         emulation/executors/begsi/CompareAndBranchImmediateExecutor.cpp
+        disassembly/instructions/data_proc_simd/AdvancedSimdCopy.h
+        disassembly/instructions/data_proc_simd/AdvancedSimdCopy.cpp
         emulation/simd/NeonExtension.h
         emulation/simd/NeonExtension.cpp
         utils/bit_utils.h
