@@ -1,53 +1,16 @@
 #include "A64Decoder.h"
+#include "decoder_utils.h"
 #include <cmath>
-#include <stdexcept>
 #include <map>
 
 namespace {
-	// Explanation for the maps:
-	// std::tuple<uint32_t, uint32_t> contains:
-	// 	1 - mask for the field (e.g. when only the 2 MSBs are to be compared, value 1 is equal to 1100)
-	//	2 - field value after ANDing the decoded value with the mask (1)
-	// example:
-	// ADD/SUB (immediate):
-	// op1 decode field == 010x (only the first 3 most significant bits are compared)
-	// (1) == 1110
-	// (2) == 0100 (x are replaced with 0)
-	typedef std::tuple<uint32_t, uint32_t> mask_values_t;
-
-	constexpr bool MATCHES_MASK(uint32_t val, mask_values_t mask_and_value) {
-		const auto [mask, fixed_val] = mask_and_value;
-		return (val & mask) == fixed_val;
-	}
-
-	template<class EnumType>
-	EnumType *find_instruction_type(std::map<mask_values_t, EnumType> &mask_type_map, uint32_t val) {
-		for (auto &[mask, type]: mask_type_map) {
-			if (MATCHES_MASK(val, mask)) {
-				return &type;
-			}
-		}
-
-		return nullptr;
-	}
-
-	InstructionType find_instruction_type_fast(std::map<mask_values_t, InstructionType> &mask_type_map, uint32_t val) {
-		for (auto &[mask, type]: mask_type_map) {
-			if (MATCHES_MASK(val, mask)) {
-				return type;
-			}
-		}
-
-		return InstructionType::Undefined;
-	}
-
 
 	// Top-level -> Data processing (immediate) -> (op1 field)
-	std::map<mask_values_t, InstructionType> data_proc_imm_op1{
-			{mask_values_t(0b1110, 0b0100), InstructionType::AddOrSubImmediate},
-			{mask_values_t(0b1100, 0b0000), InstructionType::PcRelativeAddressing},
-			{mask_values_t(0b1110, 0b1000), InstructionType::LogicalImmediate},
-			{mask_values_t(0b1110, 0b1010), InstructionType::MoveWideImmediate}
+	std::map<Decoding::mask_values_t, InstructionType> data_proc_imm_op1{
+			{Decoding::mask_values_t(0b1110, 0b0100), InstructionType::AddOrSubImmediate},
+			{Decoding::mask_values_t(0b1100, 0b0000), InstructionType::PcRelativeAddressing},
+			{Decoding::mask_values_t(0b1110, 0b1000), InstructionType::LogicalImmediate},
+			{Decoding::mask_values_t(0b1110, 0b1010), InstructionType::MoveWideImmediate}
 	};
 
 	InstructionType decode_data_processing_imm_type(uint32_t raw_instruction) {
@@ -55,7 +18,7 @@ namespace {
 		const uint32_t op0 = raw_instruction >> 29 & 0b11;
 		const uint32_t op1 = raw_instruction >> 22 & 0b1111;
 
-		InstructionType *ptr = find_instruction_type(data_proc_imm_op1, op1);
+		InstructionType *ptr = Decoding::find_instruction_type(data_proc_imm_op1, op1);
 		if (ptr == nullptr) {
 			return InstructionType::Undefined;
 		} else {
@@ -64,31 +27,31 @@ namespace {
 	}
 
 	// Top-level -> Branches, Exception Generating and System instructions -> (op0 field) -> (op1 field)
-	std::map<mask_values_t, std::map<mask_values_t, InstructionType>> br_exc_sys_op0_op1{
+	std::map<Decoding::mask_values_t, std::map<Decoding::mask_values_t, InstructionType>> br_exc_sys_op0_op1{
 			{
-					mask_values_t(0b111, 0b010),
+					Decoding::mask_values_t(0b111, 0b010),
 					{
-							{mask_values_t(0b11000000000000, 0), InstructionType::ConditionalBranchImmediate}
+							{Decoding::mask_values_t(0b11000000000000, 0), InstructionType::ConditionalBranchImmediate}
 					}
 			},
 			{
-					mask_values_t(0b011, 0b000),
+					Decoding::mask_values_t(0b011, 0b000),
 					{
 							// 0,0 just means that there no other instructions with the same op0 field
-							{mask_values_t(0, 0), InstructionType::UnconditionalBranchImmediate}
+							{Decoding::mask_values_t(0, 0), InstructionType::UnconditionalBranchImmediate}
 					}
 			},
 			{
-				mask_values_t(0b011, 0b001),
+				Decoding::mask_values_t(0b011, 0b001),
 				{
-						{mask_values_t(0b10000000000000, 0b00000000000000), InstructionType::CompareAndBranchImmediate}
+						{Decoding::mask_values_t(0b10000000000000, 0b00000000000000), InstructionType::CompareAndBranchImmediate}
 				}
 			},
 			{
-					mask_values_t(0b111, 0b110),
+					Decoding::mask_values_t(0b111, 0b110),
 					{
-							{mask_values_t(0b11111111111111, 0b01000000110010), InstructionType::Hint},
-							{mask_values_t(0b10000000000000, 0b10000000000000), InstructionType::UnconditionalBranchRegister}
+							{Decoding::mask_values_t(0b11111111111111, 0b01000000110010), InstructionType::Hint},
+							{Decoding::mask_values_t(0b10000000000000, 0b10000000000000), InstructionType::UnconditionalBranchRegister}
 					}
 			}
 	};
@@ -97,18 +60,18 @@ namespace {
 		const uint32_t op0 = raw_instruction >> 29 & 0b111;
 		const uint32_t op1 = raw_instruction >> 12 & 0b11111111111111;
 
-		auto op1_map = find_instruction_type(br_exc_sys_op0_op1, op0);
+		auto op1_map = Decoding::find_instruction_type(br_exc_sys_op0_op1, op0);
 		if (op1_map != nullptr) {
-			return find_instruction_type_fast(*op1_map, op1);
+			return Decoding::find_instruction_type_fast(*op1_map, op1);
 		}
 
 		return InstructionType::Undefined;
 	}
 
 	// Top-level -> Data processing (register) -> (op2 field)
-	std::map<mask_values_t, InstructionType> data_proc_imm_op1zero_op2{
-			{mask_values_t(0b1000, 0b0000), InstructionType::LogicalShiftedRegister},
-			{mask_values_t(0b1001, 0b1001), InstructionType::AddSubExtendedRegister}
+	std::map<Decoding::mask_values_t, InstructionType> data_proc_imm_op1zero_op2{
+			{Decoding::mask_values_t(0b1000, 0b0000), InstructionType::LogicalShiftedRegister},
+			{Decoding::mask_values_t(0b1001, 0b1001), InstructionType::AddSubExtendedRegister}
 	};
 
 	InstructionType decode_data_processing_register_type(uint32_t raw_instruction) {
@@ -116,44 +79,44 @@ namespace {
 		const uint32_t op2 = raw_instruction >> 21 & 0b1111;
 
 		return op1 == 0
-			   ? find_instruction_type_fast(data_proc_imm_op1zero_op2, op2)
+			   ? Decoding::find_instruction_type_fast(data_proc_imm_op1zero_op2, op2)
 			   : InstructionType::Undefined;
 	}
 
 	// Top-level -> Load and store -> (op0 field) -> (op2 field)
-	std::map<mask_values_t, std::map<mask_values_t, InstructionType>> load_and_store_op0_op2{
+	std::map<Decoding::mask_values_t, std::map<Decoding::mask_values_t, InstructionType>> load_and_store_op0_op2{
 			{
-					mask_values_t(0b0011, 0b0010),
+					Decoding::mask_values_t(0b0011, 0b0010),
 					{
 							{
 									// 0,0 just means that there no other instructions with the same op0 field
-									mask_values_t(0, 0),
+									Decoding::mask_values_t(0, 0),
 									InstructionType::LoadStoreRegisterPair
 							}
 					}
 			},
 			{
-					mask_values_t(0b0011, 0b0011),
+					Decoding::mask_values_t(0b0011, 0b0011),
 					{
 							// these are the 4 LoadRegisterVariants, let's just check separately these to be safe
 							{
-									mask_values_t(0b100100000000011, 0b000000000000000),
+									Decoding::mask_values_t(0b100100000000011, 0b000000000000000),
 									InstructionType::LoadStoreRegister
 							},
 							{
-									mask_values_t(0b100100000000011, 0b000000000000001),
+									Decoding::mask_values_t(0b100100000000011, 0b000000000000001),
 									InstructionType::LoadStoreRegister
 							},
 							{
-									mask_values_t(0b100100000000011, 0b000000000000010),
+									Decoding::mask_values_t(0b100100000000011, 0b000000000000010),
 									InstructionType::LoadStoreRegister
 							},
 							{
-									mask_values_t(0b100100000000011, 0b000000000000011),
+									Decoding::mask_values_t(0b100100000000011, 0b000000000000011),
 									InstructionType::LoadStoreRegister
 							},
 							{
-									mask_values_t(0b100000000000000, 0b100000000000000),
+									Decoding::mask_values_t(0b100000000000000, 0b100000000000000),
 									InstructionType::LoadStoreRegisterUnsignedImm
 							},
 					}
@@ -165,9 +128,9 @@ namespace {
 		const uint32_t op1 = raw_instruction >> 26 & 1;
 		const uint32_t op2 = raw_instruction >> 10 & 0b111111111111111;
 
-		std::map<mask_values_t, InstructionType> *op2_map = find_instruction_type(load_and_store_op0_op2, op0);
+		std::map<Decoding::mask_values_t, InstructionType> *op2_map = Decoding::find_instruction_type(load_and_store_op0_op2, op0);
 		if (op2_map != nullptr) {
-			return find_instruction_type_fast(*op2_map, op2);
+			return Decoding::find_instruction_type_fast(*op2_map, op2);
 		}
 
 		return InstructionType::Undefined;
@@ -187,11 +150,12 @@ namespace {
 
 	typedef InstructionType (*decode_sublevel_instruction_t)(uint32_t);
 
-	std::map<mask_values_t, decode_sublevel_instruction_t> top_level_op1{
-			{mask_values_t(0b1110, 0b1000), &decode_data_processing_imm_type},
-			{mask_values_t(0b1110, 0b1010), &decode_branches_exc_sys},
-			{mask_values_t(0b0111, 0b0101), &decode_data_processing_register_type},
-			{mask_values_t(0b0101, 0b0100), &decode_load_and_store_type}
+	std::map<Decoding::mask_values_t, decode_sublevel_instruction_t> top_level_op1{
+			{Decoding::mask_values_t(0b1110, 0b1000), &decode_data_processing_imm_type},
+			{Decoding::mask_values_t(0b1110, 0b1010), &decode_branches_exc_sys},
+			{Decoding::mask_values_t(0b0111, 0b0101), &decode_data_processing_register_type},
+			{Decoding::mask_values_t(0b0111, 0b0111), &Decoding::decode_data_processing_fp_simd},
+			{Decoding::mask_values_t(0b0101, 0b0100), &decode_load_and_store_type}
 	};
 }
 
@@ -206,7 +170,7 @@ InstructionType A64Decoder::decodeNextType(const uint32_t encodedInstruction) {
 		return decode_reserved(encodedInstruction);
 	}
 
-	auto decode_func_ptr = find_instruction_type(top_level_op1, op1_field);
+	auto decode_func_ptr = Decoding::find_instruction_type(top_level_op1, op1_field);
 	if (decode_func_ptr == nullptr) {
 		return InstructionType::Undefined;
 	}

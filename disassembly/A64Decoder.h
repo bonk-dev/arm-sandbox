@@ -3,25 +3,7 @@
 #include <vector>
 #include <string>
 #include "../emulation/emu_types.h"
-
-enum class InstructionType {
-	AddOrSubImmediate,
-	Hint,
-	ConditionalBranchImmediate,
-	UnconditionalBranchImmediate,
-	UnconditionalBranchRegister,
-	CompareAndBranchImmediate,
-	PcRelativeAddressing,
-	LogicalImmediate,
-	MoveWideImmediate,
-	AddSubExtendedRegister,
-	LogicalShiftedRegister,
-	LoadStoreRegisterPair,
-	LoadStoreRegister,
-	LoadStoreRegisterUnsignedImm,
-	ReservedCall,
-	Undefined = 0xFFFFFFF
-};
+#include "instruction_type.h"
 
 class A64Decoder {
 private:
