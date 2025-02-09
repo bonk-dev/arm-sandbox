@@ -4,25 +4,10 @@
 #include "decoder_utils.h"
 #include "data_processing_imm.h"
 #include "branches_exc_sys.h"
+#include "data_processing_register.h"
 #include "scalar_fp_simd.h"
 
 namespace {
-
-	// Top-level -> Data processing (register) -> (op2 field)
-	std::map<Decoding::mask_values_t, InstructionType> data_proc_imm_op1zero_op2{
-			{Decoding::mask_values_t(0b1000, 0b0000), InstructionType::LogicalShiftedRegister},
-			{Decoding::mask_values_t(0b1001, 0b1001), InstructionType::AddSubExtendedRegister}
-	};
-
-	InstructionType decode_data_processing_register_type(uint32_t raw_instruction) {
-		const uint32_t op1 = raw_instruction >> 28 & 0b1;
-		const uint32_t op2 = raw_instruction >> 21 & 0b1111;
-
-		return op1 == 0
-			   ? Decoding::find_instruction_type_fast(data_proc_imm_op1zero_op2, op2)
-			   : InstructionType::Undefined;
-	}
-
 	// Top-level -> Load and store -> (op0 field) -> (op2 field)
 	std::map<Decoding::mask_values_t, std::map<Decoding::mask_values_t, InstructionType>> load_and_store_op0_op2{
 			{
@@ -93,7 +78,7 @@ namespace {
 	std::map<Decoding::mask_values_t, decode_sublevel_instruction_t> top_level_op1{
 			{Decoding::mask_values_t(0b1110, 0b1000), &Decoding::decode_data_processing_imm_type},
 			{Decoding::mask_values_t(0b1110, 0b1010), &Decoding::decode_branches_exc_sys},
-			{Decoding::mask_values_t(0b0111, 0b0101), &decode_data_processing_register_type},
+			{Decoding::mask_values_t(0b0111, 0b0101), &Decoding::decode_data_processing_register_type},
 			{Decoding::mask_values_t(0b0111, 0b0111), &Decoding::decode_data_processing_fp_simd},
 			{Decoding::mask_values_t(0b0101, 0b0100), &decode_load_and_store_type}
 	};
