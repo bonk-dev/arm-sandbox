@@ -6,6 +6,7 @@
 #include "emu_types.h"
 #include "registers.h"
 #include "filesystem/VirtualFileSystem.h"
+#include "simd/NeonExtension.h"
 
 constexpr size_t AARCH64_GENERAL_PURPOSE_REGISTERS = 31;
 
@@ -14,6 +15,8 @@ private:
 	uint64_t _nzcvConditionRegister;
     std::vector<uint64_t> _generalRegisters;
 	uint64_t _programCounter;
+
+	Emulation::Simd::NeonExtension _neon;
 
 	std::vector<uint64_t> _threads;
 	std::unique_ptr<CpuVirtualMemory> _memory;
