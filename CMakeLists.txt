@@ -153,4 +153,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/scalar_fp_simd.cpp
         disassembly/decoder_utils.h
         disassembly/decoder_utils.cpp
+        disassembly/data_processing_imm.cpp
+        disassembly/data_processing_imm.h
 )

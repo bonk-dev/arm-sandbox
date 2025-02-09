@@ -1,32 +1,11 @@
-#include "A64Decoder.h"
-#include "decoder_utils.h"
-#include "scalar_fp_simd.h"
 #include <cmath>
 #include <map>
+#include "A64Decoder.h"
+#include "decoder_utils.h"
+#include "data_processing_imm.h"
+#include "scalar_fp_simd.h"
 
 namespace {
-
-	// Top-level -> Data processing (immediate) -> (op1 field)
-	std::map<Decoding::mask_values_t, InstructionType> data_proc_imm_op1{
-			{Decoding::mask_values_t(0b1110, 0b0100), InstructionType::AddOrSubImmediate},
-			{Decoding::mask_values_t(0b1100, 0b0000), InstructionType::PcRelativeAddressing},
-			{Decoding::mask_values_t(0b1110, 0b1000), InstructionType::LogicalImmediate},
-			{Decoding::mask_values_t(0b1110, 0b1010), InstructionType::MoveWideImmediate}
-	};
-
-	InstructionType decode_data_processing_imm_type(uint32_t raw_instruction) {
-		// op0 unused for now
-		const uint32_t op0 = raw_instruction >> 29 & 0b11;
-		const uint32_t op1 = raw_instruction >> 22 & 0b1111;
-
-		InstructionType *ptr = Decoding::find_instruction_type(data_proc_imm_op1, op1);
-		if (ptr == nullptr) {
-			return InstructionType::Undefined;
-		} else {
-			return *ptr;
-		}
-	}
-
 	// Top-level -> Branches, Exception Generating and System instructions -> (op0 field) -> (op1 field)
 	std::map<Decoding::mask_values_t, std::map<Decoding::mask_values_t, InstructionType>> br_exc_sys_op0_op1{
 			{
@@ -152,7 +131,7 @@ namespace {
 	typedef InstructionType (*decode_sublevel_instruction_t)(uint32_t);
 
 	std::map<Decoding::mask_values_t, decode_sublevel_instruction_t> top_level_op1{
-			{Decoding::mask_values_t(0b1110, 0b1000), &decode_data_processing_imm_type},
+			{Decoding::mask_values_t(0b1110, 0b1000), &Decoding::decode_data_processing_imm_type},
 			{Decoding::mask_values_t(0b1110, 0b1010), &decode_branches_exc_sys},
 			{Decoding::mask_values_t(0b0111, 0b0101), &decode_data_processing_register_type},
 			{Decoding::mask_values_t(0b0111, 0b0111), &Decoding::decode_data_processing_fp_simd},
