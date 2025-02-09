@@ -161,4 +161,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/data_processing_register.h
         disassembly/load_and_store.cpp
         disassembly/load_and_store.h
+        disassembly/reserved.h
+        disassembly/reserved.cpp
 )
