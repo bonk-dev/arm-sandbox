@@ -15,6 +15,7 @@
 #include "instructions/data_proc_register/AddSubExtendedRegister.h"
 #include "instructions/loads_and_stores/LoadStoreReg.h"
 #include "instructions/begsi/CompareAndBranchImmediate.h"
+#include "instructions/data_proc_simd/AdvancedSimdCopy.h"
 
 namespace disassembly {
 	std::string to_pretty_string(const InstructionDefs::DataProcImm::AddImmediate& i);
@@ -32,4 +33,5 @@ namespace disassembly {
 	std::string to_pretty_string(const InstructionDefs::DataProcReg::AddSubExtendedRegister& i);
 	std::string to_pretty_string(const InstructionDefs::DataProcReg::LogicalShiftedRegister& i);
 	std::string to_pretty_string(const InstructionDefs::Reserved::ReservedCall& i);
+	std::string to_pretty_string(const InstructionDefs::DataProcSimd::AdvancedSimdCopy& i);
 }

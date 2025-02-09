@@ -482,3 +482,7 @@ std::string disassembly::to_pretty_string(const InstructionDefs::Begsi::CompareA
 
 	return ss.str();
 }
+
+std::string disassembly::to_pretty_string(const InstructionDefs::DataProcSimd::AdvancedSimdCopy &i) {
+	throw std::runtime_error("to_pretty_string not implemented");
+}
