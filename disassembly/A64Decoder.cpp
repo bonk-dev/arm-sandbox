@@ -1,5 +1,6 @@
 #include "A64Decoder.h"
 #include "decoder_utils.h"
+#include "scalar_fp_simd.h"
 #include <cmath>
 #include <map>
 

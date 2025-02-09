@@ -148,7 +148,9 @@ add_executable(arm_sandbox main.cpp
         emulation/simd/NeonExtension.h
         emulation/simd/NeonExtension.cpp
         utils/bit_utils.h
+        disassembly/scalar_fp_simd.h
         disassembly/instruction_type.h
+        disassembly/scalar_fp_simd.cpp
         disassembly/decoder_utils.h
         disassembly/decoder_utils.cpp
 )
