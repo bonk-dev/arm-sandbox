@@ -1,18 +1,12 @@
 #include "AArch64Cpu.h"
 #include "registers.h"
+#include "../utils/bit_utils.h"
 
 namespace {
 	inline void check_regindex(const regindex_t index) {
 		if (index < 0 || index > 31) {
 			throw std::runtime_error("Invalid register index");
 		}
-	}
-	inline uint64_t get_mask(unsigned int size) {
-		// 1 << (1 - size)
-		// -1
-		// << 1
-		// + 1
-		return (((1 << (size - 1)) - 1) << 1) + 1;
 	}
 	inline bool is_stack_pointer(const regindex_t index) {
 		return static_cast<Emulation::Registers>(index) == Emulation::Registers::Sp;
@@ -37,14 +31,14 @@ void AArch64Cpu::writeRegisterSp(regindex_t index, uint64_t val, size_t size) {
 		this->getMemory().getStack(AARCH64_MAIN_THREAD_ID)->setStackPointer(val);
 	}
 	else {
-		this->_generalRegisters[index] = val & get_mask(size);
+		this->_generalRegisters[index] = val & Utils::get_mask(size);
 	}
 }
 
 void AArch64Cpu::writeRegister(regindex_t index, uint64_t val, size_t size) {
 	check_regindex(index);
 	if (!is_stack_pointer(index)) {
-		this->_generalRegisters[index] = val & get_mask(size);
+		this->_generalRegisters[index] = val & Utils::get_mask(size);
 	}
 }
 
@@ -59,7 +53,7 @@ uint64_t AArch64Cpu::readRegisterSp(regindex_t index, size_t size) const {
 		val = this->_generalRegisters[index];
 	}
 
-	return val & get_mask(size);
+	return val & Utils::get_mask(size);
 }
 
 uint64_t AArch64Cpu::readRegister(regindex_t index, size_t size) const {
@@ -69,7 +63,7 @@ uint64_t AArch64Cpu::readRegister(regindex_t index, size_t size) const {
 		return 0;
 	}
 
-	return this->_generalRegisters[index] & get_mask(size);
+	return this->_generalRegisters[index] & Utils::get_mask(size);
 }
 
 CpuVirtualMemory & AArch64Cpu::getMemory() const {
@@ -111,6 +105,10 @@ void AArch64Cpu::createThread(const uint64_t id) const {
 
 Filesystem::VirtualFileSystem &AArch64Cpu::getFs() {
 	return this->_fileSystem;
+}
+
+Emulation::Simd::NeonExtension& AArch64Cpu::getNeon() {
+	return this->_neon;
 }
 
 uint64_t AArch64Cpu::readNzcvRegister() const {

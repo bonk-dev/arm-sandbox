@@ -38,6 +38,8 @@ public:
 	[[nodiscard]] uint64_t getProgramCounter() const;
 	void setProgramCounter(uint64_t pc);
 
+	[[nodiscard]] Emulation::Simd::NeonExtension& getNeon();
+
 	/**
 	 * Reads the nzcv register (condition flags)
 	 * @return nzcv register value
