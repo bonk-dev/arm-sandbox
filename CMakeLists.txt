@@ -155,4 +155,6 @@ add_executable(arm_sandbox main.cpp
         disassembly/decoder_utils.cpp
         disassembly/data_processing_imm.cpp
         disassembly/data_processing_imm.h
+        disassembly/branches_exc_sys.cpp
+        disassembly/branches_exc_sys.h
 )
